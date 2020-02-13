@@ -11,7 +11,12 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Style;
 use PhpOffice\PhpSpreadsheet\Style\Font;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+
 use Response;
+/**
+ * 
+ */
 
 class CasualPlantillaController extends Controller
 {
@@ -21,8 +26,9 @@ class CasualPlantillaController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    private $lastRow = 0;
 
+    private $lastRow = 0;
+    private $currentMergedCells = "";
 
     public function index()
     {
@@ -332,8 +338,8 @@ $this->headSection($department,$spreadsheet,$startRow);
         $spreadsheet->getActiveSheet()->getPageSetup()->setPrintArea($printArea);
         $spreadsheet->getActiveSheet()->getPageSetup()->setFitToWidth(1);
 
-        $worksheet1 = $spreadsheet->createSheet();
-        $worksheet1->setTitle('RAI');
+        $this->lastRow = 0;
+        $this->createRaiWorksheet($spreadsheet);
 
 
         // Redirect output to a client’s web browser (Xlsx)
@@ -807,4 +813,75 @@ $this->lastRow = $startRow+14;
         $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(14);
         $spreadsheet->getActiveSheet()->getRowDimension($row)->setRowHeight(15);
     }
+
+    public function mergeCells($pRange)
+    {
+        // Uppercase coordinate
+        $pRange = strtoupper($pRange);
+        $this->currentMergedCells = $pRange;
+        if (strpos($pRange, ':') !== false) {
+            $this->mergeCells[$pRange] = $pRange;
+
+            // make sure cells are created
+
+            // get the cells in the range
+            $aReferences = Coordinate::extractAllCellReferencesInRange($pRange);
+
+            // create upper left cell if it does not already exist
+            $upperLeft = $aReferences[0];
+            if (!$this->cellExists($upperLeft)) {
+                $this->getCell($upperLeft)->setValueExplicit(null, DataType::TYPE_NULL);
+            }
+
+            // Blank out the rest of the cells in the range (if they exist)
+            $count = count($aReferences);
+            for ($i = 1; $i < $count; ++$i) {
+                if ($this->cellExists($aReferences[$i])) {
+                    $this->getCell($aReferences[$i])->setValueExplicit(null, DataType::TYPE_NULL);
+                }
+            }
+        } else {
+            throw new Exception('Merge must be set on a range of cells.');
+        }
+
+        return $this;
+    }
+
+    // private $startingRow = 0;
+    private function createRaiWorksheet($spreadsheet)
+    {
+        $worksheet1 = $spreadsheet->createSheet();
+        $worksheet1->setTitle('RAI');
+        
+
+        // create head of RAI
+        $row = $this->lastRow;
+        $col = 'A';
+        $colend = 'S';
+        $spreadsheet->setActiveSheetIndex(1);
+        $spreadsheet->getActiveSheet()
+            ->setCellValue($col.$this->nextRow(), 'CS Form No. 2')
+            ->setCellValue($col.$this->nextRow(), 'Revised 2017')->getStyle($col.$this->currentRow())->getFont()->setBold(true)->setItalic(true)->setSize(9);
+        $spreadsheet->getActiveSheet()
+            ->mergeCells($col.$this->nextRow(2).":".$colend.$this->currentRow())->getCell($col.$this->currentRow())->setValue($this->mergeCells('A9:B9'));
+                                                                             
+            // For the month of JANUARY 2020                                                                       
+    }
+
+
+    private function nextRow($rowApart=1){
+        $this->lastRow = $this->lastRow+$rowApart;
+        return ($this->lastRow);
+    }
+
+    private function currentRow(){
+        return $this->lastRow;
+    }
+
+    // private function  currentCells($cola,$rowa,$colb,$rowb){
+    //     $mergeCells = 
+    //     return $mergeCells;
+    // }
+
+
 }
