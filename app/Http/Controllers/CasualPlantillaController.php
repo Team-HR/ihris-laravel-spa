@@ -827,6 +827,8 @@ $this->lastRow = $startRow+14;
 
         // start of head
 $this->lastRow = 1;
+
+
 $casuals =$this->casuals;
 $count = count($casuals);
 $pages = intval($count/15);
@@ -849,7 +851,7 @@ $cols = array(
     'i'=>'daily_wage',
     'j'=>0,
     'k'=>'employment_status',
-    'l'=>'period_of_employment',
+    'l'=>'',
     'm'=>'nature_of_appointment',
     'n'=>'',
     'o'=>'',
@@ -858,9 +860,14 @@ $cols = array(
     'r'=>'',
     's'=>'',
 );
+
+
 for ($page=1; $page <= $pages ; $page++) {
+
+    
+
 // Head
- $this->raiHead($spreadsheet);
+        $this->raiHead($spreadsheet);  
 
     for ($i=1; $i <= 15; $i++) {
         // (isset($casuals[$numbering-2])?$end = true:$end = false);
@@ -868,22 +875,37 @@ for ($page=1; $page <= $pages ; $page++) {
         // echo $numbering++.'. '.(isset($name[$numbering-2])?$name[$numbering-2]:($end?nothingFollows($end):'')).'<br>';  
         $row = $this->nextRow();
         $num = $numbering-1;
-    
 
         if (!$end && !isset($casuals[$num-1]['last_name'])) {
             $end = true;
             $this->nothingFollows($spreadsheet,$row,'S');
         } else {
 
-            // foreach ($cols as $key => $col) {
-            //     $spreadsheet->getActiveSheet()->setCellValue($col.$row,$num);
-            //     $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
-            //     $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getLeft()->setBorderStyle('thick');
-            //     $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
-            //     $spreadsheet->getActiveSheet()->getCell($col.$row)->setValue((isset($casuals[$num-1]['last_name'])?$casuals[$num-1]['last_name']:''));
-            //     $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
-            //     $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
-            // }
+            foreach ($cols as $col => $index) {
+                if ($col == 'a') {
+                    $spreadsheet->getActiveSheet()->setCellValue($col.$row,$num);   
+                } elseif ($col == 'b') {
+                     $spreadsheet->getActiveSheet()->setCellValue($col.$row,(isset($casuals[$num-1]['from_date'])?date_format(date_create($casuals[$num-1]['from_date']), 'm/d/Y'):''));
+                     $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
+                } elseif ($col == 'l') {
+                    $spreadsheet->getActiveSheet()->setCellValue($col.$row,(isset($casuals[$num-1]['from_date'])?date_format(date_create($casuals[$num-1]['from_date']), 'm/d/Y').' - '.date_format(date_create($casuals[$num-1]['to_date']), 'm/d/Y'):''));
+                    $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
+                } elseif (in_array($col, array('c','d','e','f'))) {
+                    $spreadsheet->getActiveSheet()->setCellValue($col.$row,(isset($casuals[$num-1][$index])?$casuals[$num-1][$index]:''));
+                    $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('left')->setVertical('center');
+                } else {
+                    $spreadsheet->getActiveSheet()->setCellValue($col.$row,(isset($casuals[$num-1][$index])?$casuals[$num-1][$index]:''));
+                    $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
+                }
+                $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
+                // $this->spreadsheet->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+                // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
+                // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getLeft()->setBorderStyle('thick');
+                // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
+                // $spreadsheet->getActiveSheet()->getCell($col.$row)->setValue((isset($casuals[$num-1][$col])?$casuals[$num-1][$col]:''));
+                // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
+                // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
+            }
     
         
         // $col = "D";
@@ -954,6 +976,7 @@ for ($page=1; $page <= $pages ; $page++) {
         // start of foot
         $this->raiFoot($spreadsheet);
         $this->lastRow = $this->currentRow()+3;
+        $spreadsheet->getActiveSheet()->getStyle('A20:S39')->getBorders()->getOutline()->setBorderStyle('thick');
 }
     // end of perpage
 
@@ -1139,11 +1162,12 @@ for ($page=1; $page <= $pages ; $page++) {
 
         $this->spreadsheet = $spreadsheet;
         $this->oneColMultiRowField('A',$this->currentRow(),'',3);
+        $this->spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(5.5);
         $this->oneColMultiRowField('B',$this->currentRow(),'Date Issued/Effectivity (mm/dd/yyyy)',3);
         $this->spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(15);
         $this->multiColOneRow('C',$this->currentRow(),'NAME OF APPOINTEE/S','F',true);
         $this->oneColMultiRowField('G',$this->currentRow(),'POSITION TITLE (Indicate parenthetical title if applicable)',3);
-        $this->spreadsheet->getActiveSheet()->getColumnDimension('g')->setWidth(20);
+        $this->spreadsheet->getActiveSheet()->getColumnDimension('g')->setWidth(22);
         $this->oneColMultiRowField('H',$this->currentRow(),'ITEM NO.',3);
         $this->oneColMultiRowField('I',$this->currentRow(),'SALARY/JOB/PAY GRADE',3);
         $this->oneColMultiRowField('J',$this->currentRow(),'SALARY RATE (Annual)',3);
@@ -1153,7 +1177,7 @@ for ($page=1; $page <= $pages ; $page++) {
         $this->oneColMultiRowField('L',$this->currentRow(),"PERIOD OF EMPLOYMENT \n(for Temporary, Casual/ Contractual Appointments) (mm/dd/yyyy to mm/dd/yyyy)",3);
         $this->spreadsheet->getActiveSheet()->getColumnDimension('L')->setWidth(31);
         $this->oneColMultiRowField('M',$this->currentRow(),'NATURE OF APPOINTMENT',3);
-        $this->spreadsheet->getActiveSheet()->getColumnDimension('M')->setWidth(16);
+        $this->spreadsheet->getActiveSheet()->getColumnDimension('M')->setWidth(17);
 
         $this->multiColOneRow('N',$this->currentRow(),'PUBLICATION','O');
         $this->multiColOneRow('P',$this->currentRow(),'CSC ACTION','R');
@@ -1161,13 +1185,13 @@ for ($page=1; $page <= $pages ; $page++) {
 
         $this->nextRow();
         $this->oneColMultiRowField('C',$this->currentRow(),'Last Name',2);
-        $this->spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+        $this->spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(20);
         $this->oneColMultiRowField('D',$this->currentRow(),'First Name',2);
-        $this->spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(30);
+        $this->spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(20);
         $this->oneColMultiRowField('E',$this->currentRow(),'Name Extension (Jr./III)',2);
         $this->spreadsheet->getActiveSheet()->getStyle('E'.$this->currentRow())->getFont()->setSize(8);
         $this->oneColMultiRowField('F',$this->currentRow(),'Middle Name',2);
-        $this->spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(30);
+        $this->spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(20);
 
         $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
         // $richText->createText('This is to certify that all requirement and supporting papers pursuant to ');
@@ -1219,12 +1243,14 @@ private function raiFoot($spreadsheet){
             if ($col == 'n') {
                 $currentCell = $col.$row;
                 $spreadsheet->getActiveSheet()->setCellValue($currentCell,'Post-Audited by:');
+
             } else {
                 $currentCell = $col.$row;
                 $spreadsheet->getActiveSheet()->setCellValue($currentCell,'CERTIFICATION:');
             }
             $spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setBold(true)->setSize(12);
-            $spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center')->setWrapText(false);
+            $spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('bottom')->setWrapText(false);
+            $spreadsheet->getActiveSheet()->getRowDimension($row)->setRowHeight(36);
         }
 
 $this->nextRow(2);
