@@ -28,7 +28,9 @@ class CasualPlantillaController extends Controller
 
 
     private $lastRow = 0;
-    private $currentMergedCells = "";
+    private $currentMergedCell = "";
+    private $spreadsheet;
+    private $casuals;
 
     public function index()
     {
@@ -162,6 +164,7 @@ class CasualPlantillaController extends Controller
             ->orderBy('last_name','asc')
             ->get();
 
+         $this->casuals = $casuals;
         // Create new Spreadsheet object
         
         $spreadsheet = new Spreadsheet();
@@ -338,7 +341,7 @@ $this->headSection($department,$spreadsheet,$startRow);
         $spreadsheet->getActiveSheet()->getPageSetup()->setPrintArea($printArea);
         $spreadsheet->getActiveSheet()->getPageSetup()->setFitToWidth(1);
 
-        $this->lastRow = 0;
+        
         $this->createRaiWorksheet($spreadsheet);
 
 
@@ -799,63 +802,193 @@ $this->lastRow = $startRow+14;
     }
 
 
-    private function nothingFollows($spreadsheet,$row){
+    private function nothingFollows($spreadsheet,$row,$colb='N'){
         $col = "A";
 
-        $spreadsheet->getActiveSheet()->mergeCells($col.$row.':N'.$row);
+        $spreadsheet->getActiveSheet()->mergeCells($col.$row.':'.$colb.$row);
 
         $spreadsheet->getActiveSheet()->getCell($col.$row)->setValue('***NOTHING FOLLOWS***');
-        $spreadsheet->getActiveSheet()->getStyle($col.$row.':N'.$row)->getBorders()->getOutline()->setBorderStyle('thin');
-        $spreadsheet->getActiveSheet()->getStyle($col.$row.':N'.$row)->getBorders()->getLeft()->setBorderStyle('thick');
-        $spreadsheet->getActiveSheet()->getStyle($col.$row.':N'.$row)->getBorders()->getRight()->setBorderStyle('thick');
+        $spreadsheet->getActiveSheet()->getStyle($col.$row.':'.$colb.$row)->getBorders()->getOutline()->setBorderStyle('thin');
+        $spreadsheet->getActiveSheet()->getStyle($col.$row.':'.$colb.$row)->getBorders()->getLeft()->setBorderStyle('thick');
+        $spreadsheet->getActiveSheet()->getStyle($col.$row.':'.$colb.$row)->getBorders()->getRight()->setBorderStyle('thick');
         
         $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
         $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(14);
         $spreadsheet->getActiveSheet()->getRowDimension($row)->setRowHeight(15);
     }
 
-    public function mergeCells($pRange)
-    {
-        // Uppercase coordinate
-        $pRange = strtoupper($pRange);
-        $this->currentMergedCells = $pRange;
-        if (strpos($pRange, ':') !== false) {
-            $this->mergeCells[$pRange] = $pRange;
-
-            // make sure cells are created
-
-            // get the cells in the range
-            $aReferences = Coordinate::extractAllCellReferencesInRange($pRange);
-
-            // create upper left cell if it does not already exist
-            $upperLeft = $aReferences[0];
-            if (!$this->cellExists($upperLeft)) {
-                $this->getCell($upperLeft)->setValueExplicit(null, DataType::TYPE_NULL);
-            }
-
-            // Blank out the rest of the cells in the range (if they exist)
-            $count = count($aReferences);
-            for ($i = 1; $i < $count; ++$i) {
-                if ($this->cellExists($aReferences[$i])) {
-                    $this->getCell($aReferences[$i])->setValueExplicit(null, DataType::TYPE_NULL);
-                }
-            }
-        } else {
-            throw new Exception('Merge must be set on a range of cells.');
-        }
-
-        return $this;
-    }
-
-    // private $startingRow = 0;
     private function createRaiWorksheet($spreadsheet)
     {
         $worksheet1 = $spreadsheet->createSheet();
         $worksheet1->setTitle('RAI');
-        
-
+        $spreadsheet->getDefaultStyle()->getFont()->setName('Arial');
+        $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
         // create head of RAI
-        $row = $this->lastRow;
+
+        // start of head
+$this->lastRow = 1;
+$casuals =$this->casuals;
+$count = count($casuals);
+$pages = intval($count/15);
+if ($count>($pages*15)) {
+    $pages = $pages+1;
+}
+$totalNo = $pages*15;
+$numbering = 1;
+// row number to start
+$end = false;
+$cols = array(
+    'a'=>0,
+    'b'=>'from_date',
+    'c'=>'last_name',
+    'd'=>'first_name',
+    'e'=>'ext_name',
+    'f'=>'middle_name',
+    'g'=>'position_title',
+    'h'=>'sg',
+    'i'=>'daily_wage',
+    'j'=>0,
+    'k'=>'employment_status',
+    'l'=>'period_of_employment',
+    'm'=>'nature_of_appointment',
+    'n'=>'',
+    'o'=>'',
+    'p'=>'',
+    'q'=>'',
+    'r'=>'',
+    's'=>'',
+);
+for ($page=1; $page <= $pages ; $page++) {
+// Head
+ $this->raiHead($spreadsheet);
+
+    for ($i=1; $i <= 15; $i++) {
+        // (isset($casuals[$numbering-2])?$end = true:$end = false);
+        $numbering++;
+        // echo $numbering++.'. '.(isset($name[$numbering-2])?$name[$numbering-2]:($end?nothingFollows($end):'')).'<br>';  
+        $row = $this->nextRow();
+        $num = $numbering-1;
+    
+
+        if (!$end && !isset($casuals[$num-1]['last_name'])) {
+            $end = true;
+            $this->nothingFollows($spreadsheet,$row,'S');
+        } else {
+
+            // foreach ($cols as $key => $col) {
+            //     $spreadsheet->getActiveSheet()->setCellValue($col.$row,$num);
+            //     $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
+            //     $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getLeft()->setBorderStyle('thick');
+            //     $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
+            //     $spreadsheet->getActiveSheet()->getCell($col.$row)->setValue((isset($casuals[$num-1]['last_name'])?$casuals[$num-1]['last_name']:''));
+            //     $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
+            //     $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
+            // }
+    
+        
+        // $col = "D";
+        // $spreadsheet->setActiveSheetIndex(0)->setCellValue($col.$row, (isset($casuals[$num-1]['last_name'])?$casuals[$num-1]['first_name']:''));
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
+        // $col = "E";
+        // $spreadsheet->setActiveSheetIndex(0)->setCellValue($col.$row, (isset($casuals[$num-1]['last_name'])?$casuals[$num-1]['ext_name']:''));
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
+        // $col = "F";
+        // $spreadsheet->setActiveSheetIndex(0)->setCellValue($col.$row, (isset($casuals[$num-1]['last_name'])?$casuals[$num-1]['middle_name']:''));
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
+        // $col = 'G';
+        // $spreadsheet->setActiveSheetIndex(0)->setCellValue($col.$row, (isset($casuals[$num-1]['last_name'])?$casuals[$num-1]['position_title']:''));
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
+        // $col = 'H';
+        // $spreadsheet->setActiveSheetIndex(0)->setCellValue($col.$row, (isset($casuals[$num-1]['last_name'])?$casuals[$num-1]['sg']:''));
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
+        // $col = 'I';
+        // $spreadsheet->setActiveSheetIndex(0)->setCellValue($col.$row, (isset($casuals[$num-1]['last_name'])?'Php. '.number_format((float)$casuals[$num-1]['daily_wage'], 2, '.', ''):''));
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
+        // $col = 'J';
+        // $spreadsheet->setActiveSheetIndex(0)->setCellValue($col.$row, (isset($casuals[$num-1]['last_name'])?date_format(date_create($casuals[$num-1]['from_date']), 'm/d/Y'):''));
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
+        // $col = 'K';
+        // $spreadsheet->setActiveSheetIndex(0)->setCellValue($col.$row, (isset($casuals[$num-1]['last_name'])?date_format(date_create($casuals[$num-1]['to_date']), 'm/d/Y'):''));
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
+        // $col = 'L';
+        // $spreadsheet->setActiveSheetIndex(0)->setCellValue($col.$row, (isset($casuals[$num-1]['last_name'])?$casuals[$num-1]['nature_of_appointment']:''));
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
+        // $col = 'M';
+        // // $spreadsheet->setActiveSheetIndex(0)->setCellValue($col.$row, $casual['nature_of_appointment']);
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
+        // $col = 'N';
+        // // $spreadsheet->setActiveSheetIndex(0)->setCellValue($col.$row, $casual['nature_of_appointment']);
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
+        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getRight()->setBorderStyle('thick');
+
+        $spreadsheet->getActiveSheet()->getRowDimension($row)->setRowHeight(18);
+        }
+    }
+
+    if ($totalNo == $count && $page == $pages) {
+        // echo nothingFollows($end=false)."<br>";
+            $row = $this->lastRow+1;
+            $this->nothingFollows($spreadsheet,$row,'S');
+            $this->lastRow = $row;
+    }
+        // start of foot
+        $this->raiFoot($spreadsheet);
+        $this->lastRow = $this->currentRow()+3;
+}
+    // end of perpage
+
+
+        $b =-1;
+        $printArea = '';
+        for ($i=0; $i < $pages ; $i++) { 
+            $a = $b+2;
+            $b = $a+54;
+            $printArea .= 'A'.$a.':S'.$b;
+            if ($i != ($pages-1)) {
+                $printArea .= ',';
+            }
+        }
+
+
+        $spreadsheet->getActiveSheet()->getPageSetup()
+        ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+        $spreadsheet->getActiveSheet()->getPageSetup()
+        ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
+
+        $spreadsheet->getActiveSheet()->getPageMargins()->setTop(0.25);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setRight(0.25);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setLeft(0.41);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setBottom(0.25);
+
+        $spreadsheet->getActiveSheet()->getPageSetup()->setPrintArea($printArea);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setFitToWidth(1);
+
+
+
+    } 
+
+
+    private function raiHead($spreadsheet){
         $col = 'A';
         $colend = 'S';
         $spreadsheet->setActiveSheetIndex(1);
@@ -863,11 +996,443 @@ $this->lastRow = $startRow+14;
             ->setCellValue($col.$this->nextRow(), 'CS Form No. 2')
             ->setCellValue($col.$this->nextRow(), 'Revised 2017')->getStyle($col.$this->currentRow())->getFont()->setBold(true)->setItalic(true)->setSize(9);
         $spreadsheet->getActiveSheet()
-            ->mergeCells($col.$this->nextRow(2).":".$colend.$this->currentRow())->getCell($col.$this->currentRow())->setValue($this->mergeCells('A9:B9'));
-                                                                             
-            // For the month of JANUARY 2020                                                                       
+            ->mergeCells($this->currentMergedCell($col,$this->nextRow(2),$colend,$this->currentRow()))->getCell($col.$this->currentRow())->setValue('REPORT ON APPOINTMENTS ISSUED (RAI)')->getStyle($this->currentMergedCell)->getAlignment()->setHorizontal('center')->setVertical('center');
+        $spreadsheet->getActiveSheet()->getStyle($this->currentMergedCell)->getFont()->setBold(true)->setSize(14);
+
+        $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
+        $payable = $richText->createTextRun('For the month of ');
+        // $richText->createText('For the Month of ');
+        $payable->getFont()->setItalic(true);
+        $payable = $richText->createTextRun('JANUARY 2020');
+        $payable->getFont()->setItalic(true);
+        $payable->getFont()->setBold(true);
+        $payable->getFont()->setUnderline(true);
+        
+        // $payable->getFont()->setBold(true);
+        // $richText->createText('');
+
+        $spreadsheet->getActiveSheet()
+            ->mergeCells($this->currentMergedCell($col,$this->nextRow(),$colend,$this->currentRow()))->getCell($col.$this->currentRow())->setValue($richText)->getStyle($this->currentMergedCell)->getAlignment()->setHorizontal('center')->setVertical('center');
+        $col = 'O';
+        $spreadsheet->getActiveSheet()
+            ->setCellValue($col.$this->nextRow(), 'Date received by CSCFO:')->getStyle($col.$this->currentRow())->getFont()->setBold(true)->setItalic(false)->setSize(10);
+
+
+        $spreadsheet->getActiveSheet()->getStyle($col.$this->currentRow())->getAlignment()->setHorizontal('right');
+
+        $spreadsheet->getActiveSheet()->mergeCells($this->currentMergedCell('p',$this->currentRow(),'s',$this->currentRow()));
+        $spreadsheet->getActiveSheet()->getStyle($this->currentMergedCell)->getBorders()->getBottom()->setBorderStyle('thin');
+
+        $col = 'A';
+        $colB = 'B';
+        $spreadsheet->getActiveSheet()
+            ->mergeCells($this->currentMergedCell($col,$this->nextRow(3),$colB,$this->currentRow()))->getCell($col.$this->currentRow())->setValue('AGENCY:')->getStyle($this->currentMergedCell)->getAlignment()->setHorizontal('center')->setVertical('center');
+        $spreadsheet->getActiveSheet()
+            ->getStyle($col.$this->currentRow())->getFont()->setBold(true)->setItalic(false)->setSize(12);
+        $spreadsheet->getActiveSheet()->mergeCells($this->currentMergedCell('c',$this->currentRow(),'f',$this->currentRow()));
+        $spreadsheet->getActiveSheet()->getStyle($this->currentMergedCell)->getBorders()->getBottom()->setBorderStyle('thin');
+        // CSC Resolution No:   1201478 
+        // label start
+        $col = 'I';
+        $row = $this->currentRow();
+        $currentCell = $col.$row;
+        $spreadsheet->getActiveSheet()->setCellValue($currentCell,'CSC Resolution No:');
+        // fontstyle
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setBold(true);
+        // alignment
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('right')->setVertical('center');
+        // label end
+        // underline start
+
+
+        $spreadsheet->getActiveSheet()->mergeCells($this->currentMergedCell('j',$this->currentRow(),'k',$this->currentRow()));
+        $currentCell = 'J'.$row;
+        $spreadsheet->getActiveSheet()->setCellValue($currentCell,'1201478');
+        // fontstyle
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setBold(true);
+        // alignment
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('center')->setVertical('center');
+        $spreadsheet->getActiveSheet()->getStyle($this->currentMergedCell)->getBorders()->getBottom()->setBorderStyle('thin');
+
+
+        // underline end
+
+        // CSCFO In-charge: M
+        // label start
+        $col = 'M';
+        $row = $this->currentRow();
+        $currentCell = $col.$row;
+        $spreadsheet->getActiveSheet()->setCellValue($currentCell,'CSC Resolution No:');
+        // fontstyle
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setBold(true);
+        // alignment
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('right')->setVertical('center');
+        // label end
+        // underline start
+        $spreadsheet->getActiveSheet()->mergeCells($this->currentMergedCell('n',$this->currentRow(),'s',$this->currentRow()));
+        $spreadsheet->getActiveSheet()->getStyle($this->currentMergedCell)->getBorders()->getBottom()->setBorderStyle('thin');
+        // underline end
+
+
+        // start merged cells
+        $col = 'A';
+        $colb = 'B';
+        $row = $this->nextRow(2);
+        $currentCell = $col.$row;
+        $currentMCell = $col.$row.':'.$colb.$row;
+
+        $spreadsheet->getActiveSheet()->mergeCells($currentMCell);
+        $spreadsheet->getActiveSheet()->setCellValue($currentCell,'INSTRUCTIONS:');
+        // fontstyle
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setBold(true);
+        // alignment
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('right')->setVertical('center');
+        // end merged cells
+        // start write cell
+        $col = 'C';
+        // $colb = 'B';
+        $row = $this->currentRow();
+        $currentCell = $col.$row;
+        // $currentMCell = $col.$row.':'.$colb.$row;
+
+        // $spreadsheet->getActiveSheet()->mergeCells($currentCell);
+        $spreadsheet->getActiveSheet()->setCellValue($currentCell,'(1) Fill-out the data needed in the form completely and accurately.');
+        // fontstyle
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setBold(false);
+        // alignment
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center');
+        // end write cell
+                // start write cell
+        // $col = 'C';
+        // $colb = 'B';
+        $row = $this->nextRow();
+        $currentCell = $col.$row;
+        $spreadsheet->getActiveSheet()->setCellValue($currentCell,'(2) Do not abbreviate entries in the form.');
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setBold(false);
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center');
+        $row = $this->nextRow();
+        $currentCell = $col.$row;
+        $spreadsheet->getActiveSheet()->setCellValue($currentCell,'(3) Accomplish the Checklist of Common Requirements and sign the certification.');
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setBold(false);
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center');
+        $row = $this->nextRow();
+        $currentCell = $col.$row;
+        $spreadsheet->getActiveSheet()->setCellValue($currentCell,'(4) Submit the duly accomplished form in electronic and printed copy (2 copies) to the CSC Field Office-in-Charge');
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setBold(false);
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center');
+        $row = $this->nextRow();
+        $currentCell = $col.$row;
+        $spreadsheet->getActiveSheet()->setCellValue($currentCell,' together with the original CSC copy of appointments and supporting documents within the 30th day of the succeeding month.');
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setBold(false);
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center');
+
+
+        // Pertinent data on appointment issued
+        $col = 'A';
+        $row = $this->nextRow(2);
+        $currentCell = $col.$row;
+        $spreadsheet->getActiveSheet()->setCellValue($currentCell,'Pertinent data on appointment issued');
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setBold(true);
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center');
+
+        $this->nextRow(2);
+
+        $this->spreadsheet = $spreadsheet;
+        $this->oneColMultiRowField('A',$this->currentRow(),'',3);
+        $this->oneColMultiRowField('B',$this->currentRow(),'Date Issued/Effectivity (mm/dd/yyyy)',3);
+        $this->spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+        $this->multiColOneRow('C',$this->currentRow(),'NAME OF APPOINTEE/S','F',true);
+        $this->oneColMultiRowField('G',$this->currentRow(),'POSITION TITLE (Indicate parenthetical title if applicable)',3);
+        $this->spreadsheet->getActiveSheet()->getColumnDimension('g')->setWidth(20);
+        $this->oneColMultiRowField('H',$this->currentRow(),'ITEM NO.',3);
+        $this->oneColMultiRowField('I',$this->currentRow(),'SALARY/JOB/PAY GRADE',3);
+        $this->oneColMultiRowField('J',$this->currentRow(),'SALARY RATE (Annual)',3);
+        $this->spreadsheet->getActiveSheet()->getColumnDimension('J')->setWidth(14);
+        $this->oneColMultiRowField('K',$this->currentRow(),'EMPLOYMENT STATUS',3);
+        $this->spreadsheet->getActiveSheet()->getColumnDimension('K')->setWidth(14);
+        $this->oneColMultiRowField('L',$this->currentRow(),"PERIOD OF EMPLOYMENT \n(for Temporary, Casual/ Contractual Appointments) (mm/dd/yyyy to mm/dd/yyyy)",3);
+        $this->spreadsheet->getActiveSheet()->getColumnDimension('L')->setWidth(31);
+        $this->oneColMultiRowField('M',$this->currentRow(),'NATURE OF APPOINTMENT',3);
+        $this->spreadsheet->getActiveSheet()->getColumnDimension('M')->setWidth(16);
+
+        $this->multiColOneRow('N',$this->currentRow(),'PUBLICATION','O');
+        $this->multiColOneRow('P',$this->currentRow(),'CSC ACTION','R');
+        $this->oneColMultiRowField('S',$this->currentRow(),'Agency Receiving Officer',3);
+
+        $this->nextRow();
+        $this->oneColMultiRowField('C',$this->currentRow(),'Last Name',2);
+        $this->spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+        $this->oneColMultiRowField('D',$this->currentRow(),'First Name',2);
+        $this->spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(30);
+        $this->oneColMultiRowField('E',$this->currentRow(),'Name Extension (Jr./III)',2);
+        $this->spreadsheet->getActiveSheet()->getStyle('E'.$this->currentRow())->getFont()->setSize(8);
+        $this->oneColMultiRowField('F',$this->currentRow(),'Middle Name',2);
+        $this->spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(30);
+
+        $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
+        // $richText->createText('This is to certify that all requirement and supporting papers pursuant to ');
+        $payable = $richText->createTextRun('DATE');
+        $payable->getFont()->setBold(true);
+        $payable = $richText->createTextRun("\nIndicate date of publication\n(mm/dd/yyyy)");
+        $payable->getFont()->setSize(8);
+
+        $this->oneColMultiRowField('N',$this->currentRow(),$richText,2,'top');
+
+        $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
+        // $richText->createText('This is to certify that all requirement and supporting papers pursuant to ');
+        $payable = $richText->createTextRun('MODE');
+        $payable->getFont()->setBold(true);
+        $payable = $richText->createTextRun("\nCSC Bulletin of Vacant Positions");
+        $payable->getFont()->setSize(8);
+        $this->oneColMultiRowField('O',$this->currentRow(),$richText,2,'top');
+        $this->oneColMultiRowField('P',$this->currentRow(),"V-Validated\nINV- Invalidated",2);
+        $this->spreadsheet->getActiveSheet()->getColumnDimension('P')->setWidth(14);
+        $this->oneColMultiRowField('Q',$this->currentRow(),'Date of Action (mm/dd/yyyy)',2);
+        $this->oneColMultiRowField('R',$this->currentRow(),'Date of Release (mm/dd/yyyy)',2);
+
+        $this->spreadsheet->getActiveSheet()->getRowDimension($this->currentRow())->setRowHeight(51);
+
+        $this->nextRow(3);
+
+        $this->oneColOneRow('A',$this->currentRow(),'');
+        $this->oneColOneRow('B',$this->currentRow(),'(1)');
+        $this->multiColOneRow('C',$this->currentRow(),'(2)','F');
+        
+
+        $cols = array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s');
+
+        foreach ($cols as $num => $col) {
+            if (!in_array($col, array('a','b','c','d','e','f'))) {
+                $this->oneColOneRow($col,$this->currentRow(),'('.($num-3).')');
+            }
+        }
+
+
     }
 
+
+private function raiFoot($spreadsheet){
+        $this->nextRow();
+        $cols = array('a','h','n');
+        $row = $this->currentRow();
+        foreach ($cols as $key => $col) {
+            if ($col == 'n') {
+                $currentCell = $col.$row;
+                $spreadsheet->getActiveSheet()->setCellValue($currentCell,'Post-Audited by:');
+            } else {
+                $currentCell = $col.$row;
+                $spreadsheet->getActiveSheet()->setCellValue($currentCell,'CERTIFICATION:');
+            }
+            $spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setBold(true)->setSize(12);
+            $spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center')->setWrapText(false);
+        }
+
+$this->nextRow(2);
+$row = $this->currentRow();
+
+$texts0 = array(
+    ' This is to certify that the information contained in this',
+    'report are true, correct and complete based on the Plantilla',
+    'of Personnel and appointment/s issued.'
+);
+$texts1 = array(
+    ' This is to certify that the appointment/s issued',
+    'is/are in accordance with existing Civil Service Law,',
+    'rules and regulations.'
+);
+$cols = array('a'=>$texts0,'h'=>$texts1);
+
+foreach ($cols as $col => $text) {
+    foreach ($text as $i => $text) {
+        $currentCell = $col.($row+$i);
+        $spreadsheet->getActiveSheet()->setCellValue($currentCell,$text);
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setSize(14);
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center')->setWrapText(false);
+    }
+}
+
+$this->multiColOneRow('N',$this->currentRow(),'','P',false,'bottom');
+
+
+
+
+$this->nextRow(3);
+$this->spreadsheet->getActiveSheet()->getRowDimension($this->currentRow())->setRowHeight(45);
+
+$this->nextRow(1);
+
+        $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
+        $payable = $richText->createTextRun('VERONICA GRACE P. MIRAFLOR');
+        $payable->getFont()->setBold(true);
+        $payable->getFont()->setUnderline(true);
+        $payable->getFont()->setSize(16);
+        
+        $col = 'A';
+        $colb = 'D';
+        $row = $this->currentRow();
+        $currentCell = $col.$row;
+        $currentMCell = $currentCell.':'.$colb.$row;
+        $this->spreadsheet->getActiveSheet()->mergeCells($currentMCell);
+        $this->spreadsheet->getActiveSheet()->setCellValue($currentCell,$richText);
+        $this->spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setSize(16);
+        $this->spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('center')->setVertical('center');
+
+        $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
+        $payable = $richText->createTextRun('PRYDE HENRY A. TEVES');
+        $payable->getFont()->setBold(true);
+        $payable->getFont()->setUnderline(true);
+        $payable->getFont()->setSize(16);
+
+        $col = 'H';
+        $colb = 'L';
+        $row = $this->currentRow();
+        $currentCell = $col.$row;
+        $currentMCell = $currentCell.':'.$colb.$row;
+        $this->spreadsheet->getActiveSheet()->mergeCells($currentMCell);
+        $this->spreadsheet->getActiveSheet()->setCellValue($currentCell,$richText);
+        $this->spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setSize(16);
+        $this->spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('center')->setVertical('center');
+
+        $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
+        $payable = $richText->createTextRun('');
+        $payable->getFont()->setBold(true);
+        $payable->getFont()->setUnderline(true);
+        $payable->getFont()->setSize(16);
+
+        $col = 'n';
+        $colb = 'p';
+        $row = $this->currentRow();
+        $currentCell = $col.$row;
+        $currentMCell = $currentCell.':'.$colb.$row;
+        $this->spreadsheet->getActiveSheet()->mergeCells($currentMCell);
+        $this->spreadsheet->getActiveSheet()->setCellValue($currentCell,$richText);
+        $this->spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setSize(16);
+        $this->spreadsheet->getActiveSheet()->getStyle($currentMCell)->getBorders()->getBottom()->setBorderStyle('thin');
+        $this->spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('center')->setVertical('center');
+
+        $this->nextRow();
+
+        $col = 'A';
+        $colb = 'D';
+        $row = $this->currentRow();
+        $currentCell = $col.$row;
+        $currentMCell = $currentCell.':'.$colb.$row;
+        $this->spreadsheet->getActiveSheet()->mergeCells($currentMCell);
+        $this->spreadsheet->getActiveSheet()->setCellValue($currentCell,'HRMO IV');
+        $this->spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setSize(16);
+        $this->spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('center')->setVertical('top');
+
+        $col = 'H';
+        $colb = 'L';
+        $row = $this->currentRow();
+        $currentCell = $col.$row;
+        $currentMCell = $currentCell.':'.$colb.$row;
+        $this->spreadsheet->getActiveSheet()->mergeCells($currentMCell);
+        $this->spreadsheet->getActiveSheet()->setCellValue($currentCell,'City Mayor');
+        $this->spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setSize(16);
+        $this->spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('center')->setVertical('top');
+
+        $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
+        $payable = $richText->createTextRun('_____________________________');
+        $payable->getFont()->setBold(true);
+        $payable->getFont()->setUnderline(true);
+
+
+        $col = 'n';
+        $colb = 'p';
+        $row = $this->currentRow();
+        $currentCell = $col.$row;
+        $currentMCell = $currentCell.':'.$colb.$row;
+        $this->spreadsheet->getActiveSheet()->mergeCells($currentMCell);
+        $this->spreadsheet->getActiveSheet()->setCellValue($currentCell,'CSC Official');
+        $this->spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setSize(16);
+        $this->spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('center')->setVertical('top');
+
+        $this->spreadsheet->getActiveSheet()->getRowDimension($this->currentRow())->setRowHeight(35);
+        $this->nextRow();
+
+
+        $col = 'A';
+        $colb = 'S';
+        $row = $this->currentRow();
+        $currentCell = $col.$row;
+        $currentMCell = $currentCell.':'.$colb.$row;
+        $spreadsheet->getActiveSheet()->mergeCells($currentMCell);
+        $this->spreadsheet->getActiveSheet()->setCellValue($currentCell,'For CSC use only:');
+        $this->spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setBold(true)->setItalic(true);
+        $this->spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center')->setWrapText(false);
+        $this->spreadsheet->getActiveSheet()->getStyle($currentMCell)->getBorders()->getBottom()->setBorderStyle('double');
+
+        
+        for ($i=0; $i < 6; $i++) { 
+
+            $this->nextRow();
+            $row = $this->currentRow();
+                $currentCell = $col.($row);
+                $currentMCell = $currentCell.':'.$colb.($row);
+                $spreadsheet->getActiveSheet()->mergeCells($currentMCell);
+            if ($i == 0) {
+                $this->spreadsheet->getActiveSheet()->setCellValue($currentCell,'REMARKS/COMMENTS/RECOMMENDATIONS (e.g. Reasons for Invalidation)');    
+            } else {
+                $this->spreadsheet->getActiveSheet()->setCellValue($currentCell,'');    
+            }
+
+            $this->spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setBold(true)->setItalic(true);
+            $this->spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center')->setWrapText(false);
+            $this->spreadsheet->getActiveSheet()->getStyle($currentMCell)->getBorders()->getOutline()->setBorderStyle('thin');
+            $this->spreadsheet->getActiveSheet()->getRowDimension($this->currentRow())->setRowHeight(20);     
+        }
+    }
+
+    private function setColAutoSize($col){
+        $spreadsheet = $this->spreadsheet;
+        $spreadsheet->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+    }
+
+    private function oneColOneRow($col,$row,$string,$bold=false){
+        $spreadsheet = $this->spreadsheet;
+        $col = $col;
+        $row = $row;
+        $currentCell = $col.$row;
+        $spreadsheet->getActiveSheet()->setCellValue($currentCell,$string);
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setBold($bold);
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('center')->setVertical('center')->setWrapText(true);
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getBorders()->getOutline()->setBorderStyle('thin');
+    }
+
+    private function oneColMultiRowField ($col,$row,$string,$rows,$valign='center',$border='outline'){
+        $spreadsheet = $this->spreadsheet;
+        $col = $col;
+        $row = $row;
+        $currentCell = $col.$row;
+        $currentMCell = $currentCell.':'.$col.($row+$rows);
+        $spreadsheet->getActiveSheet()->mergeCells($currentMCell);
+        $spreadsheet->getActiveSheet()->setCellValue($currentCell,$string);
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setBold(false);
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('center')->setVertical($valign)->setWrapText(true);
+        if ($border == 'bottom') {
+            $spreadsheet->getActiveSheet()->getStyle($currentMCell)->getBorders()->getBottom()->setBorderStyle('thin');
+        } elseif ($border == 'outline') {
+            $spreadsheet->getActiveSheet()->getStyle($currentMCell)->getBorders()->getOutline()->setBorderStyle('thin');
+        }
+    }
+
+    private function multiColOneRow($col,$row,$string,$colb,$bold=false,$border='outline'){
+        $spreadsheet = $this->spreadsheet;
+        $col = $col;
+        $row = $row;
+        $currentCell = $col.$row;
+        $currentMCell = $currentCell.':'.$colb.$row;
+        $spreadsheet->getActiveSheet()->mergeCells($currentMCell);
+        $spreadsheet->getActiveSheet()->setCellValue($currentCell,$string);
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getFont()->setBold($bold);
+        $spreadsheet->getActiveSheet()->getStyle($currentCell)->getAlignment()->setHorizontal('center')->setVertical('center')->setWrapText(true);
+        if ($border == 'bottom') {
+            $spreadsheet->getActiveSheet()->getStyle($currentMCell)->getBorders()->getBottom()->setBorderStyle('thin');
+        } elseif ($border == 'outline') {
+            $spreadsheet->getActiveSheet()->getStyle($currentMCell)->getBorders()->getOutline()->setBorderStyle('thin');
+        }
+    }
 
     private function nextRow($rowApart=1){
         $this->lastRow = $this->lastRow+$rowApart;
@@ -878,10 +1443,10 @@ $this->lastRow = $startRow+14;
         return $this->lastRow;
     }
 
-    // private function  currentCells($cola,$rowa,$colb,$rowb){
-    //     $mergeCells = 
-    //     return $mergeCells;
-    // }
+    private function  currentMergedCell($cola,$rowa,$colb,$rowb){
+        $this->currentMergedCell = $cola.$rowa.":".$colb.$rowb;
+        return $this->currentMergedCell;
+    }
 
 
 }
