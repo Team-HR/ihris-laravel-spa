@@ -802,15 +802,15 @@ $this->lastRow = $startRow+14;
     }
 
 
-    private function nothingFollows($spreadsheet,$row,$colb='N'){
+    private function nothingFollows($spreadsheet,$row,$colb='N',$bstyle='thick'){
         $col = "A";
 
         $spreadsheet->getActiveSheet()->mergeCells($col.$row.':'.$colb.$row);
 
         $spreadsheet->getActiveSheet()->getCell($col.$row)->setValue('***NOTHING FOLLOWS***');
         $spreadsheet->getActiveSheet()->getStyle($col.$row.':'.$colb.$row)->getBorders()->getOutline()->setBorderStyle('thin');
-        $spreadsheet->getActiveSheet()->getStyle($col.$row.':'.$colb.$row)->getBorders()->getLeft()->setBorderStyle('thick');
-        $spreadsheet->getActiveSheet()->getStyle($col.$row.':'.$colb.$row)->getBorders()->getRight()->setBorderStyle('thick');
+        $spreadsheet->getActiveSheet()->getStyle($col.$row.':'.$colb.$row)->getBorders()->getLeft()->setBorderStyle($bstyle);
+        $spreadsheet->getActiveSheet()->getStyle($col.$row.':'.$colb.$row)->getBorders()->getRight()->setBorderStyle($bstyle);
         
         $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
         $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(14);
@@ -878,8 +878,9 @@ for ($page=1; $page <= $pages ; $page++) {
 
         if (!$end && !isset($casuals[$num-1]['last_name'])) {
             $end = true;
-            $this->nothingFollows($spreadsheet,$row,'S');
+            $this->nothingFollows($spreadsheet,$row,'S','thin');
         } else {
+
 
             foreach ($cols as $col => $index) {
                 if ($col == 'a') {
@@ -906,7 +907,17 @@ for ($page=1; $page <= $pages ; $page++) {
                 // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
                 // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
             }
-    
+
+            // this is the one not stashed
+            // foreach ($cols as $key => $col) {
+            //     $spreadsheet->getActiveSheet()->setCellValue($col.$row,$num);
+            //     $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
+            //     $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getLeft()->setBorderStyle('thick');
+            //     $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
+            //     $spreadsheet->getActiveSheet()->getCell($col.$row)->setValue((isset($casuals[$num-1]['last_name'])?$casuals[$num-1]['last_name']:''));
+            //     $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
+            //     $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
+            // }
         
         // $col = "D";
         // $spreadsheet->setActiveSheetIndex(0)->setCellValue($col.$row, (isset($casuals[$num-1]['last_name'])?$casuals[$num-1]['first_name']:''));
@@ -970,7 +981,7 @@ for ($page=1; $page <= $pages ; $page++) {
     if ($totalNo == $count && $page == $pages) {
         // echo nothingFollows($end=false)."<br>";
             $row = $this->lastRow+1;
-            $this->nothingFollows($spreadsheet,$row,'S');
+            $this->nothingFollows($spreadsheet,$row,'S','thin');
             $this->lastRow = $row;
 
     }
