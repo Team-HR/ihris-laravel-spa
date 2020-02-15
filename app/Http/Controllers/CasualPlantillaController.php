@@ -972,11 +972,11 @@ for ($page=1; $page <= $pages ; $page++) {
             $row = $this->lastRow+1;
             $this->nothingFollows($spreadsheet,$row,'S');
             $this->lastRow = $row;
+
     }
         // start of foot
         $this->raiFoot($spreadsheet);
         $this->lastRow = $this->currentRow()+3;
-        $spreadsheet->getActiveSheet()->getStyle('A20:S39')->getBorders()->getOutline()->setBorderStyle('thick');
 }
     // end of perpage
 
