@@ -61,7 +61,7 @@
 @if(count($appointments)>0)
   @foreach($appointments as $no => $appointment) 
     <tr>
-      <td class="text-center">{{$no+1}}.)</td>
+      <td class="text-center">{{$no+1}}</td>
       <td class="text-center text-primary"><a href="javascript:void(0)" onclick="generateReport('{{json_encode($appointment)}}')"><i class="fas fa-file-excel"></i> Generate Report</a></td>
       <td class="text-center">{{$appointment['from_date_str']}}</td>
       <td class="text-center">{{$appointment['to_date_str']}}</td>
@@ -108,19 +108,30 @@
         <label for="filter">for:</label>
         <select id="filter" name="filter" class="custom-select form-control">
           <option value="all" selected>All Employees</option>
-@if(count($departments)>0)
-  @foreach($departments as $department)
-    <option value="{{$department['id']}}">{{($department['short_name']?$department['short_name'].' - ':'')}}{{$department['name']}}</option>
-  @endforeach
-@else
-<option disabled>No Departments</option>
-@endif
+
+      @if(count($departments)>0)
+        @foreach($departments as $department)
+          <option value="{{$department['id']}}">{{($department['short_name']?$department['short_name'].' - ':'')}}{{$department['name']}}</option>
+        @endforeach
+      @else
+        <option disabled>No Departments</option>
+      @endif
 
         </select>
         <div class="invalid-feedback">
             Please indicate the gender.
       </div>
       </div>
+  </div>
+  <div class="form-row ml-2">
+    {{-- <div class="form-group col-12">
+      <label>Inlcude RAI</label>
+      <input type="checkbox" name="incRAI">
+    </div> --}}
+    <div class="form-group form-check">
+      <input type="checkbox" class="form-check-input" id="incRAI" style="transform: scale(1);" name="incRAI">
+      <label class="form-check-label" for="incRAI"> Include RAI</label>
+    </div>
   </div>
 </form>
 
@@ -172,6 +183,7 @@
  $("#generateReport-form").submit(function(event) {
             event.preventDefault();
             var serial = $('#generateReport-form').serialize();
+            console.log(serial);
             window.location.href="{{url('/casual/plantilla-generate_report')}}"+'?'+serial;
             $('#Foo').show();
 

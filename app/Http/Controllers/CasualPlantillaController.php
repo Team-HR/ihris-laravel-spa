@@ -341,8 +341,11 @@ $this->headSection($department,$spreadsheet,$startRow);
         $spreadsheet->getActiveSheet()->getPageSetup()->setPrintArea($printArea);
         $spreadsheet->getActiveSheet()->getPageSetup()->setFitToWidth(1);
 
+        if (isset($request->incRAI)) {
+            $this->createRaiWorksheet($spreadsheet);
+        }
         
-        $this->createRaiWorksheet($spreadsheet);
+        
 
 
         // Redirect output to a client’s web browser (Xlsx)
@@ -898,83 +901,10 @@ for ($page=1; $page <= $pages ; $page++) {
                     $spreadsheet->getActiveSheet()->setCellValue($col.$row,(isset($casuals[$num-1][$index])?$casuals[$num-1][$index]:''));
                     $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
                 }
-                $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
-                // $this->spreadsheet->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
-                // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
-                // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getLeft()->setBorderStyle('thick');
-                // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
-                // $spreadsheet->getActiveSheet()->getCell($col.$row)->setValue((isset($casuals[$num-1][$col])?$casuals[$num-1][$col]:''));
-                // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
-                // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
+                    $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
             }
 
-            // this is the one not stashed
-            // foreach ($cols as $key => $col) {
-            //     $spreadsheet->getActiveSheet()->setCellValue($col.$row,$num);
-            //     $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
-            //     $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getLeft()->setBorderStyle('thick');
-            //     $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
-            //     $spreadsheet->getActiveSheet()->getCell($col.$row)->setValue((isset($casuals[$num-1]['last_name'])?$casuals[$num-1]['last_name']:''));
-            //     $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
-            //     $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
-            // }
-        
-        // $col = "D";
-        // $spreadsheet->setActiveSheetIndex(0)->setCellValue($col.$row, (isset($casuals[$num-1]['last_name'])?$casuals[$num-1]['first_name']:''));
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
-        // $col = "E";
-        // $spreadsheet->setActiveSheetIndex(0)->setCellValue($col.$row, (isset($casuals[$num-1]['last_name'])?$casuals[$num-1]['ext_name']:''));
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
-        // $col = "F";
-        // $spreadsheet->setActiveSheetIndex(0)->setCellValue($col.$row, (isset($casuals[$num-1]['last_name'])?$casuals[$num-1]['middle_name']:''));
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
-        // $col = 'G';
-        // $spreadsheet->setActiveSheetIndex(0)->setCellValue($col.$row, (isset($casuals[$num-1]['last_name'])?$casuals[$num-1]['position_title']:''));
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
-        // $col = 'H';
-        // $spreadsheet->setActiveSheetIndex(0)->setCellValue($col.$row, (isset($casuals[$num-1]['last_name'])?$casuals[$num-1]['sg']:''));
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
-        // $col = 'I';
-        // $spreadsheet->setActiveSheetIndex(0)->setCellValue($col.$row, (isset($casuals[$num-1]['last_name'])?'Php. '.number_format((float)$casuals[$num-1]['daily_wage'], 2, '.', ''):''));
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
-        // $col = 'J';
-        // $spreadsheet->setActiveSheetIndex(0)->setCellValue($col.$row, (isset($casuals[$num-1]['last_name'])?date_format(date_create($casuals[$num-1]['from_date']), 'm/d/Y'):''));
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
-        // $col = 'K';
-        // $spreadsheet->setActiveSheetIndex(0)->setCellValue($col.$row, (isset($casuals[$num-1]['last_name'])?date_format(date_create($casuals[$num-1]['to_date']), 'm/d/Y'):''));
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
-        // $col = 'L';
-        // $spreadsheet->setActiveSheetIndex(0)->setCellValue($col.$row, (isset($casuals[$num-1]['last_name'])?$casuals[$num-1]['nature_of_appointment']:''));
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
-        // $col = 'M';
-        // // $spreadsheet->setActiveSheetIndex(0)->setCellValue($col.$row, $casual['nature_of_appointment']);
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
-        // $col = 'N';
-        // // $spreadsheet->setActiveSheetIndex(0)->setCellValue($col.$row, $casual['nature_of_appointment']);
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getOutline()->setBorderStyle('thin');
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getFont()->setSize(13);//data
-        // $spreadsheet->getActiveSheet()->getStyle($col.$row)->getBorders()->getRight()->setBorderStyle('thick');
-
-        $spreadsheet->getActiveSheet()->getRowDimension($row)->setRowHeight(18);
+            $spreadsheet->getActiveSheet()->getRowDimension($row)->setRowHeight(18);
         }
     }
 
@@ -1003,11 +933,8 @@ for ($page=1; $page <= $pages ; $page++) {
             }
         }
 
-
-        $spreadsheet->getActiveSheet()->getPageSetup()
-        ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
-        $spreadsheet->getActiveSheet()->getPageSetup()
-        ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
 
         $spreadsheet->getActiveSheet()->getPageMargins()->setTop(0.25);
         $spreadsheet->getActiveSheet()->getPageMargins()->setRight(0.25);
@@ -1016,8 +943,7 @@ for ($page=1; $page <= $pages ; $page++) {
 
         $spreadsheet->getActiveSheet()->getPageSetup()->setPrintArea($printArea);
         $spreadsheet->getActiveSheet()->getPageSetup()->setFitToWidth(1);
-
-
+        $spreadsheet->setActiveSheetIndex(0);
 
     } 
 
