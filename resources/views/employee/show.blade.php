@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="container-fluid">
-  {{-- <h1>{{$employee_id}}</h1>   --}}
   <div class="row justify-content-center">
         <div class="col-12">
             <div class="card">
@@ -17,12 +16,6 @@
   <li class="nav-item">
     <a class="nav-link" id="pds-tab" data-toggle="tab" href="#PDS" role="tab" aria-controls="pds" aria-selected="false">PDS</a>
   </li>
-  {{-- <li class="nav-item">
-    <a class="nav-link" id="messages-tab" data-toggle="tab" href="#messages" role="tab" aria-controls="messages" aria-selected="false">Messages</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false">Settings</a>
-  </li> --}}
 </ul>
 
 <div class="tab-content">
@@ -32,7 +25,8 @@
               <table class="table small compact striped">
                   <thead>
                       <tr>
-                        <th>No.</th>
+                          <th>No.</th>
+                          <th>Edit</th>
                           <th>Employment Status</th>
                           <th>Position Title</th>
                           <th>SG</th>
@@ -49,6 +43,7 @@
 
         <tr>
             <td>{{$no+1}}.)</td>
+            <td><a href="javascript:void(0)" onclick="editFunction({{$appointment['id']}})" class="">Edit</a></td>
             <td>{{$appointment['employment_status']}}</td>
             <td>{{$appointment['position_title']}}</td>
             <td>{{$appointment['sg']}}</td>
@@ -89,6 +84,75 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="editAppointmentModal" tabindex="-1" role="dialog" aria-labelledby="editAppointmentModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editAppointmentModalLabel">Update Appointment Entry</h5>
+        {{-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> --}}
+      </div>
+      <div class="modal-body">
+        <form id="editAppointmentForm" novalidate>
+          @method('PUT')
+          <input type="text" name="id" id="id" hidden="">
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label for="employment_status" class="col-form-label">Employement Status:</label>
+              <input type="text" class="form-control" id="employment_status" name="employment_status">
+            </div>
+            <div class="form-group col-6">
+              <label for="position_title" class="col-form-label">Position Title:</label>
+              <input type="text" class="form-control" id="position_title" name="position_title">
+            </div>  
+          </div>
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label for="sg" class="col-form-label">Salary Grade:</label>
+              <input type="text" class="form-control" id="sg" name="sg">
+            </div>
+            <div class="form-group col-6">
+              <label for="daily_wage" class="col-form-label">Daily Wage:</label>
+              <input type="text" class="form-control" id="daily_wage" name="daily_wage">
+            </div>  
+          </div>
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label for="from_date" class="col-form-label">From:</label>
+              <input type="date" class="form-control" id="from_date" name="from_date">
+            </div>
+            <div class="form-group col-6">
+              <label for="to_date" class="col-form-label">To:</label>
+              <input type="date" class="form-control" id="to_date" name="to_date">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label for="nature_of_appointment" class="col-form-label">Nature of Appointment:</label>
+              <input type="text" class="form-control" id="nature_of_appointment" name="nature_of_appointment">
+            </div>
+            <div class="form-group col-6">
+              <label for="department_id" class="col-form-label">Department:</label>
+              {{-- <input type="date" class="form-control" id="to_date"> --}}
+              <select class="form-control" id="department_id" name="department_id">
+                @foreach($departments as $department)
+                  <option value="{{$department['id']}}">{{$department['name']}}</option>
+                @endforeach
+              </select>
+
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button form="editAppointmentForm" type="cancel" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button form="editAppointmentForm" type="submit" class="btn btn-primary">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection
 
 @section('page-script')
@@ -102,7 +166,46 @@
             }
         });
 
+          $("#editAppointmentForm").submit(function(event) {
+            event.preventDefault();
+            var serial = $(this).serialize(); 
+            var appointment_id = $('#id').val();
+            console.log(serial);
+
+            $.ajax({
+                url: '../appointment/'+appointment_id+'/updatePerEmployee',
+                type: 'POST',
+                dataType: 'json',
+                data: $("#editAppointmentForm").serialize(),
+                success: function (data){
+                  // console.log(data);
+                  $('#editAppointmentModal').modal('hide');
+                  window.location.reload();
+                }
+              });
+
+
+          });
+
+
     });
+
+    function editFunction(id){
+      $.get('../appointment/'+id+'/edit', function(data, textStatus, xhr) {
+        /*optional stuff to do after success */
+        console.log(data);
+        $('#id').val(data.id);
+        $('#employment_status').val(data.employment_status);
+        $('#position_title').val(data.position_title);
+        $('#sg').val(data.sg);  
+        $('#daily_wage').val(data.daily_wage);
+        $('#from_date').val(data.from_date);
+        $('#to_date').val(data.to_date);
+        $('#nature_of_appointment').val(data.nature_of_appointment);
+        $('#department_id').val(data.department_id);
+      });
+      $('#editAppointmentModal').modal('show');
+    }
 
 </script>
 

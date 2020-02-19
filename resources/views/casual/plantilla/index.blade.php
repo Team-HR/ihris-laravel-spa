@@ -203,7 +203,6 @@
     $('#period').html(period);
     $('#nature_of_appointment_label').html(arr.nature_of_appointment);
     $('#generate-report-modal').modal("show");
-    
 
     
   }

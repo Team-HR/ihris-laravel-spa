@@ -29,7 +29,9 @@ Route::resource('/employee', 'EmployeeController');
 Route::resource('/casual/plantilla', 'CasualPlantillaController');
 Route::get('/casual/plantilla-generate_report', 'CasualPlantillaController@generateReport');
 
-
+// appointment
+Route::resource('/appointment', 'AppointmentController');
+Route::put('/appointment/{id}/updatePerEmployee', 'AppointmentController@updatePerEmployee');
 // Route::get('admin/employee', 'EmployeeController@index')->name('admin.employee')->middleware('is_admin');
 
 // Route::post('admin/employee', 'EmployeeController@store')->name('admin.employee')->middleware('is_admin');

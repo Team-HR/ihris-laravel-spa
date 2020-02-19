@@ -35,7 +35,7 @@ class EmployeeController extends Controller
         $user = Auth::user();
 
         return view('employee.index', [
-                'employees' => $employees,
+            'employees' => $employees,
             'departments' => $departments,
             'positions' => $positions
         ]);
@@ -135,11 +135,12 @@ class EmployeeController extends Controller
     {
         $employee  = Employee::find($id);
         $appointments = Appointment::where('employee_id',$id)->get();
-
+        $departments = Department::orderBy('short_name', 'asc')->get();
         // $appointments = Appointments::
         return view('employee.show', [
             'employee' => $employee,
             'appointments' => $appointments,
+            'departments' => $departments
         ]);
         // return view('employee.show');
     }
@@ -160,6 +161,7 @@ class EmployeeController extends Controller
         return Response::json($employee);
 
     }
+
 
     /**
      * Update the specified resource in storage.
