@@ -31,6 +31,7 @@ class CasualPlantillaController extends Controller
     private $currentMergedCell = "";
     private $spreadsheet;
     private $casuals;
+    private $department;
 
     public function index()
     {
@@ -157,6 +158,10 @@ class CasualPlantillaController extends Controller
             $department = $dept['name'];
             $matchThese['department_id'] = $department_id;
         }
+
+        $this->department = $department;
+
+
 
         $casuals = Employee::join('appointments', 'appointments.employee_id', '=', 'employees.id')
             ->where($matchThese)
@@ -989,7 +994,11 @@ for ($page=1; $page <= $pages ; $page++) {
             ->mergeCells($this->currentMergedCell($col,$this->nextRow(3),$colB,$this->currentRow()))->getCell($col.$this->currentRow())->setValue('AGENCY:')->getStyle($this->currentMergedCell)->getAlignment()->setHorizontal('center')->setVertical('center');
         $spreadsheet->getActiveSheet()
             ->getStyle($col.$this->currentRow())->getFont()->setBold(true)->setItalic(false)->setSize(12);
+
+
         $spreadsheet->getActiveSheet()->mergeCells($this->currentMergedCell('c',$this->currentRow(),'f',$this->currentRow()));
+        $spreadsheet->getActiveSheet()->setCellValue('C'.$this->currentRow(),$this->department);
+        $spreadsheet->getActiveSheet()->getStyle($this->currentMergedCell)->getAlignment()->setHorizontal('center');
         $spreadsheet->getActiveSheet()->getStyle($this->currentMergedCell)->getBorders()->getBottom()->setBorderStyle('thin');
         // CSC Resolution No:   1201478 
         // label start
