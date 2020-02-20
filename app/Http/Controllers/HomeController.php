@@ -12,6 +12,7 @@ class HomeController extends Controller
      *
      * @return void
      */
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -22,16 +23,16 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function indexUser()
-    {
-        
-        return view('home.index');
-        // $user = Auth::user();
-    }
+    public function index (){
 
-    public function indexAdmin()
-    {
+        $user = Auth::user();
+
+        if ($user->u_type == 'sys_admin') {
+            # code...
+            return view('home.adminIndex');
+        }
         return view('home.index');
+
     }
 
 }

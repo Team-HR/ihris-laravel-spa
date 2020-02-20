@@ -20,7 +20,9 @@ class CreateUsersTable extends Migration
             // $table->bigInteger('employee_id')->unique();
             // $table->string('email')->unique()->nullable();
             // $table->timestamp('email_verified_at')->nullable();
-            $table->boolean('is_admin')->nullable();
+            $table->string('u_type')->nullable();
+            // $table->string('u_group')->nullable();
+            // $table->string('u_perms')->nullable();
             $table->string('password')->nullable();
             $table->rememberToken();
             $table->timestamps();
