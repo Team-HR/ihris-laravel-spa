@@ -30,6 +30,7 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
 
 </head>
+
 <body style="
     background: url({{asset('images/circuitboardbg.gif')}}) repeat center center fixed;
     -moz-background-size: cover;
@@ -37,6 +38,7 @@
     -o-background-size: cover;
     background-size: cover;
 ">
+
 <div class="wrapper">
         {{-- Sidebar Start --}}
         <nav id="sidebar" class="card" style="background: none !important;">

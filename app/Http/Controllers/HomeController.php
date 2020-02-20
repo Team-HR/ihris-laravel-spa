@@ -23,17 +23,21 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
     public function index (){
 
         $user = Auth::user();
 
         if ($user->u_type == 'sys_admin') {
-            # code...
-            return view('home.adminIndex');
+                return view('sys_admin.home.index', [
+                'user' => $user
+            ]);
         }
-        return view('home.index');
+
+        return view('user.home.index', [
+            'user' => $user
+        ]);
 
     }
 
 }
-

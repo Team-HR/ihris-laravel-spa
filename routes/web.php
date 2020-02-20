@@ -22,7 +22,8 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('employee.home');
 Route::get('/', 'HomeController@index')->name('employee.home');
 
-// Route::post('/casual/plantilla/generateReport', 'CasualController@createReport')->name('casual.create.plantilla');
+// cores
+Route::get('/cores', 'CoresController@index');
 
 // employee
 Route::resource('/employee', 'EmployeeController');
