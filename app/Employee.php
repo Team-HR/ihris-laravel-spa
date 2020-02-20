@@ -3,8 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-// use App\Department;
-// use App\Position;
+use App\Appointment;
+use App\Department;
 // use Nicolaslopezj\Searchable\SearchableTrait;
 use Illuminate\Notifications\Notifiable;
 class Employee extends Model
@@ -47,8 +47,8 @@ class Employee extends Model
         'padded_id',
         'full_name',
         // 'department_short',
-        // 'department',
-        // 'position',
+        'department',
+        'position',
         // 'position_function'
     ];
 
@@ -71,21 +71,22 @@ public function getPaddedIDAttribute()
 //     return mb_convert_case($department['short_name'], MB_CASE_UPPER);
 // }
 
-// public function getDepartmentAttribute()
-// {
-//     $where = array('id' => $this->department_id);
-//     $department  = Department::where($where)->first();
-//     // return $department['name'];
-//     return mb_convert_case($department['name'], MB_CASE_UPPER);
-// }
+public function getDepartmentAttribute()
+{
+    $where = array('employee_id' => $this->id);
+    $appointment  = Appointment::where($where)->first();
+    $where = array('id' => $appointment->department_id);
+    $department  = Department::where($where)->first();
+    return $department['name'];
+}
 
-// public function getPositionAttribute()
-// {
-//     $where = array('id' => $this->position_id);
-//     $position = Position::where($where)->first();
-//     // return $position['name'];
-//     return mb_convert_case($position['name'], MB_CASE_UPPER);
-// }
+public function getPositionAttribute()
+{
+    $where = array('employee_id' => $this->id);
+    $appointment  = Appointment::where($where)->first();
+    return $appointment['positiontitle'];
+}
+
 // public function getPositionFunctionAttribute()
 // {
 //     $where = array('id' => $this->position_id);

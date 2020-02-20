@@ -52,10 +52,11 @@
                             <th rowspan="0" width="60" class="text-center align-middle">ID</th>
                             {{-- <th width="60" class="text-center">Status</th> --}}
                             <th rowspan="0" class="">Name</th>
-                            {{-- <th class="text-center" width="50">Gender</th>
+                            <th class="text-center" width="50">Gender</th>
                             <th class="text-center">Department</th>
                             <th class="text-center">Position</th>
-                            <th class="text-center">Assignment</th> --}}
+                            <th class="text-center">Employment Status</th>
+                            <th class="text-center">Assignment</th>
                             <th rowspan="0" class="text-center" width="40"></th>
                         </tr>
                     </thead> 
@@ -67,6 +68,11 @@
       <td>{{$employee['id']}}</td>
       {{-- <td></td> --}}
       <td>{{$employee['full_name']}}</td>
+      <td></td> 
+      <td>{{$employee['department']}}</td>
+      <td>{{$employee['position']}}</td>
+      <td></td>
+      <td></td>
       <td></td>
     </tr>
   @endforeach
