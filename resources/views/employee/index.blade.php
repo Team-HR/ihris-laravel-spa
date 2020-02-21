@@ -71,7 +71,7 @@
       <td></td> 
       <td>{{$employee['department']}}</td>
       <td>{{$employee['position']}}</td>
-      <td></td>
+      <td>{{$employee['employment_status']}}</td>
       <td></td>
       <td></td>
     </tr>

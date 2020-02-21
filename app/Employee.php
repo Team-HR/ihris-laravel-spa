@@ -49,7 +49,7 @@ class Employee extends Model
         // 'department_short',
         'department',
         'position',
-        // 'position_function'
+        'employment_status'
     ];
 
 public function getFullNameAttribute()
@@ -60,7 +60,7 @@ public function getFullNameAttribute()
 
 public function getPaddedIDAttribute()
 {
-	return sprintf('%05d', $this->id);	
+	return sprintf('%06d', $this->id);	
 }
 
 // public function getDepartmentShortAttribute()
@@ -84,8 +84,16 @@ public function getPositionAttribute()
 {
     $where = array('employee_id' => $this->id);
     $appointment  = Appointment::where($where)->first();
-    return $appointment['positiontitle'];
+    return $appointment['position_title'];
 }
+
+public function getEmploymentStatusAttribute()
+{
+    $where = array('employee_id' => $this->id);
+    $appointment  = Appointment::where($where)->first();
+    return $appointment['employment_status'];
+}
+
 
 // public function getPositionFunctionAttribute()
 // {
