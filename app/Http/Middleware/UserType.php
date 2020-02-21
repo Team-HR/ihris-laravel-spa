@@ -16,9 +16,10 @@ class UserType
     public function handle($request, Closure $next)
     {
 
-        if (auth()->user()->user_type == 'admin') {
+        if (auth()->user()->u_type == 'sys_admin') {
             return $next($request);
         }
+        
         return redirect('home')->with('error',"You don't have admin access.");
 
     }

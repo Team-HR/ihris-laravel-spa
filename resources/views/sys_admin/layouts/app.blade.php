@@ -53,6 +53,10 @@
             <i class="fas fa-home"></i>     
             <span class="link-label">Home</span>
       </a>
+      <a href="{{url('/cores')}}" class="list-group-item list-group-item-action"> 
+            <i class="fas fa-atom"></i>     
+            <span class="link-label">Cores</span>
+      </a>
 
         <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action dropdown-toggle">
                         <i class="fas fa-id-card"></i> 
