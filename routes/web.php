@@ -51,6 +51,9 @@ Route::get('admin/employee/','EmployeeController@index')->middleware('is_admin')
 Route::resource('admin/department','DepartmentController')->middleware('is_admin');
 Route::resource('admin/position','PositionController')->middleware('is_admin');
 
+// plantilla permanent
+Route::resource('/plantilla_permanent', 'PlantillaPermanentController');
+
 //  test
 Route::resource('ajax-crud','AjaxController');
 Route::resource('shows', 'ShowController');

@@ -80,16 +80,18 @@
         <a href="{{url('/employee')}}" class="list-group-item list-group-item-action"> 
             <i class="fas fa-users"></i> <span class="link-label">Employee List</span>
         </a>
+        
         <a href="#plantillaSubmenu" data-toggle="collapse" aria-expanded="false" class="list-group-item list-group-item-action dropdown-toggle">
                         <i class="fas fa-file-excel"></i>
                         <span class="link-label">Plantilla</span>
         </a>
+
         <div class="collapse list-group" id="plantillaSubmenu">
                 <a class="list-group-item list-group-item-action" href="{{url('/casual/plantilla')}}">
                     <strong>Cas</strong> 
                     <span class="link-label blockquote-footer">Casual Plantilla</span>
                 </a>
-                <a class="list-group-item list-group-item-action" href="{{url('/employee')}}">
+                <a class="list-group-item list-group-item-action" href="{{url('/plantilla_permanent')}}">
                     <strong>Perm</strong> 
                     <span class="link-label blockquote-footer">Permanent Plantilla</span>
                 </a>
