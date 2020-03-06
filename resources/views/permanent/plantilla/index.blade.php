@@ -118,11 +118,16 @@
     <td colspan="9" class="text-center">No employees found!</td>
   </tr>
 @endif --}}
-
                     </tbody>
                 </table>
             </div>
         </div>
+
+{{-- <div id="app"> --}}
+	<example-component></example-component>	
+{{-- </div> --}}
+
+
 
                 </div>
             </div>
@@ -197,10 +202,9 @@
     </div>
   </div>
 </div>
-
-
-
-
+<div id="app">
+	<example-component></example-component>
+</div>
 @endsection
 
 

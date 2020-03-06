@@ -6,6 +6,9 @@ use App\PlantillaPermanent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Http\Response;
+use Faker\Generator;
+
 class PlantillaPermanentController extends Controller
 {
     /**
@@ -21,7 +24,9 @@ class PlantillaPermanentController extends Controller
 
     public function index()
     {
-        return view('permanent.plantilla.index');
+        // $plantilla_permanent = PlantillaPermanent::all()->jsonSerialize();
+        return response(PlantillaPermanent::all()->jsonSerialize(), Response::HTTP_OK);
+        // return view('permanent.plantilla.index');
     }
 
     /**

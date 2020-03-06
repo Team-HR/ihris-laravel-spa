@@ -13,7 +13,7 @@ class CreatePlantillaPermanent extends Migration
      */
     public function up()
     {
-        Schema::create('plantilla_permanent', function (Blueprint $table) {
+        Schema::create('plantilla_permanents', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('office_id')->unsigned();
             $table->string('item_number');
@@ -41,6 +41,6 @@ class CreatePlantillaPermanent extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('plantilla_permanent');
+        Schema::dropIfExists('plantilla_permanents');
     }
 }

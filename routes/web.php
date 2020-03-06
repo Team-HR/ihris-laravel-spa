@@ -22,7 +22,6 @@ Auth::routes([
   'reset' => false
 ]);
 
-
 // home
 Route::get('/home', 'HomeController@index')->name('employee.home');
 Route::get('/', 'HomeController@index')->name('employee.home');
@@ -52,7 +51,11 @@ Route::resource('admin/department','DepartmentController')->middleware('is_admin
 Route::resource('admin/position','PositionController')->middleware('is_admin');
 
 // plantilla permanent
-Route::resource('/plantilla_permanent', 'PlantillaPermanentController');
+// Route::view('/plantilla_permanent','permanent.plantilla.index');
+// Route::resource('/plantilla_permanent', 'PlantillaPermanentController');
+// Route::resource('/cruds', 'CrudsController', [
+//   'except' => ['edit', 'show', 'store']
+// ]);
 
 //  test
 Route::resource('ajax-crud','AjaxController');
