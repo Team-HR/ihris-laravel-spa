@@ -15,41 +15,17 @@
                             {{ session('error') }}
                         </div>
                     @endif
-            {{-- <button type="button" class="btn btn-primary" id="add-new-employee"><i class="fas fa-file-excel"></i> Generate Report</button> --}}
-
-{{-- <button type="button" class="btn btn-primary float-right" id="view-report"><i class="fas fa-chart-pie"></i> View Report</button> --}}
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                {{-- Employees --}}
             </div>
             
             <div class="panel-body">
-
-
-              {{-- {{var_dump($casuals)}} --}}
-{{-- <ul>
-@foreach ($casuals as $casual)
-              <li>{{$casual->last_name}}</li>
-@endforeach
-</ul> --}}
-              {{-- <p>Count: {{count($employees)}}</p> --}}
-
-{{-- <form id="form-search" class="form-inline mb-2" novalidate>
-    <div class="input-group mb-2" style="width: 500px;">
-      <div class="input-group-prepend">
-        <button class="btn btn-primary" style="width: 125px;" type="submit" id="button-addon2"><i class="fas fa-search"></i> Search</button>
-      </div>
-      <input type="text" class="form-control" placeholder="Search employee" aria-label="Employee's name" aria-describedby="button-addon2" id="table-search">
-    </div>
-</form> --}}
                 <table id="page-table" class="table bg-light table-striped task-table table-sm table-bordered p-sm-0 m-sm-0">
-
-                    <!-- Table Headings -->
                     <thead class="text-primary">
                         <tr>
                             <th class="text-center align-middle">No.</th>
-                            <th class="text-center align-middle"></th>
+                            <th class="text-center align-middle">Generate Report</th>
                             <th class="text-center align-middle">From Date</th>
                             <th class="text-center align-middle">To Date</th>
                             <th class="text-center align-middle">Nature of Appointment</th>
@@ -59,10 +35,23 @@
 
 
 @if(count($appointments)>0)
-  @foreach($appointments as $no => $appointment) 
+  @foreach($appointments as $no => $appointment)
     <tr>
       <td class="text-center">{{$no+1}}</td>
-      <td class="text-center text-primary"><a href="javascript:void(0)" onclick="generateReport('{{json_encode($appointment)}}')"><i class="fas fa-file-excel"></i> Generate Report</a></td>
+      <td class="text-center text-primary">
+        <a class="btn btn-primary btn-sm" href="javascript:void(0)" onclick="generateReport('{{json_encode($appointment)}}')"><i class="fas fa-file-excel"></i> - Plantilla</a>
+        <a class="btn btn-primary btn-sm" href="{{url('/casual/plantilla-generate_ataf?'.implode('&', array_map(
+    function ($v, $k) {
+        if(is_array($v)){
+            return $k.'='.implode('&'.$k.'[]=', $v);
+        }else{
+            return $k.'='.$v;
+        }
+    }, 
+    $appointment, 
+    array_keys($appointment)
+)).'&filter=1')}}" ><i class="fas fa-file-excel"></i> - ATAF</a>
+      </td>
       <td class="text-center">{{$appointment['from_date_str']}}</td>
       <td class="text-center">{{$appointment['to_date_str']}}</td>
       <td class="text-center">{{$appointment['nature_of_appointment']}}</td>
@@ -73,8 +62,6 @@
     <td colspan="9" class="text-center">No employees found!</td>
   </tr>
 @endif
-
-
                     </tbody>
                 </table>
             </div>
@@ -124,10 +111,6 @@
       </div>
   </div>
   <div class="form-row ml-2">
-    {{-- <div class="form-group col-12">
-      <label>Inlcude RAI</label>
-      <input type="checkbox" name="incRAI">
-    </div> --}}
     <div class="form-group form-check">
       <input type="checkbox" class="form-check-input" id="incRAI" style="transform: scale(1);" name="incRAI">
       <label class="form-check-label" for="incRAI"> Include RAI</label>
@@ -153,11 +136,6 @@
     </div>
   </div>
 </div>
-
-
-
-
-
 
 @endsection
 
@@ -185,9 +163,7 @@
             var serial = $('#generateReport-form').serialize();
             console.log(serial);
             window.location.href="{{url('/casual/plantilla-generate_report')}}"+'?'+serial;
-            $('#Foo').show();
-
-  
+            $('#Foo').show();  
   });
 
 

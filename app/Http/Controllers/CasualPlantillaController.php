@@ -25,8 +25,7 @@ class CasualPlantillaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
-
+    
     private $lastRow = 0;
     private $currentMergedCell = "";
     private $worksheet1;
@@ -134,6 +133,70 @@ class CasualPlantillaController extends Controller
     public function destroy($id)
     {   
         //
+    }
+    public function generateAtaf(Request $request){
+        // return $request;
+        $from_date = $request->from_date;
+        $to_date = $request->to_date;
+        $nature_of_appointment = $request->nature_of_appointment;
+        $department_id = $request->filter;
+
+        $matchThese = [
+            'from_date'=>$from_date,
+            'to_date'=>$to_date,
+            'nature_of_appointment' => $nature_of_appointment,
+        ];
+
+
+        if($department_id == 'all'){
+            $department = "LGU BAYAWAN CITY";
+        } else {
+            $where = array('id' => $department_id);
+            $dept  = Department::where($where)->first();
+            $department = $dept['name'];
+            $matchThese['department_id'] = $department_id;
+        }
+
+        $this->department = $department;
+
+
+
+        $casuals = Employee::join('appointments', 'appointments.employee_id', '=', 'employees.id')
+            ->where($matchThese)
+            ->select('*')
+            ->orderBy('last_name','asc')
+            ->get();
+
+         $this->casuals = $casuals;
+
+         // return $casuals->count();
+         $spreadsheet = new Spreadsheet();
+         $spreadsheet->getProperties()->setCreator('FranzDev')
+            ->setLastModifiedBy('FranzDev')
+            ->setTitle('Report Plantilla')
+            ->setSubject('for Casual Employees')
+            ->setDescription('Generated plantilla report for casual employees.')
+            ->setKeywords('office 2007 openxml php')
+            ->setCategory('Report excel file');
+         $this->createRaiWorksheet($spreadsheet);
+         // Redirect output to a client’s web browser (Xlsx)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        // file title
+        header('Content-Disposition: attachment;filename="CASUAL PLANTILLA - '.(isset($dept['short_name'])?$dept['short_name']:'ALL EMPLOYEES').'_'.$from_date.'-'.$to_date.'_'.$nature_of_appointment.'.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header('Pragma: public'); // HTTP/1.0
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+
+        exit;
     }
     public function generateReport(Request $request){
 
