@@ -166,7 +166,8 @@ class CasualPlantillaController extends Controller
 
          $this->casuals = $casuals;
 
-         // return $casuals->count();
+         // return dd($casuals);
+
          $spreadsheet = new Spreadsheet();
          $spreadsheet->getProperties()->setCreator('FranzDev')
             ->setLastModifiedBy('FranzDev')
@@ -206,7 +207,7 @@ $cols = array(
     'f'=>'position_title',
     'g'=>'sg',
     'h'=>'employment_status',
-    'i' => 0,
+    'i' => '',
     'j'=>'nature_of_appointment',
     'k'=>'',
     'l'=>'',
