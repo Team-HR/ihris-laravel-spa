@@ -158,6 +158,9 @@ class CasualPlantillaController extends Controller
         }
 
         $this->department = $department;
+
+
+
         $casuals = Employee::join('appointments', 'appointments.employee_id', '=', 'employees.id')
             ->where($matchThese)
             ->select('*')
@@ -176,9 +179,8 @@ class CasualPlantillaController extends Controller
             ->setKeywords('office 2007 openxml php')
             ->setCategory('Report excel file');
             // CREATE ATAF START
-
         $worksheet1 = $spreadsheet->createSheet();
-        $worksheet1->setTitle('ATAF');
+        $worksheet1->setTitle('RAI');
         $spreadsheet->setActiveSheetIndex(1);
         $spreadsheet->getDefaultStyle()->getFont()->setName('Arial');
         $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
@@ -186,6 +188,7 @@ class CasualPlantillaController extends Controller
 
         // start of head
 $this->lastRow = 1;
+
 
 $casuals =$this->casuals;
 $count = count($casuals);
@@ -199,22 +202,24 @@ $numbering = 1;
 $end = false;
 $cols = array(
     'a'=>0,
-    'b'=>'last_name',
-    'c'=>'first_name',
-    'd'=>'ext_name',
-    'e'=>'middle_name',
-    'f'=>'position_title',
-    'g'=>'sg',
-    'h'=>'employment_status',
-    'i' => 0,
-    'j'=>'nature_of_appointment',
-    'k'=>'',
+    'b'=>'from_date',
+    'c'=>'last_name',
+    'd'=>'first_name',
+    'e'=>'ext_name',
+    'f'=>'middle_name',
+    'g'=>'position_title',
+    'h'=>'sg',
+    'i'=>'daily_wage',
+    'j'=>0,
+    'k'=>'employment_status',
     'l'=>'',
-    'm'=>'',
+    'm'=>'nature_of_appointment',
     'n'=>'',
     'o'=>'',
     'p'=>'',
     'q'=>'',
+    'r'=>'',
+    's'=>'',
 );
 
 
@@ -234,48 +239,43 @@ for ($page=1; $page <= $pages ; $page++) {
 
         if (!$end && !isset($casuals[$num-1]['last_name'])) {
             $end = true;
-            $this->nothingFollows($spreadsheet,$row,'Q','thin');
+            $this->nothingFollows($spreadsheet,$row,'S','thin');
         } else {
 
 
             foreach ($cols as $col => $index) {
                 if ($col == 'a') {
                     $worksheet1->setCellValue($col.$row,$num);   
-                } 
-                // elseif ($col == 'b') {
-                //      $worksheet1->setCellValue($col.$row,(isset($casuals[$num-1]['from_date'])?date_format(date_create($casuals[$num-1]['from_date']), 'm/d/Y'):''));
-                //      $worksheet1->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
-                // }
-                 elseif ($col == 'i') {
+                } elseif ($col == 'b') {
+                     $worksheet1->setCellValue($col.$row,(isset($casuals[$num-1]['from_date'])?date_format(date_create($casuals[$num-1]['from_date']), 'm/d/Y'):''));
+                     $worksheet1->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
+                } elseif ($col == 'l') {
                     $worksheet1->setCellValue($col.$row,(isset($casuals[$num-1]['from_date'])?date_format(date_create($casuals[$num-1]['from_date']), 'm/d/Y').' - '.date_format(date_create($casuals[$num-1]['to_date']), 'm/d/Y'):''));
                     $worksheet1->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
-                } 
-                // elseif ($col == 'l') {
-                //     $daily_wage = "";
-                //     if (isset($casuals[$num-1]['daily_wage'])) {
-                //         // DAILY WAGE
-                //         $daily_wage = "Php ".number_format((float)$casuals[$num-1]['daily_wage'], 2, '.', ',');
-                //     }                    
-                //     $worksheet1->setCellValue($col.$row,$daily_wage);
-                //     $worksheet1->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
-                // } 
-                // elseif ($col == 'j') {
-                //     $annual_wage = "";
+                } elseif ($col == 'i') {
+                    $daily_wage = "";
+                    if (isset($casuals[$num-1]['daily_wage'])) {
+                        // DAILY WAGE
+                        $daily_wage = "Php ".number_format((float)$casuals[$num-1]['daily_wage'], 2, '.', ',');
+                    }                    
+                    $worksheet1->setCellValue($col.$row,$daily_wage);
+                    $worksheet1->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
+                } elseif ($col == 'j') {
+                    $annual_wage = "";
 
-                //     if (isset($casuals[$num-1]['daily_wage'])) {
-                //         // ANNUAL WAGE
-                //         $annual_wage = "Php ".number_format((float)(($casuals[$num-1]['daily_wage']*22)*12), 2, '.', ',');
-                //     }
+                    if (isset($casuals[$num-1]['daily_wage'])) {
+                        // ANNUAL WAGE
+                        $annual_wage = "Php ".number_format((float)(($casuals[$num-1]['daily_wage']*22)*12), 2, '.', ',');
+                    }
 
-                //     $worksheet1->setCellValue($col.$row,$annual_wage);
-                //     $worksheet1->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
-                // }
+                    $worksheet1->setCellValue($col.$row,$annual_wage);
+                    $worksheet1->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
+                }
 
-                //  elseif (in_array($col, array('c','d','e','f'))) {
-                //     $worksheet1->setCellValue($col.$row,(isset($casuals[$num-1][$index])?$casuals[$num-1][$index]:''));
-                //     $worksheet1->getStyle($col.$row)->getAlignment()->setHorizontal('left')->setVertical('center');
-                // }
-                 else {
+                 elseif (in_array($col, array('c','d','e','f'))) {
+                    $worksheet1->setCellValue($col.$row,(isset($casuals[$num-1][$index])?$casuals[$num-1][$index]:''));
+                    $worksheet1->getStyle($col.$row)->getAlignment()->setHorizontal('left')->setVertical('center');
+                } else {
                     $worksheet1->setCellValue($col.$row,(isset($casuals[$num-1][$index])?$casuals[$num-1][$index]:''));
                     $worksheet1->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
                 }
@@ -290,7 +290,7 @@ for ($page=1; $page <= $pages ; $page++) {
     if ($totalNo == $count && $page == $pages) {
         // echo nothingFollows($end=false)."<br>";
             $row = $this->lastRow+1;
-            $this->nothingFollows($spreadsheet,$row,'Q','thin');
+            $this->nothingFollows($spreadsheet,$row,'S','thin');
             $this->lastRow = $row;
 
     }
@@ -500,78 +500,74 @@ for ($page=1; $page <= $pages ; $page++) {
         $this->worksheet1 = $worksheet1;
         $this->oneColMultiRowField('A',$this->currentRow(),'No.',3);
         $this->worksheet1->getColumnDimension('A')->setWidth(5.5);
-        $this->multiColOneRow('B',$this->currentRow(),'NAME OF APPOINTEE/S','E',true);
-        $this->oneColMultiRowField('F',$this->currentRow(),'POSITION TITLE (Indicate parenthetical title if applicable)',3);
-        $this->worksheet1->getColumnDimension('F')->setWidth(26);
-        // $this->oneColMultiRowField('H',$this->currentRow(),'ITEM NO.',3);
-        $this->oneColMultiRowField('G',$this->currentRow(),'SALARY/JOB/PAY GRADE',3);
-        $this->worksheet1->getColumnDimension('G')->setWidth(12);
-        // $this->oneColMultiRowField('J',$this->currentRow(),'SALARY RATE (Annual)',3);
-        // $this->worksheet1->getColumnDimension('J')->setWidth(18);
-        $this->oneColMultiRowField('H',$this->currentRow(),'EMPLOYMENT STATUS',3);
-        $this->worksheet1->getColumnDimension('H')->setWidth(14);
-        $this->oneColMultiRowField('I',$this->currentRow(),"PERIOD OF EMPLOYMENT \n(for Temporary, Casual/ Contractual Appointments) (mm/dd/yyyy to mm/dd/yyyy)",3);
-        $this->worksheet1->getColumnDimension('I')->setWidth(31);
-        $this->oneColMultiRowField('J',$this->currentRow(),'NATURE OF APPOINTMENT',3);
-        $this->worksheet1->getColumnDimension('J')->setWidth(20);
-        $this->oneColMultiRowField('K',$this->currentRow(),'Date of Issuance (mm/dd/yyyy)',3);
-        $this->worksheet1->getColumnDimension('K')->setWidth(20);
-        $this->multiColOneRow('L',$this->currentRow(),'PUBLICATION','M');
-        $this->worksheet1->getStyle('L'.$this->currentRow())->getFont()->setBold(true);
-        $this->multiColOneRow('N',$this->currentRow(),'CSC ACTION','P');
-        $this->worksheet1->getStyle('N'.$this->currentRow())->getFont()->setBold(true);
-        $this->oneColMultiRowField('Q',$this->currentRow(),'Agency Receiving Officer',3);
+        // $this->oneColMultiRowField('B',$this->currentRow(),'Date Issued/Effectivity (mm/dd/yyyy)',3);
+        $this->worksheet1->getColumnDimension('B')->setWidth(15);
+        $this->multiColOneRow('C',$this->currentRow(),'NAME OF APPOINTEE/S','F',true);
+        $this->oneColMultiRowField('G',$this->currentRow(),'POSITION TITLE (Indicate parenthetical title if applicable)',3);
+        $this->worksheet1->getColumnDimension('g')->setWidth(26);
+        $this->oneColMultiRowField('H',$this->currentRow(),'ITEM NO.',3);
+        $this->oneColMultiRowField('I',$this->currentRow(),'SALARY/JOB/PAY GRADE',3);
+        $this->worksheet1->getColumnDimension('I')->setWidth(12);
+        $this->oneColMultiRowField('J',$this->currentRow(),'SALARY RATE (Annual)',3);
+        $this->worksheet1->getColumnDimension('J')->setWidth(18);
+        $this->oneColMultiRowField('K',$this->currentRow(),'EMPLOYMENT STATUS',3);
+        $this->worksheet1->getColumnDimension('K')->setWidth(14);
+        $this->oneColMultiRowField('L',$this->currentRow(),"PERIOD OF EMPLOYMENT \n(for Temporary, Casual/ Contractual Appointments) (mm/dd/yyyy to mm/dd/yyyy)",3);
+        $this->worksheet1->getColumnDimension('L')->setWidth(31);
+        $this->oneColMultiRowField('M',$this->currentRow(),'NATURE OF APPOINTMENT',3);
+        $this->worksheet1->getColumnDimension('M')->setWidth(20);
 
-        // go to next row;
+        $this->multiColOneRow('N',$this->currentRow(),'PUBLICATION','O');
+        $this->multiColOneRow('P',$this->currentRow(),'CSC ACTION','R');
+        $this->oneColMultiRowField('S',$this->currentRow(),'Agency Receiving Officer',3);
+
         $this->nextRow();
-
-        $this->oneColMultiRowField('B',$this->currentRow(),'Last Name',2);
-        $this->worksheet1->getColumnDimension('B')->setWidth(20);
-        $this->oneColMultiRowField('C',$this->currentRow(),'First Name',2);
+        $this->oneColMultiRowField('C',$this->currentRow(),'Last Name',2);
         $this->worksheet1->getColumnDimension('C')->setWidth(20);
-        $this->oneColMultiRowField('D',$this->currentRow(),'Name Extension (Jr./III)',2);
-        $this->worksheet1->getStyle('D'.$this->currentRow())->getFont()->setSize(8);
-        $this->oneColMultiRowField('E',$this->currentRow(),'Middle Name',2);
-        $this->worksheet1->getColumnDimension('E')->setWidth(20);
+        $this->oneColMultiRowField('D',$this->currentRow(),'First Name',2);
+        $this->worksheet1->getColumnDimension('D')->setWidth(20);
+        $this->oneColMultiRowField('E',$this->currentRow(),'Name Extension (Jr./III)',2);
+        $this->worksheet1->getStyle('E'.$this->currentRow())->getFont()->setSize(8);
+        $this->oneColMultiRowField('F',$this->currentRow(),'Middle Name',2);
+        $this->worksheet1->getColumnDimension('F')->setWidth(20);
 
         $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
+        // $richText->createText('This is to certify that all requirement and supporting papers pursuant to ');
         $payable = $richText->createTextRun('DATE');
         $payable->getFont()->setBold(true);
-        $payable = $richText->createTextRun("\nIndicate date of publication\n(mm/dd/yyyy to mm/dd/yyyy)");
+        $payable = $richText->createTextRun("\nIndicate date of publication\n(mm/dd/yyyy)");
         $payable->getFont()->setSize(8);
-        $this->oneColMultiRowField('L',$this->currentRow(),$richText,2,'top');
 
+        $this->oneColMultiRowField('N',$this->currentRow(),$richText,2,'top');
 
         $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
+        // $richText->createText('This is to certify that all requirement and supporting papers pursuant to ');
         $payable = $richText->createTextRun('MODE');
         $payable->getFont()->setBold(true);
-        $payable = $richText->createTextRun("\n(CSC Bulletin of Vacant Positions)");
+        $payable = $richText->createTextRun("\nCSC Bulletin of Vacant Positions");
         $payable->getFont()->setSize(8);
-        $this->oneColMultiRowField('M',$this->currentRow(),$richText,2,'top');
-
-        $this->oneColMultiRowField('N',$this->currentRow(),"A = Approved\nor\nD = Disapproved",2);
-        $this->oneColMultiRowField('O',$this->currentRow(),"Date of Action (mm/dd/yyyy)",2);
-        $this->oneColMultiRowField('P',$this->currentRow(),"Date of Release (mm/dd/yyyy)",2);
-
-
-
-// MODE
-// (CSC Bulletin of Vacant Positions)
-        // $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
-        // $richText->createText('This is to certify that all requirement and supporting papers pursuant to ');
-        // $payable = $richText->createTextRun('MODE');
-        // $payable->getFont()->setBold(true);
-        // $payable = $richText->createTextRun("\nCSC Bulletin of Vacant Positions");
-        // $payable->getFont()->setSize(8);
-        // $this->oneColMultiRowField('O',$this->currentRow(),$richText,2,'top');
-        // $this->oneColMultiRowField('P',$this->currentRow(),"V-Validated\nINV- Invalidated",2);
-        // $this->worksheet1->getColumnDimension('P')->setWidth(14);
-        // $this->oneColMultiRowField('Q',$this->currentRow(),'Date of Action (mm/dd/yyyy)',2);
-        // $this->oneColMultiRowField('R',$this->currentRow(),'Date of Release (mm/dd/yyyy)',2);
+        $this->oneColMultiRowField('O',$this->currentRow(),$richText,2,'top');
+        $this->oneColMultiRowField('P',$this->currentRow(),"V-Validated\nINV- Invalidated",2);
+        $this->worksheet1->getColumnDimension('P')->setWidth(14);
+        $this->oneColMultiRowField('Q',$this->currentRow(),'Date of Action (mm/dd/yyyy)',2);
+        $this->oneColMultiRowField('R',$this->currentRow(),'Date of Release (mm/dd/yyyy)',2);
 
         $this->worksheet1->getRowDimension($this->currentRow())->setRowHeight(51);
 
-        $this->nextRow(2);
+        $this->nextRow(3);
+
+        $this->oneColOneRow('A',$this->currentRow(),'No.');
+        $this->oneColOneRow('B',$this->currentRow(),'(1)');
+        $this->multiColOneRow('C',$this->currentRow(),'(2)','F');
+        
+
+        $cols = array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s');
+
+        foreach ($cols as $num => $col) {
+            if (!in_array($col, array('a','b','c','d','e','f'))) {
+                $this->oneColOneRow($col,$this->currentRow(),'('.($num-3).')');
+            }
+        }
 
 
     }
