@@ -48,8 +48,8 @@ class Employee extends Model
         'full_name',
         // 'department_short',
         'department',
-        'position',
-        'employment_status'
+        // 'position',
+        // 'employment_status'
     ];
 
 public function getFullNameAttribute()
@@ -80,19 +80,19 @@ public function getDepartmentAttribute()
     return $department['name'];
 }
 
-public function getPositionAttribute()
-{
-    $where = array('employee_id' => $this->id);
-    $appointment  = Appointment::where($where)->first();
-    return $appointment['position_title'];
-}
+// public function getPositionAttribute()
+// {
+//     $where = array('employee_id' => $this->id);
+//     $appointment  = Appointment::where($where)->first();
+//     return $appointment['position_title'];
+// }
 
-public function getEmploymentStatusAttribute()
-{
-    $where = array('employee_id' => $this->id);
-    $appointment  = Appointment::where($where)->first();
-    return $appointment['employment_status'];
-}
+// public function getEmploymentStatusAttribute()
+// {
+//     $where = array('employee_id' => $this->id);
+//     $appointment  = Appointment::where($where)->first();
+//     return $appointment['employment_status'];
+// }
 
 
 // public function getPositionFunctionAttribute()
