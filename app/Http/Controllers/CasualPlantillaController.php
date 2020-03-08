@@ -243,39 +243,10 @@ for ($page=1; $page <= $pages ; $page++) {
                 if ($col == 'a') {
                     $worksheet1->setCellValue($col.$row,$num);   
                 } 
-                // elseif ($col == 'b') {
-                //      $worksheet1->setCellValue($col.$row,(isset($casuals[$num-1]['from_date'])?date_format(date_create($casuals[$num-1]['from_date']), 'm/d/Y'):''));
-                //      $worksheet1->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
-                // }
                  elseif ($col == 'i') {
                     $worksheet1->setCellValue($col.$row,(isset($casuals[$num-1]['from_date'])?date_format(date_create($casuals[$num-1]['from_date']), 'm/d/Y').' - '.date_format(date_create($casuals[$num-1]['to_date']), 'm/d/Y'):''));
                     $worksheet1->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
                 } 
-                // elseif ($col == 'l') {
-                //     $daily_wage = "";
-                //     if (isset($casuals[$num-1]['daily_wage'])) {
-                //         // DAILY WAGE
-                //         $daily_wage = "Php ".number_format((float)$casuals[$num-1]['daily_wage'], 2, '.', ',');
-                //     }                    
-                //     $worksheet1->setCellValue($col.$row,$daily_wage);
-                //     $worksheet1->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
-                // } 
-                // elseif ($col == 'j') {
-                //     $annual_wage = "";
-
-                //     if (isset($casuals[$num-1]['daily_wage'])) {
-                //         // ANNUAL WAGE
-                //         $annual_wage = "Php ".number_format((float)(($casuals[$num-1]['daily_wage']*22)*12), 2, '.', ',');
-                //     }
-
-                //     $worksheet1->setCellValue($col.$row,$annual_wage);
-                //     $worksheet1->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
-                // }
-
-                //  elseif (in_array($col, array('c','d','e','f'))) {
-                //     $worksheet1->setCellValue($col.$row,(isset($casuals[$num-1][$index])?$casuals[$num-1][$index]:''));
-                //     $worksheet1->getStyle($col.$row)->getAlignment()->setHorizontal('left')->setVertical('center');
-                // }
                  else {
                     $worksheet1->setCellValue($col.$row,(isset($casuals[$num-1][$index])?$casuals[$num-1][$index]:''));
                     $worksheet1->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
@@ -289,7 +260,6 @@ for ($page=1; $page <= $pages ; $page++) {
     }
 
     if ($totalNo == $count && $page == $pages) {
-        // echo nothingFollows($end=false)."<br>";
             $row = $this->lastRow+1;
             $this->nothingFollows($spreadsheet,$row,'Q','thin');
             $this->lastRow = $row;
@@ -348,93 +318,40 @@ for ($page=1; $page <= $pages ; $page++) {
     // ATAF HEAD START
     private function atafHead($worksheet1){
         $col = 'A';
-        $colend = 'S';
-        $worksheet1
-            ->setCellValue($col.$this->nextRow(), 'CS Form No. 2')
-            ->setCellValue($col.$this->nextRow(), 'Revised 2017')->getStyle($col.$this->currentRow())->getFont()->setBold(true)->setItalic(true)->setSize(9);
-        $worksheet1
-            ->mergeCells($this->currentMergedCell($col,$this->nextRow(2),$colend,$this->currentRow()))->getCell($col.$this->currentRow())->setValue('REPORT ON APPOINTMENTS ISSUED (RAI)')->getStyle($this->currentMergedCell)->getAlignment()->setHorizontal('center')->setVertical('center');
-        $worksheet1->getStyle($this->currentMergedCell)->getFont()->setBold(true)->setSize(14);
+        $colend = 'Q';
+        $worksheet1->setCellValue($col.$this->nextRow(), 'CS Form No. 1')->getStyle($col.$this->currentRow())->getFont()->setBold(true)->setItalic(false)->setSize(11);
 
-        $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
-        $payable = $richText->createTextRun('For the month of ');
-        // $richText->createText('For the Month of ');
-        $payable->getFont()->setItalic(true);
-        $payable = $richText->createTextRun('JANUARY 2020');
-        $payable->getFont()->setItalic(true);
-        $payable->getFont()->setBold(true);
-        $payable->getFont()->setUnderline(true);
-        
-        // $payable->getFont()->setBold(true);
-        // $richText->createText('');
+        $col = 'L'; 
+        $worksheet1->mergeCells($this->currentMergedCell('L',$this->currentRow(),'Q',$this->currentRow()));
+        $worksheet1->setCellValue($col.$this->currentRow(), 'For  Use of Regulated Agencies  Only')->getStyle($col.$this->currentRow())->getFont()->setBold(true)->setItalic(true)->setSize(12);
+        $worksheet1->getStyle($col.$this->currentRow())->getAlignment()->setHorizontal('center')->setVertical('center');
+        $worksheet1->getStyle($this->currentMergedCell)->getBorders()->getOutline()->setBorderStyle('thin');
+        $worksheet1->getRowDimension($this->currentRow())->setRowHeight(22);
 
-        $worksheet1
-            ->mergeCells($this->currentMergedCell($col,$this->nextRow(),$colend,$this->currentRow()))->getCell($col.$this->currentRow())->setValue($richText)->getStyle($this->currentMergedCell)->getAlignment()->setHorizontal('center')->setVertical('center');
-        $col = 'O';
-        $worksheet1
-            ->setCellValue($col.$this->nextRow(), 'Date received by CSCFO:')->getStyle($col.$this->currentRow())->getFont()->setBold(true)->setItalic(false)->setSize(10);
-
-
-        $worksheet1->getStyle($col.$this->currentRow())->getAlignment()->setHorizontal('right');
-
-        $worksheet1->mergeCells($this->currentMergedCell('p',$this->currentRow(),'s',$this->currentRow()));
-        $worksheet1->getStyle($this->currentMergedCell)->getBorders()->getBottom()->setBorderStyle('thin');
 
         $col = 'A';
+        $worksheet1->setCellValue($col.$this->nextRow(), 'Revised 2017')->getStyle($col.$this->currentRow())->getFont()->setBold(true)->setItalic(true)->setSize(9);
+        $worksheet1
+            ->mergeCells($this->currentMergedCell($col,$this->nextRow(2),$colend,$this->currentRow()))->getCell($col.$this->currentRow())->setValue('APPOINTMENT TRANSMITTAL  AND ACTION FORM')->getStyle($this->currentMergedCell)->getAlignment()->setHorizontal('center')->setVertical('center');
+        $worksheet1->getStyle($this->currentMergedCell)->getFont()->setBold(true)->setSize(14);
+
+        $this->nextRow();
+        $col = 'A';
         $colB = 'B';
-        $worksheet1
-            ->mergeCells($this->currentMergedCell($col,$this->nextRow(3),$colB,$this->currentRow()))->getCell($col.$this->currentRow())->setValue('AGENCY:')->getStyle($this->currentMergedCell)->getAlignment()->setHorizontal('center')->setVertical('center');
-        $worksheet1
-            ->getStyle($col.$this->currentRow())->getFont()->setBold(true)->setItalic(false)->setSize(12);
+        $worksheet1->mergeCells($this->currentMergedCell($col,$this->nextRow(3),$colB,$this->currentRow()))->getCell($col.$this->currentRow())->setValue('AGENCY:')->getStyle($this->currentMergedCell)->getAlignment()->setHorizontal('center')->setVertical('center');
+        $worksheet1->getStyle($col.$this->currentRow())->getFont()->setBold(true)->setItalic(false)->setSize(12);
+
+        $col = 'K';
+        $worksheet1->setCellValue($col.$this->currentRow(), 'CSCFO In-Charge:')->getStyle($col.$this->currentRow())->getFont()->setBold(true)->setItalic(false)->setSize(10);
+        $worksheet1->getStyle($col.$this->currentRow())->getAlignment()->setHorizontal('right');
+        $worksheet1->mergeCells($this->currentMergedCell('L',$this->currentRow(),'Q',$this->currentRow()));
+        $worksheet1->getStyle($this->currentMergedCell)->getBorders()->getBottom()->setBorderStyle('thin');
 
 
         $worksheet1->mergeCells($this->currentMergedCell('c',$this->currentRow(),'f',$this->currentRow()));
         $worksheet1->setCellValue('C'.$this->currentRow(),$this->department);
         $worksheet1->getStyle($this->currentMergedCell)->getAlignment()->setHorizontal('center');
         $worksheet1->getStyle($this->currentMergedCell)->getBorders()->getBottom()->setBorderStyle('thin');
-        // CSC Resolution No:   1201478 
-        // label start
-        $col = 'I';
-        $row = $this->currentRow();
-        $currentCell = $col.$row;
-        $worksheet1->setCellValue($currentCell,'CSC Resolution No:');
-        // fontstyle
-        $worksheet1->getStyle($currentCell)->getFont()->setBold(true);
-        // alignment
-        $worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('right')->setVertical('center');
-        // label end
-        // underline start
-
-
-        $worksheet1->mergeCells($this->currentMergedCell('j',$this->currentRow(),'k',$this->currentRow()));
-        $currentCell = 'J'.$row;
-        $worksheet1->setCellValue($currentCell,'1201478');
-        // fontstyle
-        $worksheet1->getStyle($currentCell)->getFont()->setBold(true);
-        // alignment
-        $worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('center')->setVertical('center');
-        $worksheet1->getStyle($this->currentMergedCell)->getBorders()->getBottom()->setBorderStyle('thin');
-
-
-        // underline end
-
-        // CSCFO In-charge: M
-        // label start
-        $col = 'M';
-        $row = $this->currentRow();
-        $currentCell = $col.$row;
-        $worksheet1->setCellValue($currentCell,'CSCFO In-charge:');
-        // fontstyle
-        $worksheet1->getStyle($currentCell)->getFont()->setBold(true);
-        // alignment
-        $worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('right')->setVertical('center');
-        // label end
-        // underline start
-        $worksheet1->mergeCells($this->currentMergedCell('n',$this->currentRow(),'s',$this->currentRow()));
-        $worksheet1->getStyle($this->currentMergedCell)->getBorders()->getBottom()->setBorderStyle('thin');
-        // underline end
-
-
         // start merged cells
         $col = 'A';
         $colb = 'B';
@@ -454,47 +371,86 @@ for ($page=1; $page <= $pages ; $page++) {
         // $colb = 'B';
         $row = $this->currentRow();
         $currentCell = $col.$row;
-        // $currentMCell = $col.$row.':'.$colb.$row;
-
-        // $worksheet1->mergeCells($currentCell);
         $worksheet1->setCellValue($currentCell,'(1) Fill-out the data needed in the form completely and accurately.');
-        // fontstyle
         $worksheet1->getStyle($currentCell)->getFont()->setBold(false);
-        // alignment
         $worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center');
-        // end write cell
-                // start write cell
-        // $col = 'C';
-        // $colb = 'B';
+
+        // For CSCRO/FO's Use:
+        $borderThickness = 'thin';
+        $col = 'L';
+        $currentCell = $col.$row;
+        $currentMCell = $currentCell.':'.'Q'.$row;
+        $worksheet1->mergeCells($currentMCell);
+        $worksheet1->setCellValue($currentCell,'For CSCRO/FOs Use:');
+        $worksheet1->getStyle($currentCell)->getFont()->setBold(true);
+        $worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center')->setWrapText(true);
+        $worksheet1->getStyle($currentMCell)->getBorders()->getOutline()->setBorderStyle($borderThickness);
+        $worksheet1->getStyle($currentMCell)->getFill()->setFillType('solid')->getStartColor()->setARGB('c3c3c3');
+
+
+        $col = 'C';
         $row = $this->nextRow();
         $currentCell = $col.$row;
         $worksheet1->setCellValue($currentCell,'(2) Do not abbreviate entries in the form.');
         $worksheet1->getStyle($currentCell)->getFont()->setBold(false);
         $worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center');
+
+        $col = 'L';
+        $currentCell = $col.$row;
+        $currentMCell = $currentCell.':'.'Q'.$row;
+        $worksheet1->mergeCells($currentMCell);
+        $worksheet1->setCellValue($currentCell,'Date Received:');
+        $worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center')->setWrapText(true);
+        $worksheet1->getStyle($currentMCell)->getBorders()->getLeft()->setBorderStyle($borderThickness);
+        $worksheet1->getStyle($currentMCell)->getBorders()->getRight()->setBorderStyle($borderThickness);
+
+        $col = 'C';
         $row = $this->nextRow();
         $currentCell = $col.$row;
         $worksheet1->setCellValue($currentCell,'(3) Accomplish the Checklist of Common Requirements and sign the certification.');
         $worksheet1->getStyle($currentCell)->getFont()->setBold(false);
         $worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center');
+
+
+        $col = 'L';
+        $currentCell = $col.$row;
+        $currentMCell = $currentCell.':'.'Q'.$row;
+        $worksheet1->mergeCells($currentMCell);
+        $worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center')->setWrapText(true);
+        $worksheet1->getStyle($currentMCell)->getBorders()->getLeft()->setBorderStyle($borderThickness);
+        $worksheet1->getStyle($currentMCell)->getBorders()->getRight()->setBorderStyle($borderThickness);
+
+        
         $row = $this->nextRow();
+        $col = 'C';
         $currentCell = $col.$row;
         $worksheet1->setCellValue($currentCell,'(4) Submit the duly accomplished form in electronic and printed copy (2 copies) to the CSC Field Office-in-Charge');
         $worksheet1->getStyle($currentCell)->getFont()->setBold(false);
         $worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center');
+
+        $col = 'L';
+        $currentCell = $col.$row;
+        $currentMCell = $currentCell.':'.'Q'.$row;
+        $worksheet1->mergeCells($currentMCell);
+        $worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center')->setWrapText(true);
+        $worksheet1->getStyle($currentMCell)->getBorders()->getLeft()->setBorderStyle($borderThickness);
+        $worksheet1->getStyle($currentMCell)->getBorders()->getRight()->setBorderStyle($borderThickness);
+
         $row = $this->nextRow();
+        $col = 'C';
         $currentCell = $col.$row;
         $worksheet1->setCellValue($currentCell,' together with the original CSC copy of appointments and supporting documents within the 30th day of the succeeding month.');
         $worksheet1->getStyle($currentCell)->getFont()->setBold(false);
         $worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center');
 
-
-        // Pertinent data on appointment issued
-        $col = 'A';
-        $row = $this->nextRow(2);
+        $col = 'L';
         $currentCell = $col.$row;
-        $worksheet1->setCellValue($currentCell,'Pertinent data on appointment issued');
-        $worksheet1->getStyle($currentCell)->getFont()->setBold(true);
-        $worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center');
+        $currentMCell = $currentCell.':'.'Q'.$row;
+        $worksheet1->mergeCells($currentMCell);
+        $worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center')->setWrapText(true);
+        $worksheet1->getStyle($currentMCell)->getBorders()->getLeft()->setBorderStyle($borderThickness);
+        $worksheet1->getStyle($currentMCell)->getBorders()->getRight()->setBorderStyle($borderThickness);
+        $worksheet1->getStyle($currentMCell)->getBorders()->getBottom()->setBorderStyle($borderThickness);
 
         $this->nextRow(2);
 
@@ -553,27 +509,8 @@ for ($page=1; $page <= $pages ; $page++) {
         $this->oneColMultiRowField('N',$this->currentRow(),"A = Approved\nor\nD = Disapproved",2);
         $this->oneColMultiRowField('O',$this->currentRow(),"Date of Action (mm/dd/yyyy)",2);
         $this->oneColMultiRowField('P',$this->currentRow(),"Date of Release (mm/dd/yyyy)",2);
-
-
-
-// MODE
-// (CSC Bulletin of Vacant Positions)
-        // $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
-        // $richText->createText('This is to certify that all requirement and supporting papers pursuant to ');
-        // $payable = $richText->createTextRun('MODE');
-        // $payable->getFont()->setBold(true);
-        // $payable = $richText->createTextRun("\nCSC Bulletin of Vacant Positions");
-        // $payable->getFont()->setSize(8);
-        // $this->oneColMultiRowField('O',$this->currentRow(),$richText,2,'top');
-        // $this->oneColMultiRowField('P',$this->currentRow(),"V-Validated\nINV- Invalidated",2);
-        // $this->worksheet1->getColumnDimension('P')->setWidth(14);
-        // $this->oneColMultiRowField('Q',$this->currentRow(),'Date of Action (mm/dd/yyyy)',2);
-        // $this->oneColMultiRowField('R',$this->currentRow(),'Date of Release (mm/dd/yyyy)',2);
-
         $this->worksheet1->getRowDimension($this->currentRow())->setRowHeight(51);
-
         $this->nextRow(2);
-
 
     }
     // ATAF HEAD END
@@ -581,50 +518,36 @@ for ($page=1; $page <= $pages ; $page++) {
 
 private function atafFoot($worksheet1){
         $this->nextRow();
-        $cols = array('a','h','n');
+        $col = 'A';
         $row = $this->currentRow();
-        foreach ($cols as $key => $col) {
-            if ($col == 'n') {
-                $currentCell = $col.$row;
-                $worksheet1->setCellValue($currentCell,'Post-Audited by:');
+        $currentCell = $col.$row;
+        $currentMCell = $currentCell.':'.'Q'.$row;
+        $worksheet1->mergeCells($currentMCell);
+        $worksheet1->setCellValue($currentCell,'');
+        $worksheet1->getStyle($currentCell)->getFont()->setBold(true);
+        $worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center')->setWrapText(true);
+        $worksheet1->getStyle($currentMCell)->getBorders()->getOutline()->setBorderStyle('thin');
+        $worksheet1->getStyle($currentMCell)->getFill()->setFillType('solid')->getStartColor()->setARGB('c3c3c3');
 
-            } else {
-                $currentCell = $col.$row;
-                $worksheet1->setCellValue($currentCell,'CERTIFICATION:');
-            }
-            $worksheet1->getStyle($currentCell)->getFont()->setBold(true)->setSize(12);
-            $worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('bottom')->setWrapText(false);
-            $worksheet1->getRowDimension($row)->setRowHeight(36);
-        }
+
+        $this->nextRow();
+        $col = 'A';
+        $row = $this->currentRow();
+        $currentCell = $col.$row;
+        $worksheet1->setCellValue($currentCell,'CERTIFICATION:');
+        $worksheet1->getStyle($currentCell)->getFont()->setBold(true)->setSize(10);
+        $worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('bottom')->setWrapText(false);
+        // $worksheet1->getRowDimension($row)->setRowHeight(36);
 
 $this->nextRow(2);
 $row = $this->currentRow();
 
-$texts0 = array(
-    ' This is to certify that the information contained in this',
-    'report are true, correct and complete based on the Plantilla',
-    'of Personnel and appointment/s issued.'
-);
-$texts1 = array(
-    ' This is to certify that the appointment/s issued',
-    'is/are in accordance with existing Civil Service Law,',
-    'rules and regulations.'
-);
-$cols = array('a'=>$texts0,'h'=>$texts1);
+$text = 'This is to certify that the information contained in this form are true, correct and complete.';
 
-foreach ($cols as $col => $text) {
-    foreach ($text as $i => $text) {
-        $currentCell = $col.($row+$i);
+        $currentCell = $col.$row;
         $worksheet1->setCellValue($currentCell,$text);
-        $worksheet1->getStyle($currentCell)->getFont()->setSize(14);
+        $worksheet1->getStyle($currentCell)->getFont()->setSize(10);
         $worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center')->setWrapText(false);
-    }
-}
-
-$this->multiColOneRow('N',$this->currentRow(),'','P',false,'bottom');
-
-
-
 
 $this->nextRow(3);
 $this->worksheet1->getRowDimension($this->currentRow())->setRowHeight(45);
@@ -635,7 +558,7 @@ $this->nextRow(1);
         $payable = $richText->createTextRun('VERONICA GRACE P. MIRAFLOR');
         $payable->getFont()->setBold(true);
         $payable->getFont()->setUnderline(true);
-        $payable->getFont()->setSize(16);
+        $payable->getFont()->setSize(10);
         
         $col = 'A';
         $colb = 'D';
@@ -647,93 +570,18 @@ $this->nextRow(1);
         $this->worksheet1->getStyle($currentCell)->getFont()->setSize(16);
         $this->worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('center')->setVertical('center');
 
-        $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
-        $payable = $richText->createTextRun('PRYDE HENRY A. TEVES');
-        $payable->getFont()->setBold(true);
-        $payable->getFont()->setUnderline(true);
-        $payable->getFont()->setSize(16);
-
-        $col = 'H';
-        $colb = 'L';
-        $row = $this->currentRow();
-        $currentCell = $col.$row;
-        $currentMCell = $currentCell.':'.$colb.$row;
-        $this->worksheet1->mergeCells($currentMCell);
-        $this->worksheet1->setCellValue($currentCell,$richText);
-        $this->worksheet1->getStyle($currentCell)->getFont()->setSize(16);
-        $this->worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('center')->setVertical('center');
-
-        $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
-        $payable = $richText->createTextRun('');
-        $payable->getFont()->setBold(true);
-        $payable->getFont()->setUnderline(true);
-        $payable->getFont()->setSize(16);
-
-        $col = 'n';
-        $colb = 'p';
-        $row = $this->currentRow();
-        $currentCell = $col.$row;
-        $currentMCell = $currentCell.':'.$colb.$row;
-        $this->worksheet1->mergeCells($currentMCell);
-        $this->worksheet1->setCellValue($currentCell,$richText);
-        $this->worksheet1->getStyle($currentCell)->getFont()->setSize(16);
-        $this->worksheet1->getStyle($currentMCell)->getBorders()->getBottom()->setBorderStyle('thin');
-        $this->worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('center')->setVertical('center');
-
         $this->nextRow();
-
         $col = 'A';
         $colb = 'D';
         $row = $this->currentRow();
         $currentCell = $col.$row;
         $currentMCell = $currentCell.':'.$colb.$row;
         $this->worksheet1->mergeCells($currentMCell);
-        $this->worksheet1->setCellValue($currentCell,'HRMO IV');
-        $this->worksheet1->getStyle($currentCell)->getFont()->setSize(16);
+        $this->worksheet1->setCellValue($currentCell,'Highest Ranking HRMO');
+        $this->worksheet1->getStyle($currentCell)->getFont()->setSize(10);
         $this->worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('center')->setVertical('top');
-
-        $col = 'H';
-        $colb = 'L';
-        $row = $this->currentRow();
-        $currentCell = $col.$row;
-        $currentMCell = $currentCell.':'.$colb.$row;
-        $this->worksheet1->mergeCells($currentMCell);
-        $this->worksheet1->setCellValue($currentCell,'City Mayor');
-        $this->worksheet1->getStyle($currentCell)->getFont()->setSize(16);
-        $this->worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('center')->setVertical('top');
-
-        $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
-        $payable = $richText->createTextRun('_____________________________');
-        $payable->getFont()->setBold(true);
-        $payable->getFont()->setUnderline(true);
-
-
-        $col = 'n';
-        $colb = 'p';
-        $row = $this->currentRow();
-        $currentCell = $col.$row;
-        $currentMCell = $currentCell.':'.$colb.$row;
-        $this->worksheet1->mergeCells($currentMCell);
-        $this->worksheet1->setCellValue($currentCell,'CSC Official');
-        $this->worksheet1->getStyle($currentCell)->getFont()->setSize(16);
-        $this->worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('center')->setVertical('top');
-
-        $this->worksheet1->getRowDimension($this->currentRow())->setRowHeight(35);
-        $this->nextRow();
-
-
-        $col = 'A';
-        $colb = 'S';
-        $row = $this->currentRow();
-        $currentCell = $col.$row;
-        $currentMCell = $currentCell.':'.$colb.$row;
-        $worksheet1->mergeCells($currentMCell);
-        $this->worksheet1->setCellValue($currentCell,'For CSC use only:');
-        $this->worksheet1->getStyle($currentCell)->getFont()->setBold(true)->setItalic(true);
-        $this->worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center')->setWrapText(false);
-        $this->worksheet1->getStyle($currentMCell)->getBorders()->getBottom()->setBorderStyle('double');
-
         
+        $colb = 'Q';
         for ($i=0; $i < 6; $i++) { 
 
             $this->nextRow();
@@ -742,12 +590,12 @@ $this->nextRow(1);
                 $currentMCell = $currentCell.':'.$colb.($row);
                 $worksheet1->mergeCells($currentMCell);
             if ($i == 0) {
-                $this->worksheet1->setCellValue($currentCell,'REMARKS/COMMENTS/RECOMMENDATIONS (e.g. Reasons for Invalidation)');    
+                $this->worksheet1->setCellValue($currentCell,'REMARKS/COMMENTS/RECOMMENDATIONS: (e.g. Reasons for Disapproval of Appointment)');    
             } else {
                 $this->worksheet1->setCellValue($currentCell,'');    
             }
 
-            $this->worksheet1->getStyle($currentCell)->getFont()->setBold(true)->setItalic(true);
+            $this->worksheet1->getStyle($currentCell)->getFont()->setBold(true)->setItalic(false);
             $this->worksheet1->getStyle($currentCell)->getAlignment()->setHorizontal('left')->setVertical('center')->setWrapText(false);
             $this->worksheet1->getStyle($currentMCell)->getBorders()->getOutline()->setBorderStyle('thin');
             $this->worksheet1->getRowDimension($this->currentRow())->setRowHeight(20);     
