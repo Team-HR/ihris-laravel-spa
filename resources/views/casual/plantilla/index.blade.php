@@ -50,7 +50,7 @@
     }, 
     $appointment, 
     array_keys($appointment)
-)).'&filter=1')}}" target="_blank"><i class="fas fa-file-excel"></i> - ATAF</a>
+)).'&filter=all')}}" target="_blank"><i class="fas fa-file-excel"></i> - ATAF</a>
       </td>
       <td class="text-center">{{$appointment['from_date_str']}}</td>
       <td class="text-center">{{$appointment['to_date_str']}}</td>
