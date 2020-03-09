@@ -31,6 +31,7 @@ class CasualPlantillaController extends Controller
     private $worksheet1;
     private $casuals;
     private $department;
+    private $incRAI;
 
     public function index()
     {
@@ -57,17 +58,6 @@ class CasualPlantillaController extends Controller
         ]);
     }
 
-    // public function generateReport(Request $request){
-    //     $from_date = $request->from_date;
-    //     $to_date = $request->to_date;
-    //     $nature_of_appointment = $request->nature_of_appointment;
-    //     $filter = $request->filter;
-
-
-
-
-    //     // return Response::json($from_date.$to_date.$nature_of_appointment.$filter);
-    // }
 
     /**
      * Show the form for creating a new resource.
@@ -134,40 +124,8 @@ class CasualPlantillaController extends Controller
     {   
         //
     }
-    public function generateAtaf(Request $request){
+    public function generateAtaf($reqs){
         // return $request;
-        $from_date = $request->from_date;
-        $to_date = $request->to_date;
-        $nature_of_appointment = $request->nature_of_appointment;
-        $department_id = $request->filter;
-
-        $matchThese = [
-            'from_date'=>$from_date,
-            'to_date'=>$to_date,
-            'nature_of_appointment' => $nature_of_appointment,
-        ];
-
-
-        if($department_id == 'all'){
-            $department = "LGU BAYAWAN CITY";
-        } else {
-            $where = array('id' => $department_id);
-            $dept  = Department::where($where)->first();
-            $department = $dept['name'];
-            $matchThese['department_id'] = $department_id;
-        }
-
-        $this->department = $department;
-        $casuals = Employee::join('appointments', 'appointments.employee_id', '=', 'employees.id')
-            ->where($matchThese)
-            ->select('*')
-            ->orderBy('last_name','asc')
-            ->get();
-
-         $this->casuals = $casuals;
-
-         // return dd($casuals);
-
          $spreadsheet = new Spreadsheet();
          $spreadsheet->getProperties()->setCreator('FranzDev')
             ->setLastModifiedBy('FranzDev')
@@ -290,7 +248,6 @@ for ($page=1; $page <= $pages ; $page++) {
         $worksheet1->getPageMargins()->setRight(0.12);
         $worksheet1->getPageMargins()->setLeft(0.19);
         $worksheet1->getPageMargins()->setBottom(0.12);
-
         $worksheet1->getPageSetup()->setPrintArea($printArea);
         $worksheet1->getPageSetup()->setFitToWidth(1);
          
@@ -298,7 +255,7 @@ for ($page=1; $page <= $pages ; $page++) {
          // Redirect output to a client’s web browser (Xlsx)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         // file title
-        header('Content-Disposition: attachment;filename="CASUAL PLANTILLA - '.(isset($dept['short_name'])?$dept['short_name']:'ALL EMPLOYEES').'_'.$from_date.'-'.$to_date.'_'.$nature_of_appointment.'.xlsx"');
+        header('Content-Disposition: attachment;filename="CASUAL PLANTILLA - '.(isset($this->department['short_name'])?$this->department['short_name']:'ALL EMPLOYEES').'_'.$reqs['from_date'].'-'.$reqs['to_date'].'_'.$reqs['nature_of_appointment'].'.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
@@ -349,7 +306,7 @@ for ($page=1; $page <= $pages ; $page++) {
 
 
         $worksheet1->mergeCells($this->currentMergedCell('c',$this->currentRow(),'f',$this->currentRow()));
-        $worksheet1->setCellValue('C'.$this->currentRow(),$this->department);
+        $worksheet1->setCellValue('C'.$this->currentRow(),$this->department['name']);
         $worksheet1->getStyle($this->currentMergedCell)->getAlignment()->setHorizontal('center');
         $worksheet1->getStyle($this->currentMergedCell)->getBorders()->getBottom()->setBorderStyle('thin');
         // start merged cells
@@ -603,33 +560,32 @@ $this->nextRow(1);
     }
     // ATAF FOOT END
     public function generateReport(Request $request){
-
-        $from_date = $request->from_date;
-        $to_date = $request->to_date;
-        $nature_of_appointment = $request->nature_of_appointment;
-        $department_id = $request->filter;
-
+        $reqs = array(
+        'from_date' => $request->from_date,
+        'to_date' => $request->to_date,
+        'nature_of_appointment' => $request->nature_of_appointment,
+        'department_id' => $request->filter,
+        'gen_type' => $request->gen_type,
+        'incRAI' => $request->incRAI);
 
         $matchThese = [
-            'from_date'=>$from_date,
-            'to_date'=>$to_date,
-            'nature_of_appointment' => $nature_of_appointment,
+            'from_date'=>$reqs['from_date'],
+            'to_date'=>$reqs['to_date'],
+            'nature_of_appointment' => $reqs['nature_of_appointment']
         ];
 
 
-        if($department_id == 'all'){
+        if($reqs['department_id'] == 'all'){
             $department = "LGU BAYAWAN CITY";
         } else {
-            $where = array('id' => $department_id);
-            $dept  = Department::where($where)->first();
-            $department = $dept['name'];
-            $matchThese['department_id'] = $department_id;
+            $where = array('id' => $reqs['department_id']);
+            $department  = Department::where($where)->first();
+            // $department = $dept['name'];
+            $matchThese['department_id'] = $reqs['department_id'];
         }
-
+        
         $this->department = $department;
-
-
-
+        // return $this->department
         $casuals = Employee::join('appointments', 'appointments.employee_id', '=', 'employees.id')
             ->where($matchThese)
             ->select('*')
@@ -637,6 +593,19 @@ $this->nextRow(1);
             ->get();
 
          $this->casuals = $casuals;
+
+         if ($reqs['gen_type'] == 0) {
+             $this->generatePlantilla($reqs);
+         } elseif ($reqs['gen_type'] == 1){
+            $this->generateAtaf($reqs);
+         }
+
+    }
+
+
+public function generatePlantilla($reqs){
+
+        
         // Create new Spreadsheet object
         
         $spreadsheet = new Spreadsheet();
@@ -656,10 +625,9 @@ $italic = [
     
         $spreadsheet->getDefaultStyle()->getFont()->setName('Arial');
         $spreadsheet->getDefaultStyle()->getFont()->setSize(12);
-    
 
-        // Add some data
-
+$department = $this->department['name'];
+$casuals = $this->casuals;
 
 // data
 $count = count($casuals);
@@ -786,19 +754,6 @@ $this->headSection($department,$spreadsheet,$startRow);
         $spreadsheet->getActiveSheet()->setTitle((isset($dept['short_name'])?$dept['short_name']:'ALL_EMPLOYEES'));
         
         $sheet1 = $spreadsheet->setActiveSheetIndex(0); 
-    //     $sheet1->getPageSetup()
-    // ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
-    //     $sheet1->getPageSetup()
-    // ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
-        
-    //     $sheet1->getPageMargins()->setTop(0.25);
-    //     $sheet1->getPageMargins()->setRight(0.25);
-    //     $sheet1->getPageMargins()->setLeft(0.41);
-    //     $sheet1->getPageMargins()->setBottom(0.25);
-
-
-        
-        // $spreadsheet->getActiveSheet()->getPageSetup()->setPrintArea('A1:N41');
 
         $b =-1;
         $printArea = '';
@@ -823,17 +778,15 @@ $this->headSection($department,$spreadsheet,$startRow);
         $sheet1->getPageSetup()->setFitToWidth(1);
 
 
-        if (isset($request->incRAI)) {
+        if ($reqs['incRAI'] == 'on') {
             $this->createRaiWorksheet($spreadsheet);
         }
-        
-        
 
 
         // Redirect output to a client’s web browser (Xlsx)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         // file title
-        header('Content-Disposition: attachment;filename="CASUAL PLANTILLA - '.(isset($dept['short_name'])?$dept['short_name']:'ALL EMPLOYEES').'_'.$from_date.'-'.$to_date.'_'.$nature_of_appointment.'.xlsx"');
+        header('Content-Disposition: attachment;filename="CASUAL PLANTILLA - '.(isset($this->department['short_name'])?$this->department['short_name']:'ALL EMPLOYEES').'_'.$reqs['from_date'].'-'.$reqs['to_date'].'_'.$reqs['nature_of_appointment'].'.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
@@ -1495,7 +1448,7 @@ for ($page=1; $page <= $pages ; $page++) {
 
 
         $worksheet1->mergeCells($this->currentMergedCell('c',$this->currentRow(),'f',$this->currentRow()));
-        $worksheet1->setCellValue('C'.$this->currentRow(),$this->department);
+        $worksheet1->setCellValue('C'.$this->currentRow(),$this->department['name']);
         $worksheet1->getStyle($this->currentMergedCell)->getAlignment()->setHorizontal('center');
         $worksheet1->getStyle($this->currentMergedCell)->getBorders()->getBottom()->setBorderStyle('thin');
         // CSC Resolution No:   1201478 

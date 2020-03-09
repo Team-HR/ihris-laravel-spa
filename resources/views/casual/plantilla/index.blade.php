@@ -39,18 +39,8 @@
     <tr>
       <td class="text-center">{{$no+1}}</td>
       <td class="text-center text-primary">
-        <a class="btn btn-primary btn-sm" href="javascript:void(0)" onclick="generateReport('{{json_encode($appointment)}}')"><i class="fas fa-file-excel"></i> - Plantilla</a>
-        <a class="btn btn-primary btn-sm" href="{{url('/casual/plantilla-generate_ataf?'.implode('&', array_map(
-    function ($v, $k) {
-        if(is_array($v)){
-            return $k.'='.implode('&'.$k.'[]=', $v);
-        }else{
-            return $k.'='.$v;
-        }
-    }, 
-    $appointment, 
-    array_keys($appointment)
-)).'&filter=1')}}" target="_blank"><i class="fas fa-file-excel"></i> - ATAF</a>
+        <a class="btn btn-primary btn-sm" href="javascript:void(0)" onclick="generateReport('{{json_encode($appointment)}}',0)"><i class="fas fa-file-excel" data-></i> - Plantilla</a>
+        <a class="btn btn-primary btn-sm" href="javascript:void(0)" onclick="generateReport('{{json_encode($appointment)}}',1)"><i class="fas fa-file-excel" data-></i> - ATAF</a>
       </td>
       <td class="text-center">{{$appointment['from_date_str']}}</td>
       <td class="text-center">{{$appointment['to_date_str']}}</td>
@@ -66,27 +56,25 @@
                 </table>
             </div>
         </div>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+{{-- Generator Modal Start --}}
  <div class="modal fade" id="generate-report-modal" aria-hidden="true">
-
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title" id=""></h5>
         </div>
         <div class="modal-body">
-          <h5>Generate Plantilla</h5>
+          <h5 id="genTitle">Generate Plantilla</h5>
           <cite class="blockquote-footer" id="period"></cite>
           <cite class="blockquote-footer" id="nature_of_appointment_label"></cite>
-
-<!-- form start -->
 <form id="generateReport-form" class="form" novalidate="">
+  <input type="hidden" name="gen_type" id="gen_type">
   <input type="hidden" name="from_date" id="from_date">
   <input type="hidden" name="to_date" id="to_date">
   <input type="hidden" name="nature_of_appointment" id="nature_of_appointment">
@@ -110,7 +98,7 @@
       </div>
       </div>
   </div>
-  <div class="form-row ml-2">
+  <div class="form-row ml-2" id="incRAI">
     <div class="form-group form-check">
       <input type="checkbox" class="form-check-input" id="incRAI" style="transform: scale(1);" name="incRAI">
       <label class="form-check-label" for="incRAI"> Include RAI</label>
@@ -125,7 +113,6 @@
     You may download another...
   </div>
 </div>
-<!-- form end -->
 </div>
         <div class="modal-footer">
             <button form="generateReport-form" type="cancel" class="btn btn-warning" data-dismiss="modal"><i class="fas fa-times-circle"></i> Cancel
@@ -136,13 +123,9 @@
     </div>
   </div>
 </div>
-
+{{-- Plantillia Generator Modal End --}}
 @endsection
-
-
-
 @section('page-script')
-
 <script type="text/javascript">
   
   $(document).ready(function() {
@@ -169,18 +152,29 @@
 
   });
 
-  function generateReport(array){
+  function generateReport(array,gen_type){
+
     arr = $.parseJSON(array);
     var period = arr.from_date_str+(arr.to_date_str?' to '+arr.to_date_str:'');
+
+    $('#genTitle').html('Generate Plantillia');
+    $('#incRAI').show();
+
+    if (gen_type == 1) {
+      $('#genTitle').html('Generate ATAF');
+      $('#incRAI').hide();
+    }
+
+    $('#gen_type').val(gen_type);
     $('#from_date').val(arr.from_date);
     $('#to_date').val(arr.to_date);
     $('#nature_of_appointment').val(arr.nature_of_appointment);
-
     $('#period').html(period);
     $('#nature_of_appointment_label').html(arr.nature_of_appointment);
+
+
     $('#generate-report-modal').modal("show");
 
-    
   }
 
 
