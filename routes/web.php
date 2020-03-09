@@ -32,9 +32,13 @@ Route::get('/cores', 'CoresController@index');
 
 // employee
 Route::resource('/employee', 'EmployeeController');
+
+// plantilla
 Route::resource('/casual/plantilla', 'CasualPlantillaController');
 Route::get('/casual/plantilla-generate_report', 'CasualPlantillaController@generateReport');
+Route::get('/casual/plantilla-generate_ataf', 'CasualPlantillaController@generateAtaf');
 // Route::get('/employee_change_id', 'EmployeeController@changeRowId');
+
 // appointment
 Route::resource('/appointment', 'AppointmentController');
 Route::put('/appointment/{id}/updatePerEmployee', 'AppointmentController@updatePerEmployee');
