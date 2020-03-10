@@ -576,9 +576,9 @@ $this->nextRow(1);
             'nature_of_appointment' => $reqs['nature_of_appointment']
         ];
 
-
+        $department = array();
         if($reqs['department_id'] == 'all'){
-            $department = "LGU BAYAWAN CITY";
+            $department['name'] = "LGU BAYAWAN CITY";
         } else {
             $where = array('id' => $reqs['department_id']);
             $department  = Department::where($where)->first();
