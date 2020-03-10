@@ -135,7 +135,6 @@ class CasualPlantillaController extends Controller
             ->setKeywords('office 2007 openxml php')
             ->setCategory('Report excel file');
             // CREATE ATAF START
-
         $worksheet1 = $spreadsheet->createSheet();
         $worksheet1->setTitle('ATAF');
         $spreadsheet->setActiveSheetIndex(1);
@@ -196,7 +195,6 @@ for ($page=1; $page <= $pages ; $page++) {
             $this->nothingFollows($spreadsheet,$row,'Q','thin');
         } else {
 
-
             foreach ($cols as $col => $index) {
                 if ($col == 'a') {
                     $worksheet1->setCellValue($col.$row,$num);   
@@ -204,7 +202,11 @@ for ($page=1; $page <= $pages ; $page++) {
                  elseif ($col == 'i') {
                     $worksheet1->setCellValue($col.$row,(isset($casuals[$num-1]['from_date'])?date_format(date_create($casuals[$num-1]['from_date']), 'm/d/Y').' - '.date_format(date_create($casuals[$num-1]['to_date']), 'm/d/Y'):''));
                     $worksheet1->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
-                } 
+                } elseif ($col == 'k') {
+                    $worksheet1->setCellValue($col.$row,(isset($casuals[$num-1]['from_date'])?
+                    date_format(date_create($casuals[$num-1]['from_date']), 'm/d/Y'):''));
+                    $worksheet1->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
+                }
                  else {
                     $worksheet1->setCellValue($col.$row,(isset($casuals[$num-1][$index])?$casuals[$num-1][$index]:''));
                     $worksheet1->getStyle($col.$row)->getAlignment()->setHorizontal('center')->setVertical('center');
@@ -233,9 +235,9 @@ for ($page=1; $page <= $pages ; $page++) {
         $b =-1;
         $printArea = '';
         for ($i=0; $i < $pages ; $i++) { 
-            $a = $b+2;
-            $b = $a+54;
-            $printArea .= 'A'.$a.':S'.$b;
+            $a = $b+3;
+            $b = $a+49;
+            $printArea .= 'A'.$a.':Q'.$b;
             if ($i != ($pages-1)) {
                 $printArea .= ',';
             }
