@@ -3,15 +3,39 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Resources\UsersResource;
 use Redirect,Response,DB,Config;
 use Datatables;
 use App\User;
 
 class UsersController extends Controller
 {
+    protected $user;
+
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * Get users for the data table.
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+
+
+    public function getUsersForDataTable(Request $request)
+    {
+        $users = $this->user->all();
+
+        return UsersResource::collection($users);
+    }
+
     public function index()
     {
-        return view('users');
+        return view('welcome',['users' => $this->user]);
     }
     public function usersList()
     {   

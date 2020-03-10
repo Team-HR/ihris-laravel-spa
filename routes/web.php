@@ -23,6 +23,11 @@ Auth::routes([
 ]);
 
 
+Route::get('users/data-table', 'UsersController@getUsersForDataTable')->name('users.table');
+Route::get('welcome', function(){
+	return view('welcome');
+});
+
 // home
 Route::get('/home', 'HomeController@index')->name('employee.home');
 Route::get('/', 'HomeController@index')->name('employee.home');
@@ -33,11 +38,16 @@ Route::get('/cores', 'CoresController@index');
 // employee
 Route::resource('/employee', 'EmployeeController');
 
-// plantilla
+// plantilla casual start
 Route::resource('/casual/plantilla', 'CasualPlantillaController');
 Route::get('/casual/plantilla-generate_report', 'CasualPlantillaController@generateReport');
 Route::get('/casual/plantilla-generate_ataf', 'CasualPlantillaController@generateAtaf');
-// Route::get('/employee_change_id', 'EmployeeController@changeRowId');
+// plantilla casual end
+
+// plantilla permanent start
+Route::resource('/permanent/plantilla', 'PlantillaPermanentController');
+// plantilla permanent end
+
 
 // appointment
 Route::resource('/appointment', 'AppointmentController');
