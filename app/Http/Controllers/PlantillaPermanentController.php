@@ -1,11 +1,31 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\PlantillaPermanent;
+use App\User;
+use App\Http\Resources\PlantillaPermanentsResource;
 use Illuminate\Http\Request;
+use Redirect,Response,DB,Config;
 
 class PlantillaPermanentController extends Controller
 {
+
+    protected $plantillaPermanent;
+
+    public function __construct (PlantillaPermanent $plantillaPermanent)
+    {
+        $this->plantillaPermanent = $plantillaPermanent;
+    }
+
+    public function getPlantillaPermanentsForDataTable()
+    {
+        $matchThese = ['department_id' => 1 ];
+        $plantillaPermanents = $this->plantillaPermanent->where($matchThese)
+            ->select('*')
+            ->get();
+        return PlantillaPermanentsResource::collection($plantillaPermanents);
+    }
+
     /**
      * Display a listing of the resource.
      *

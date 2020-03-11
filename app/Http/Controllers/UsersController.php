@@ -30,12 +30,13 @@ class UsersController extends Controller
     {
         $users = $this->user->all();
 
-        return UsersResource::collection($users);
+        dd($users);
+        // return UsersResource::collection($users);
     }
 
     public function index()
     {
-        return view('welcome',['users' => $this->user]);
+        // return view('welcome');
     }
     public function usersList()
     {   

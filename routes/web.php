@@ -14,8 +14,8 @@
 // Route::get('/', function () {
 //     return view('auth.login');
 // });
-
 // Auth::routes();
+
 Auth::routes([
   'register' => true,
   'verify' => false,
@@ -24,6 +24,9 @@ Auth::routes([
 
 
 Route::get('users/data-table', 'UsersController@getUsersForDataTable')->name('users.table');
+
+Route::get('plantilla_permanents/data-table', 'PlantillaPermanentController@getPlantillaPermanentsForDataTable')->name('plantilla_permanents.table');
+
 Route::get('welcome', function(){
 	return view('welcome');
 });
@@ -45,7 +48,7 @@ Route::get('/casual/plantilla-generate_ataf', 'CasualPlantillaController@generat
 // plantilla casual end
 
 // plantilla permanent start
-Route::resource('/permanent/plantilla', 'PlantillaPermanentController');
+// Route::resource('/permanent/plantilla', 'PlantillaPermanentController');
 // plantilla permanent end
 
 

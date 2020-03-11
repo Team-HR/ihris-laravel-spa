@@ -10,10 +10,10 @@
 </head>
 <body>
 <div class="flex-center position-ref full-height" id="app">
-    <div class="container">
+    <div class="container-fluid">
         <data-table
-            fetch-url="{{ route('users.table') }}"
-            :columns="['name', 'email' , 'created_at']"
+            fetch-url="{{ route('plantilla_permanents.table') }}"
+            :columns="['item_no', 'position_title' , 'functional_title']"
         ></data-table>
     </div>
 </div>

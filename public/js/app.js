@@ -1864,6 +1864,44 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     fetchUrl: {
@@ -1873,15 +1911,12 @@ __webpack_require__.r(__webpack_exports__);
     columns: {
       type: Array,
       required: true
-    },
-    testing: {
-      type: String,
-      required: true
     }
   },
   data: function data() {
     return {
-      tableData: []
+      tableData: [] // tableEmpty: true
+
     };
   },
   created: function created() {
@@ -1902,6 +1937,18 @@ __webpack_require__.r(__webpack_exports__);
      * */
     serialNumber: function serialNumber(key) {
       return key + 1;
+    },
+    edit: function edit(data) {
+      console.log('Remove', data.id);
+      $('#' + data.id).hide('fast', function () {
+        $(this).remove();
+      });
+      console.log('Data Size'); // $('#modal_edit').modal('show');
+      // $('#item_no').val(arr.item_no);
+      // $('#position_title').val(arr.position_title);
+    },
+    submitEdit: function submitEdit() {
+      console.log($("#form_edit").serialize());
     }
   },
   filters: {
@@ -37307,7 +37354,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "data-table" }, [
-    _c("table", { staticClass: "table" }, [
+    _c("table", { staticClass: "table table-sm table-bordered" }, [
       _c("thead", [
         _c(
           "tr",
@@ -37317,9 +37364,9 @@ var render = function() {
             _vm._l(_vm.columns, function(column) {
               return _c("th", { key: column, staticClass: "table-head" }, [
                 _vm._v(
-                  "\n        " +
+                  "\n          " +
                     _vm._s(_vm._f("columnHead")(column)) +
-                    "\n      "
+                    "\n        "
                 )
               ])
             })
@@ -37331,7 +37378,7 @@ var render = function() {
       _c(
         "tbody",
         [
-          _vm.tableData.length === 0
+          _vm.tableEmpty
             ? _c("tr", {}, [
                 _c(
                   "td",
@@ -37345,13 +37392,39 @@ var render = function() {
             : _vm._l(_vm.tableData, function(data, key1) {
                 return _c(
                   "tr",
-                  { key: data.id, staticClass: "m-datatable__row" },
+                  {
+                    key: data.id,
+                    staticClass: "m-datatable__row",
+                    attrs: { id: data.id }
+                  },
                   [
                     _c("td", [_vm._v(_vm._s(_vm.serialNumber(key1)))]),
                     _vm._v(" "),
                     _vm._l(data, function(value, key) {
-                      return _c("td", [_vm._v(_vm._s(value))])
-                    })
+                      return key != "id"
+                        ? _c("td", [
+                            _vm._v(_vm._s(value) + "\n                ")
+                          ])
+                        : _vm._e()
+                    }),
+                    _c("td", [
+                      _c(
+                        "a",
+                        {
+                          attrs: { href: "javascript:void(0)" },
+                          on: {
+                            click: function($event) {
+                              {
+                                {
+                                  _vm.edit(data)
+                                }
+                              }
+                            }
+                          }
+                        },
+                        [_vm._v("Edit")]
+                      )
+                    ])
                   ],
                   2
                 )
@@ -37359,10 +37432,132 @@ var render = function() {
         ],
         2
       )
-    ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal",
+        attrs: { id: "modal_edit", tabindex: "-1", role: "dialog" }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c(
+                  "form",
+                  {
+                    attrs: { id: "form_edit" },
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        return _vm.submitEdit()
+                      }
+                    }
+                  },
+                  [_vm._m(1), _vm._v(" "), _vm._m(2)]
+                )
+              ]),
+              _vm._v(" "),
+              _vm._m(3)
+            ])
+          ]
+        )
+      ]
+    )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title" }, [_vm._v("Modify Plantilla")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } })]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
+      _c("label", { attrs: { for: "item_no" } }, [_vm._v("Item No:")]),
+      _vm._v(" "),
+      _c("input", {
+        staticClass: "form-control",
+        attrs: {
+          type: "text",
+          name: "item_no",
+          id: "item_no",
+          "aria-describedby": "itemNumHelp"
+        }
+      }),
+      _vm._v(" "),
+      _c(
+        "small",
+        { staticClass: "form-text text-muted", attrs: { id: "itemNumHelp" } },
+        [_vm._v("Item number is unique.")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
+      _c("label", { attrs: { for: "position_title" } }, [
+        _vm._v("Position Title")
+      ]),
+      _vm._v(" "),
+      _c("input", {
+        staticClass: "form-control",
+        attrs: { type: "text", name: "position_title", id: "position_title" }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("Close")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary",
+          attrs: { form: "form_edit", type: "submit" }
+        },
+        [_vm._v("Save changes")]
+      )
+    ])
+  }
+]
 render._withStripped = true
 
 
