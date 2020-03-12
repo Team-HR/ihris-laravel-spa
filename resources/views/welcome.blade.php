@@ -9,57 +9,28 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}"/>
 </head>
 <body>
-<div class="flex-center position-ref full-height" id="app">
-    <div class="container-fluid">
-{{--         <data-table
-            fetch-url="{{ route('plantilla_permanents.table') }}"
-            :columns="['item_no',
-            'position_title' , 
-            'functional_title', 
-            'dept',
-            'lvl',
-            'sg',
-            'auth_salary',
-            'actual_salary',
-            'step',
-            'region_code',
-            'area_type',
-            'category',
-            'classification','options']"
-        ></data-table> --}}
-    </div>
-
+<div id="app">
 <!-- App.vue start -->
 <v-app>
+
   <v-navigation-drawer app>
     <!-- -->
   </v-navigation-drawer>
 
   <v-app-bar app>
     <!-- -->
-  </v-app-bar>
+  </v-app-bar>  
 
   <!-- Sizes your content based upon application components -->
   <v-content>
 
     <!-- Provides the application the proper gutter -->
     <v-container fluid>
+
         <data-tablefy
             fetch-url="{{ route('plantilla_permanents.table') }}"
-{{--             :columns="['item_no',
-            'position_title' , 
-            'functional_title', 
-            'dept',
-            'lvl',
-            'sg',
-            'auth_salary',
-            'actual_salary',
-            'step',
-            'region_code',
-            'area_type',
-            'category',
-            'classification','options']" --}}
         ></data-tablefy>
+
     </v-container>
   </v-content>
 

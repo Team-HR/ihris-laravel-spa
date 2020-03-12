@@ -14,13 +14,13 @@
 // Route::get('/', function () {
 //     return view('auth.login');
 // });
-// Auth::routes();
+Auth::routes();
 
-Auth::routes([
-  'register' => true,
-  'verify' => false,
-  'reset' => false
-]);
+// Auth::routes([
+//   'register' => true,
+//   'verify' => false,
+//   'reset' => false
+// ]);
 
 
 Route::get('users/data-table', 'UsersController@getUsersForDataTable')->name('users.table');
