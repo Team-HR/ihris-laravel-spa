@@ -1900,8 +1900,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     fetchUrl: {
@@ -1915,12 +1913,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      tableData: [] // tableEmpty: true
-
+      tableData: [],
+      onlys: ['item_no', 'position_title', 'functional_title', 'department_short', 'level', 'salary_grade', 'authorized_salary', 'actual_salary', 'step', 'region_code', 'area_type', 'category', 'classification']
     };
   },
   created: function created() {
-    return this.fetchData(this.fetchUrl);
+    return this.fetchData(this.fetchUrl); // console.log (this.fetchUrl);
   },
   methods: {
     fetchData: function fetchData(url) {
@@ -1928,6 +1926,7 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get(url).then(function (data) {
         _this.tableData = data.data.data;
+        console.log(data);
       });
     },
 
@@ -1939,12 +1938,7 @@ __webpack_require__.r(__webpack_exports__);
       return key + 1;
     },
     edit: function edit(data) {
-      console.log('Remove', data.id);
-      $('#' + data.id).hide('fast', function () {
-        $(this).remove();
-      });
-      console.log('Data Size'); // $('#modal_edit').modal('show');
-      // $('#item_no').val(arr.item_no);
+      $('#modal_edit').modal('show'); // $('#item_no').val(arr.item_no);
       // $('#position_title').val(arr.position_title);
     },
     submitEdit: function submitEdit() {
@@ -37358,6 +37352,9 @@ var render = function() {
       _c("thead", [
         _c(
           "tr",
+          {
+            staticStyle: { "text-align": "center", "vertical-align": "middle" }
+          },
           [
             _c("th", { staticClass: "table-head" }, [_vm._v("#")]),
             _vm._v(" "),
@@ -37378,7 +37375,7 @@ var render = function() {
       _c(
         "tbody",
         [
-          _vm.tableEmpty
+          _vm.tableData.length === 0
             ? _c("tr", {}, [
                 _c(
                   "td",
@@ -37400,13 +37397,12 @@ var render = function() {
                   [
                     _c("td", [_vm._v(_vm._s(_vm.serialNumber(key1)))]),
                     _vm._v(" "),
-                    _vm._l(data, function(value, key) {
-                      return key != "id"
-                        ? _c("td", [
-                            _vm._v(_vm._s(value) + "\n                ")
-                          ])
-                        : _vm._e()
+                    _vm._l(_vm.onlys, function(only, key) {
+                      return _c("td", [
+                        _vm._v(_vm._s(data[only] ? data[only] : "---"))
+                      ])
                     }),
+                    _vm._v(" "),
                     _c("td", [
                       _c(
                         "a",

@@ -47,19 +47,9 @@ Route::get('/casual/plantilla-generate_report', 'CasualPlantillaController@gener
 Route::get('/casual/plantilla-generate_ataf', 'CasualPlantillaController@generateAtaf');
 // plantilla casual end
 
-// plantilla permanent start
-// Route::resource('/permanent/plantilla', 'PlantillaPermanentController');
-// plantilla permanent end
-
-
 // appointment
 Route::resource('/appointment', 'AppointmentController');
 Route::put('/appointment/{id}/updatePerEmployee', 'AppointmentController@updatePerEmployee');
-// Route::get('admin/employee', 'EmployeeController@index')->name('admin.employee')->middleware('is_admin');
-
-// Route::post('admin/employee', 'EmployeeController@store')->name('admin.employee')->middleware('is_admin');
-
-// Route::get('admin/employee', 'EmployeeController@store')->name('admin.employee')->middleware('is_admin');
 
 Route::get('admin/employee','EmployeeController@index')->middleware('is_admin');
 Route::post('admin/employee/action', 'EmployeeController@action')->name('full-text-search.action')->middleware('is_admin');

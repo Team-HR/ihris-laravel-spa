@@ -13,7 +13,13 @@
     <div class="container-fluid">
         <data-table
             fetch-url="{{ route('plantilla_permanents.table') }}"
-            :columns="['item_no', 'position_title' , 'functional_title']"
+            :columns="['item_no', 'position_title' , 'functional_title', 'dept','lvl','sg','auth_salary',
+            'actual_salary',
+            'step',
+            'region_code',
+            'area_type',
+            'category',
+            'classification','options']"
         ></data-table>
     </div>
 </div>

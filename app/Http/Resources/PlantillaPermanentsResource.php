@@ -12,7 +12,7 @@ class PlantillaPermanentsResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    
+
     public function toArray($request)
     {
         // return parent::toArray($request);
@@ -31,7 +31,10 @@ class PlantillaPermanentsResource extends JsonResource
             'area_type' => $this->area_type,
             'category' => $this->category,
             'classification' => $this->classification,
+            'department_short' => $this->department_short,
+            'department' => $this->department,
             // 'created_at' => Carbon::parse($this->created_at)->toDayDateTimeString(),
         ];
     }
+
 }

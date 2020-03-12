@@ -2,7 +2,7 @@
   <div class="data-table">
     <table class="table table-sm table-bordered">
       <thead>
-      <tr>
+      <tr style="text-align: center; vertical-align: middle;">
         <th class="table-head">#</th>
         <th v-for="column in columns" :key="column"
             class="table-head">
@@ -11,12 +11,12 @@
       </tr>
       </thead>
       <tbody>
-          <tr class="" v-if="tableEmpty">
+          <tr class="" v-if="tableData.length === 0">
             <td class="lead text-center" :colspan="columns.length + 1">No data found.</td>
           </tr>
           <tr v-for="(data, key1) in tableData" :key="data.id" :id="data.id" class="m-datatable__row" v-else>
                 <td>{{ serialNumber(key1) }}</td>
-                <td v-for="(value, key) in data" v-if="key != 'id'">{{ value }}
+                <td v-for="(only, key) in onlys">{{ (data[only]?data[only]:'---') }}</td>
                 <td>
                     <a href="javascript:void(0)" @click="{{edit(data)}}">Edit</a>
                 </td>
@@ -46,8 +46,6 @@
     <label for="position_title">Position Title</label>
     <input type="text" class="form-control" name="position_title" id="position_title">
   </div>
-
-  <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
 </form>
 
       </div>
@@ -58,7 +56,7 @@
     </div>
   </div>
 </div>
-<!-- end edit modal -->
+
   </div>
 </template>
 
@@ -71,17 +69,33 @@ export default {
   data() {
     return {
       tableData: [],
-      // tableEmpty: true
+      onlys: [
+        'item_no',
+        'position_title',
+        'functional_title',
+        'department_short',
+        'level',
+        'salary_grade',
+        'authorized_salary',
+        'actual_salary',
+        'step',
+        'region_code',
+        'area_type',
+        'category',
+        'classification',
+      ]
     }
   },
   created() {
     return this.fetchData(this.fetchUrl)
+    // console.log (this.fetchUrl);
   },
   methods: {
     fetchData(url) {
       axios.get(url)
         .then(data => {
           this.tableData = data.data.data
+          console.log(data);
         })
     },
     /**
@@ -91,14 +105,8 @@ export default {
     serialNumber(key) {
       return key + 1;
     },
-
     edit(data){
-        console.log('Remove',data.id);
-        $('#'+data.id).hide('fast', function() {
-            $(this).remove();
-        });
-        console.log('Data Size');
-        // $('#modal_edit').modal('show');
+        $('#modal_edit').modal('show');
         // $('#item_no').val(arr.item_no);
         // $('#position_title').val(arr.position_title);
     },
