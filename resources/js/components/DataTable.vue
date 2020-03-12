@@ -29,25 +29,50 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Modify Plantilla</h5>
+        <!-- <h5 class="modal-title">MODIFY PLANTILLA</h5> -->
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true"></span>
         </button>
       </div>
       <div class="modal-body">
-        <!-- <p>Modal body text goes here.</p> -->
+<!-- start form -->
 <form id="form_edit" @submit.prevent="submitEdit()">
-  <div class="form-group">
-    <label for="item_no">Item No:</label>
-    <input type="text" class="form-control" name="item_no" id="item_no" aria-describedby="itemNumHelp">
-    <small id="itemNumHelp" class="form-text text-muted">Item number is unique.</small>
-  </div>
-  <div class="form-group">
-    <label for="position_title">Position Title</label>
-    <input type="text" class="form-control" name="position_title" id="position_title">
-  </div>
+    <input type="hidden" name="id" id="id">
+    <div class="form-row">
+        <div class="form-group col-4">
+            <label for="item_no" class="col-form-label-sm">ITEM NO:</label>
+            <input type="text" class="form-control form-control-sm" name="item_no" id="item_no" aria-describedby="itemNumHelp" placeholder="Item number ...">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-6">
+            <label for="position_title" class="col-form-label-sm">POSITION TITLE:</label>
+            <input type="text" class="form-control form-control-sm" name="position_title" id="position_title" placeholder="Position title ...">
+        </div>
+        <div class="form-group col-6">
+            <label for="functional_title" class="col-form-label-sm">FUNCTIONAL TITLE:</label>
+            <input type="text" class="form-control form-control-sm" name="functional_title" id="functional_title" placeholder="Functional title ...">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-6">
+            <label for="department_id" class="col-form-label-sm">DEPARTMENT:</label>
+            <select class="form-control form-control-sm" name="department_id" id="department_id">
+                <option selected>Select Department</option>
+                <option v-for="department in departments" :value="department.id">{{department.name}}</option>
+            </select>
+        </div>
+        <div class="form-group col-3">
+            <label for="level" class="col-form-label-sm">LEVEL:</label>
+            <input type="text" class="form-control form-control-sm" name="level" id="level" placeholder="Level ...">
+        </div>
+        <div class="form-group col-3">
+            <label for="salary_grade" class="col-form-label-sm">SALARY GRADE:</label>
+            <input type="text" class="form-control form-control-sm" name="salary_grade" id="salary_grade" placeholder="Salary grade...">
+        </div>
+    </div>
 </form>
-
+<!-- end form -->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -68,6 +93,7 @@ export default {
   },
   data() {
     return {
+        departments:[],
       tableData: [],
       onlys: [
         'item_no',
@@ -87,28 +113,35 @@ export default {
     }
   },
   created() {
-    return this.fetchData(this.fetchUrl)
-    // console.log (this.fetchUrl);
+     this.fetchData(this.fetchUrl)
+     axios.get('departments-list').then(data => {
+        this.departments = data.data.data
+    })
+
   },
   methods: {
     fetchData(url) {
       axios.get(url)
         .then(data => {
           this.tableData = data.data.data
-          console.log(data);
+          this.edit(this.tableData[0]);
+          // console.log(this.tableData)
         })
     },
-    /**
-     * Get the serial number.
-     * @param key
-     * */
     serialNumber(key) {
       return key + 1;
     },
     edit(data){
+        //modal
         $('#modal_edit').modal('show');
-        // $('#item_no').val(arr.item_no);
-        // $('#position_title').val(arr.position_title);
+        //inputs
+        $('#id').val(data.id);
+        $('#item_no').val(data.item_no);
+        $('#position_title').val(data.position_title);
+        $('#functional_title').val(data.functional_title);
+        $('#department_id').val(data.department_id);
+        $('#level').val(data.level);
+        $('#salary_grade').val(data.salary_grade);
     },
     submitEdit (){
         console.log($("#form_edit").serialize());
@@ -125,4 +158,7 @@ export default {
 </script>
 
 <style scoped>
+td {
+    padding: 0px;
+}
 </style>

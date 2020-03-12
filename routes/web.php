@@ -69,3 +69,6 @@ Route::resource('shows', 'ShowController');
 Route::get('users', 'UsersController@index');
 Route::get('users-list', 'UsersController@usersList');
 
+
+// departments 
+Route::get('departments-list', 'DepartmentController@listDepartment');

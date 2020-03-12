@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Department;
-
 use Illuminate\Support\Facades\Auth;
 use Redirect,Response;
 use Illuminate\Validation\Rule;
 use Validator;
+
+use App\Http\Resources\DepartmentsResource;
 
 class DepartmentController extends Controller
 {
@@ -29,6 +30,12 @@ class DepartmentController extends Controller
         return view('department.index', [
             'departments' => $departments
         ]);
+    }
+
+    public function listDepartment(Department $department)
+    {
+        // return Response::json($department->all());
+        return DepartmentsResource::collection($department->all());
     }
 
     /**
