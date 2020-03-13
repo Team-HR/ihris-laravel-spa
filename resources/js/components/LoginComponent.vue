@@ -13,6 +13,7 @@
             sm="8"
             md="4"
           >
+            <!-- method="POST"  -->
           <v-form
             id="login-form"
             @submit="loginSubmit"
@@ -29,9 +30,11 @@
               </v-toolbar>
               <v-card-text>
 
+                  <input type="hidden" name="_token" :value="csrf">
                   <v-text-field
                     label="Username"
                     v-model="username"
+                    name="username"
                     prepend-icon="mdi-account"
                     type="text"
                   ></v-text-field>
@@ -39,6 +42,7 @@
                   <v-text-field
                     label="Password"
                     v-model="password"
+                    name="password"
                     prepend-icon="mdi-textbox-password"
                     type="password"
                   />
@@ -65,18 +69,30 @@
     },
     data(){
       return {
+        csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
         username: '',
-        password:''
+        password:'',
       }
     },
     created: function(){
-      // console.log(this.formAction)
     },
     methods: {
       loginSubmit: function(event){
-        event.preventDefault()
-        console.log(this.username)
-        console.log(this.password)
+        event.preventDefault() 
+        // console.log(this.username)
+        // console.log(this.password)
+
+        axios.post(this.formAction, {
+          username: this.username,
+          password: this.password
+        })
+        .then(data => {
+          // console.log(data)
+        })
+        // .catch(function (error) {
+        //   console.log(error);
+        // })
+
       }
     }
   }

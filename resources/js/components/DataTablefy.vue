@@ -9,9 +9,11 @@
         label="Search"
         single-line
         hide-details
+        class="my-5 py-5"
       ></v-text-field>
     </v-card-title>
     <v-data-table
+      dense
       :headers="headers"
       :items="tableData"
       :search="search"
@@ -33,21 +35,22 @@
                 align: 'start',
                 sortable: false,
                 value: 'id',
+                width: 1
             },
             { text: 'ITEM NO',value: 'item_no' },
             { text: 'POSITION TITLE',value: 'position_title' , },
             { text: 'FUNCTION',value: 'functional_title', },
-            { text: 'DEPARTMENT',value: 'department' },
-            { text: 'LVL',value: 'lvl' },
-            { text: 'SG',value: 'sg' },
-            { text: 'AUTH SALARY',value: 'auth_salary' },
+            { text: 'OFFICE',value: 'department' },
+            { text: 'LVL',value: 'level', width: 1 },
+            { text: 'SG',value: 'salary_grade' },
+            { text: 'AUTH SALARY',value: 'authorized_salary' },
             { text: 'ACTUAL SALARY',value: 'actual_salary' },
             { text: 'STEP',value: 'step' },
             { text: 'REGION CODE',value: 'region_code' },
             { text: 'AREA TYPE',value: 'area_type' },
             { text: 'CATEGORY',value: 'category' },
-            { text: 'CLASSIFICATION',value: 'classification' },
-            { text: 'OPTIONS',value: 'options' },
+            { text: 'CLASS',value: 'classification',width:1 },
+            { text: 'OPTIONS',value: 'options', width:1 },
 
         ],
         tableData: [],

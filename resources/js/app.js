@@ -20,11 +20,11 @@ Vue.use(Vuetify);
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-
+Vue.component('app-layout', require('./components/AppLayout.vue').default);
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('data-tablefy', require('./components/DataTablefy.vue').default);
 Vue.component('login-component', require('./components/LoginComponent.vue').default);
-
+Vue.component('plantilla-permanent', require('./components/PlantillaPermanent.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
