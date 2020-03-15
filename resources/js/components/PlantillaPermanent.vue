@@ -6,6 +6,7 @@
     sort-by="calories"
     class="elevation-1"
   >
+  
     <template v-slot:top>
       <v-toolbar flat color="white">
         <v-toolbar-title>PLANTILLA OF PERMANENT EMPLOYEES</v-toolbar-title>
@@ -15,11 +16,6 @@
           vertical
         ></v-divider>
         <v-spacer></v-spacer>
-        <v-divider
-          class="mx-4"
-          inset
-          vertical
-        ></v-divider>
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
@@ -32,7 +28,7 @@
           inset
           vertical
         ></v-divider>
-        <v-dialog v-model="dialog" max-width="500px">
+        <v-dialog v-model="dialog" max-width="1000px">
           <template v-slot:activator="{ on }">
             <v-btn color="primary" dark class="mb-2" v-on="on">New Plantilla</v-btn>
           </template>
@@ -44,16 +40,18 @@
             <v-card-text>
               <v-container>
                 <v-row>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col cols="12" sm="2" md="2">
                     <v-text-field v-model="editedItem.item_no" label="Item no."></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="12" md="6">
+                  <v-col cols="12" sm="5" md="5">
                     <v-text-field v-model="editedItem.position_title" label="Position Title"></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col cols="12" sm=5 md="5">
                     <v-text-field v-model="editedItem.functional_title" label="Functional Title"></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  </v-row>  
+                <v-row>
+                  <v-col cols="12" sm="6" md="6">
                       <v-select
                         v-model="editedItem.department_id"
                         :items="departments"
@@ -62,11 +60,34 @@
                         label="Department"
                       ></v-select>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col cols="12" sm="1" md="1">
                     <v-text-field v-model="editedItem.level" label="Level"></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.salary_grade" label="Salary Grade"></v-text-field>
+                  <v-col cols="12" sm="1" md="1">
+                    <v-text-field v-model="editedItem.salary_grade" label="SG"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="2" md="2">
+                    <v-text-field v-model="editedItem.authorized_salary" label="Authorized Salary"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="2" md="2">
+                    <v-text-field v-model="editedItem.actual_salary" label="Actual Salary"></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12" sm="1" md="1">
+                    <v-text-field v-model="editedItem.step" label="Step"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="1" md="1">
+                    <v-text-field v-model="editedItem.region_code" label="Region Code"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="2" md="2">
+                    <v-text-field v-model="editedItem.area_type" label="Area Type"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="2" md="2">
+                    <v-text-field v-model="editedItem.category" label="Category"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="2" md="2">
+                    <v-text-field v-model="editedItem.classification" label="Classification"></v-text-field>
                   </v-col>
                 </v-row>
               </v-container>
@@ -102,11 +123,15 @@
   </v-data-table>
 </template>
 <script>
+
+  const qs = require('qs');
   export default {
     props: {
         fetchUrl: { type: String, required: true },
     },
-    data: () => ({
+    data () {
+      return {
+      csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
       dialog: false,
         search: '',
         headers: [
@@ -135,6 +160,7 @@
       tableData: [],
       editedIndex: -1,
       editedItem: {
+        id: 0,
         item_no: '',
         position_title: '',
         functional_title: '',
@@ -150,14 +176,24 @@
         classification: '',
       },
       defaultItem: {
+        id: null,
         item_no: '',
-        position_title: 0,
-        functional_title: 0,
-        carbs: 0,
-        protein: 0,
+        position_title: '',
+        functional_title: '',
+        department_id: '',
+        level: '',
+        salary_grade: '',
+        authorized_salary: '',
+        actual_salary: '',
+        step: '',
+        region_code: '',
+        area_type: '',
+        category: '',
+        classification: '',
       },
       departments:[]
-    }),
+      }
+    },
 
     computed: {
       formTitle () {
@@ -210,10 +246,34 @@
 
       save () {
         if (this.editedIndex > -1) {
+// axios.post('plantilla_permanents', {
+//     editedItem: this.editedItem,
+//   })
+//   .then(function (response) {
+//     console.log(response);
+//   })
+//   .catch(function (error) {
+//     console.log(error);
+//   });
+
+
           Object.assign(this.tableData[this.editedIndex], this.editedItem)
+          console.log('Edit Plantilla',this.editedItem);
         } else {
+console.log(qs.stringify(this.editedItem));
+// console.log(this.editedItem);
+axios.post('plantilla_permanents', {
+    data: qs.stringify(this.editedItem),
+  })
+  .then(function (response) {
+    // console.log(response);
+  });
+
+
           this.tableData.push(this.editedItem)
+          // console.log('New Plantilla',this.editedItem);
         }
+
         this.close()
       },
     },

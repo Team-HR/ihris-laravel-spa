@@ -25,11 +25,16 @@ Auth::routes();
 
 Route::get('users/data-table', 'UsersController@getUsersForDataTable')->name('users.table');
 
+
+// plantilla permanent start
 Route::get('plantilla_permanents/data-table', 'PlantillaPermanentController@getPlantillaPermanentsForDataTable')->name('plantilla_permanents.table');
+Route::post('plantilla_permanents', 'PlantillaPermanentController@store');
 
 Route::get('welcome', function(){
 	return view('welcome');
 });
+// plantilla permanent end
+
 
 // home
 Route::get('/home', 'HomeController@index')->name('employee.home');
@@ -55,7 +60,7 @@ Route::get('admin/employee','EmployeeController@index')->middleware('is_admin');
 Route::post('admin/employee/action', 'EmployeeController@action')->name('full-text-search.action')->middleware('is_admin');
 Route::get('admin/employee/','EmployeeController@index')->middleware('is_admin');
 
-Route::resource('admin/department','DepartmentController')->middleware('is_admin');
+Route::resource('admin/department','DepartmentController');
 Route::resource('admin/position','PositionController')->middleware('is_admin');
 
 //  test

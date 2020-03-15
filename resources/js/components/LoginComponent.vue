@@ -69,7 +69,7 @@
     },
     data(){
       return {
-        csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        // csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
         username: '',
         password:'',
       }

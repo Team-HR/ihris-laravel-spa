@@ -55,7 +55,8 @@ class DepartmentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
+        dd ($request);
         $object_id = $request->object_id;
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:departments,name,' . $object_id,

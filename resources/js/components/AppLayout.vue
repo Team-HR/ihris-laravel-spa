@@ -60,7 +60,7 @@
       drawers: ['Default (no property)', 'Permanent', 'Temporary'],
       primaryDrawer: {
         model: null,
-        type: 'default (no property)',
+        type: 'temporary',
         clipped: false,
         floating: false,
         mini: false,
