@@ -22,9 +22,7 @@
   <template v-slot:logo>
     <img src="{{asset('favicon.ico')}}" width="30" class="mr-2">
   </template>
-  <plantilla-permanent
-    fetch-url="{{ route('plantilla_permanents.table') }}"
-  ></plantilla-permanent>
+  <plantilla-permanent></plantilla-permanent>
 </app-layout>
 </v-app>
 </div>

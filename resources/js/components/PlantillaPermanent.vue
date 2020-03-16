@@ -47,7 +47,10 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="2" md="2">
-                    <v-text-field v-model="editedItem.item_no" label="Item no."></v-text-field>
+                    <v-text-field
+                      error
+                      error-message="Item number already existing, must be unique."
+                      v-model="editedItem.item_no" label="Item no."></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="5" md="5">
                     <v-text-field v-model="editedItem.position_title" label="Position Title"></v-text-field>
@@ -126,7 +129,7 @@
       </v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn color="primary" @click="fetchData(fetchUrl)">Reset</v-btn>
+      <v-btn color="primary" @click="fetchData()">Reset</v-btn>
     </template>
   </v-data-table>
 </template>
@@ -134,9 +137,9 @@
 
   const qs = require('qs');
   export default {
-    props: {
-        fetchUrl: { type: String, required: true },
-    },
+    // props: {
+    //     fetchUrl: { type: String, required: true },
+    // },
     data () {
       return {
       csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -216,7 +219,7 @@
     },
 
     created () {
-      this.fetchData(this.fetchUrl)
+      this.fetchData()
       axios.get('departments-list')
             .then(data => {
               this.departments = data.data.data
@@ -225,8 +228,8 @@
     },
 
     methods: {
-      fetchData(url) {
-          axios.get(url)
+      fetchData() {
+          axios.get('plantilla_permanents/data-table')
             .then(data => {
               this.tableData = data.data.data
               console.log(this.tableData);

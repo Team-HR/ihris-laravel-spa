@@ -2307,15 +2307,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: {
-    fetchUrl: {
-      type: String,
-      required: true
-    }
-  },
+  // props: {
+  //     fetchUrl: { type: String, required: true },
+  // },
   data: function data() {
     return {
       csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -2423,17 +2423,17 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
   created: function created() {
     var _this = this;
 
-    this.fetchData(this.fetchUrl);
+    this.fetchData();
     axios.get('departments-list').then(function (data) {
       _this.departments = data.data.data;
       console.log(_this.departments);
     });
   },
   methods: {
-    fetchData: function fetchData(url) {
+    fetchData: function fetchData() {
       var _this2 = this;
 
-      axios.get(url).then(function (data) {
+      axios.get('plantilla_permanents/data-table').then(function (data) {
         _this2.tableData = data.data.data;
         console.log(_this2.tableData);
       });
@@ -39166,7 +39166,12 @@ var render = function() {
                                       },
                                       [
                                         _c("v-text-field", {
-                                          attrs: { label: "Item no." },
+                                          attrs: {
+                                            error: "",
+                                            "error-message":
+                                              "Item number already existing, must be unique.",
+                                            label: "Item no."
+                                          },
                                           model: {
                                             value: _vm.editedItem.item_no,
                                             callback: function($$v) {
@@ -39609,7 +39614,7 @@ var render = function() {
                 attrs: { color: "primary" },
                 on: {
                   click: function($event) {
-                    return _vm.fetchData(_vm.fetchUrl)
+                    return _vm.fetchData()
                   }
                 }
               },
