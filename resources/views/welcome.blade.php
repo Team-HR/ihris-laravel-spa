@@ -17,7 +17,7 @@
 </head>
 <body>
 <div id="app">
-{{-- <v-app> --}}
+<v-app>
 <app-layout appbar-bg-url="{{asset('images/circuitboardbg.gif')}}">
   <template v-slot:logo>
     <img src="{{asset('favicon.ico')}}" width="30" class="mr-2">
@@ -25,14 +25,8 @@
   <plantilla-permanent
     fetch-url="{{ route('plantilla_permanents.table') }}"
   ></plantilla-permanent>
-  {{-- <data-tablefy 
-    fetch-url="{{ route('plantilla_permanents.table') }}"
-    ></data-tablefy> --}}
-{{--   <template v-slot:footer>
-    <p>Here's some contact info</p>
-  </template> --}}
 </app-layout>
-{{-- </v-app> --}}
+</v-app>
 </div>
 
 

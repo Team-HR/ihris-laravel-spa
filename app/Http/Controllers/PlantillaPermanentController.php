@@ -57,37 +57,53 @@ class PlantillaPermanentController extends Controller
      */
     public function store(Request $request)
     {
-        // $data = $request->editedItem;
-        dd ($request);
-    //     $id = $data['id'];
-    //     $item_no = $data['item_no'];
-    //     $position_title = $data['position_title'];
-    //     $functional_title = $data['functional_title'];
-    //     $department_id = $data['department_id'];
+        $id = $request->data['id'];
+        $item_no = $request->data['item_no'];
+        $position_title = $request->data['position_title'];
+        $functional_title = $request->data['functional_title'];
+        $department_id = $request->data['department_id'];
+        $level = $request->data['level'];
+        $salary_grade = $request->data['salary_grade'];
+        $authorized_salary = $request->data['authorized_salary'];
+        $actual_salary = $request->data['actual_salary'];
+        $step = $request->data['step'];
+        $region_code = $request->data['region_code'];
+        $area_type = $request->data['area_type'];
+        $category = $request->data['category'];
+        $classification = $request->data['classification'];
 
-    //     $validator = Validator::make($data, [
-    //         'item_no' => 'required',
-    //         'position_title' => 'required'
-    //     ],[
-    //         'item_no.unique' => 'Item already in the record!',
-    //     ]);
+        $validator = Validator::make($request->data, [
+            // 'item_no' => 'required'.($id==0?'|unique:plantilla_permanents':''),
+            'item_no' => 'required|unique:plantilla_permanents,item_no,' . $id,
+            'position_title' => 'required'
+        ],[
+            'item_no.unique' => 'Item already in the record!',
+        ]);
      
-    // if ($validator->passes()) {
-    //     $plantillaPermanent = PlantillaPermanent::updateOrCreate(['id'=>$id],
-    //         [
-    //             'item_no' => $item_no,
-    //             'position_title' => $position_title,
-    //             'functional_title' => $functional_title,
-    //             'department_id' => $department_id,
-    //         ]);
+    if ($validator->passes()) {
+        $plantillaPermanent = PlantillaPermanent::updateOrCreate(['id'=>$id],
+            [
+                'item_no' => $item_no,
+                'position_title' => $position_title,
+                'functional_title' => $functional_title,
+                'department_id' => $department_id,
+                'level' => $level,
+                'salary_grade' => $salary_grade,
+                'authorized_salary' => $authorized_salary,
+                'actual_salary' => $actual_salary,
+                'step' => $step,
+                'region_code' => $region_code,
+                'area_type' => $area_type,
+                'category' => $category,
+                'classification' => $classification
+            ]);
         
-    //     $serial = $plantillaPermanent->toArray();
-    //     $serial['count'] = PlantillaPermanent::get()->count();
-    //     return Response::json($serial);
-
-    //     }
+        $serial = $plantillaPermanent->toArray();
+        $serial['count'] = PlantillaPermanent::get()->count();
+        return Response::json($serial);
+    }
      
-    //     return response()->json(['error'=>$validator->errors()->all()]);
+        return response()->json(['error'=>$validator->errors()->all()]);
     }
 
     /**

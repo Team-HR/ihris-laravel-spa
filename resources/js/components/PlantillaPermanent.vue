@@ -5,8 +5,7 @@
     :search="search"
     sort-by="calories"
     class="elevation-1"
-  >
-  
+  > 
     <template v-slot:top>
       <v-toolbar flat color="white">
         <v-toolbar-title>PLANTILLA OF PERMANENT EMPLOYEES</v-toolbar-title>
@@ -17,18 +16,26 @@
         ></v-divider>
         <v-spacer></v-spacer>
         <v-text-field
+          class="my-5"
           v-model="search"
-          append-icon="mdi-magnify"
+          clearable
+          prepend-icon="mdi-magnify"
           label="Search"
           single-line
           hide details
         ></v-text-field>
+
         <v-divider
           class="mx-4"
           inset
           vertical
         ></v-divider>
-        <v-dialog v-model="dialog" max-width="1000px">
+        <v-dialog 
+          v-model="dialog" 
+          max-width="1000px"
+          persistent
+          app
+        >
           <template v-slot:activator="{ on }">
             <v-btn color="primary" dark class="mb-2" v-on="on">New Plantilla</v-btn>
           </template>
@@ -36,7 +43,6 @@
             <v-card-title>
               <span class="headline">{{ formTitle }}</span>
             </v-card-title>
-
             <v-card-text>
               <v-container>
                 <v-row>
@@ -92,7 +98,6 @@
                 </v-row>
               </v-container>
             </v-card-text>
-
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
@@ -101,6 +106,9 @@
           </v-card>
         </v-dialog>
       </v-toolbar>
+    </template>
+    <template v-slot:item.number="{ item }">
+     {{tableData.map(function(x) {return x.id; }).indexOf(item.id)+1}}
     </template>
     <template v-slot:item.actions="{ item }">
       <v-icon
@@ -118,7 +126,7 @@
       </v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn color="primary" @click="fetchData">Reset</v-btn>
+      <v-btn color="primary" @click="fetchData(fetchUrl)">Reset</v-btn>
     </template>
   </v-data-table>
 </template>
@@ -139,7 +147,7 @@
                 text: 'No.',
                 align: 'start',
                 sortable: false,
-                value: 'id',
+                value: 'number',
                 width: 1
             },
             { text: 'ITEM NO',value: 'item_no' },
@@ -246,35 +254,43 @@
 
       save () {
         if (this.editedIndex > -1) {
-// axios.post('plantilla_permanents', {
-//     editedItem: this.editedItem,
-//   })
-//   .then(function (response) {
-//     console.log(response);
-//   })
-//   .catch(function (error) {
-//     console.log(error);
-//   });
+          // Edit Existing
+          axios.post('plantilla_permanents', {
+            data: this.editedItem,
+          })
+          .then(data => {
+            
+            if (typeof data.data.error == 'undefined') {
+                console.log('new no error');
+                Object.assign(this.tableData[this.editedIndex], this.editedItem)
+                this.close();
+              } else {
+                console.log('new with error');
+                console.log(data.data.error);
+              }
 
-
-          Object.assign(this.tableData[this.editedIndex], this.editedItem)
-          console.log('Edit Plantilla',this.editedItem);
+          });
         } else {
-console.log(qs.stringify(this.editedItem));
-// console.log(this.editedItem);
-axios.post('plantilla_permanents', {
-    data: qs.stringify(this.editedItem),
-  })
-  .then(function (response) {
-    // console.log(response);
-  });
+          // Add New
+          axios.post('plantilla_permanents', {
+            data: this.editedItem,
+          })
+          .then(
+            data => {
 
+              if (typeof data.data.error == 'undefined') {
+                this.editedItem.id = data.data.id;
+                this.tableData.push(this.editedItem);
+                console.log('new no error',this.editedItem);
+              } else {
+                console.log('new with error');
+                console.log(data.data.error);
+              }
 
-          this.tableData.push(this.editedItem)
-          // console.log('New Plantilla',this.editedItem);
+            }
+              
+          );
         }
-
-        this.close()
       },
     },
   }

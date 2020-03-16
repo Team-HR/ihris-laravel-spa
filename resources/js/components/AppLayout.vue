@@ -23,7 +23,7 @@
       <slot name="logo"></slot>
       <v-toolbar-title>Integrated HRIS</v-toolbar-title>
     </v-app-bar>
-
+    
     <v-content>
       <!-- <v-container fluid>
         <v-row

@@ -2299,6 +2299,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2317,7 +2325,7 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
         text: 'No.',
         align: 'start',
         sortable: false,
-        value: 'id',
+        value: 'number',
         width: 1
       }, {
         text: 'ITEM NO',
@@ -2449,29 +2457,40 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
       }, 300);
     },
     save: function save() {
+      var _this4 = this;
+
       if (this.editedIndex > -1) {
-        // axios.post('plantilla_permanents', {
-        //     editedItem: this.editedItem,
-        //   })
-        //   .then(function (response) {
-        //     console.log(response);
-        //   })
-        //   .catch(function (error) {
-        //     console.log(error);
-        //   });
-        Object.assign(this.tableData[this.editedIndex], this.editedItem);
-        console.log('Edit Plantilla', this.editedItem);
-      } else {
-        console.log(qs.stringify(this.editedItem)); // console.log(this.editedItem);
-
+        // Edit Existing
         axios.post('plantilla_permanents', {
-          data: qs.stringify(this.editedItem)
-        }).then(function (response) {// console.log(response);
-        });
-        this.tableData.push(this.editedItem); // console.log('New Plantilla',this.editedItem);
-      }
+          data: this.editedItem
+        }).then(function (data) {
+          if (typeof data.data.error == 'undefined') {
+            console.log('new no error');
+            Object.assign(_this4.tableData[_this4.editedIndex], _this4.editedItem);
 
-      this.close();
+            _this4.close();
+          } else {
+            console.log('new with error');
+            console.log(data.data.error);
+          }
+        });
+      } else {
+        // Add New
+        axios.post('plantilla_permanents', {
+          data: this.editedItem
+        }).then(function (data) {
+          if (typeof data.data.error == 'undefined') {
+            _this4.editedItem.id = data.data.id;
+
+            _this4.tableData.push(_this4.editedItem);
+
+            console.log('new no error', _this4.editedItem);
+          } else {
+            console.log('new with error');
+            console.log(data.data.error);
+          }
+        });
+      }
     }
   }
 });
@@ -39064,8 +39083,10 @@ var render = function() {
                 _c("v-spacer"),
                 _vm._v(" "),
                 _c("v-text-field", {
+                  staticClass: "my-5",
                   attrs: {
-                    "append-icon": "mdi-magnify",
+                    clearable: "",
+                    "prepend-icon": "mdi-magnify",
                     label: "Search",
                     "single-line": "",
                     hide: "",
@@ -39088,7 +39109,7 @@ var render = function() {
                 _c(
                   "v-dialog",
                   {
-                    attrs: { "max-width": "1000px" },
+                    attrs: { "max-width": "1000px", persistent: "", app: "" },
                     scopedSlots: _vm._u([
                       {
                         key: "activator",
@@ -39526,6 +39547,25 @@ var render = function() {
         proxy: true
       },
       {
+        key: "item.number",
+        fn: function(ref) {
+          var item = ref.item
+          return [
+            _vm._v(
+              "\n   " +
+                _vm._s(
+                  _vm.tableData
+                    .map(function(x) {
+                      return x.id
+                    })
+                    .indexOf(item.id) + 1
+                ) +
+                "\n  "
+            )
+          ]
+        }
+      },
+      {
         key: "item.actions",
         fn: function(ref) {
           var item = ref.item
@@ -39565,7 +39605,14 @@ var render = function() {
           return [
             _c(
               "v-btn",
-              { attrs: { color: "primary" }, on: { click: _vm.fetchData } },
+              {
+                attrs: { color: "primary" },
+                on: {
+                  click: function($event) {
+                    return _vm.fetchData(_vm.fetchUrl)
+                  }
+                }
+              },
               [_vm._v("Reset")]
             )
           ]
