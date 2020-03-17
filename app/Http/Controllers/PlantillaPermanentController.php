@@ -146,8 +146,11 @@ class PlantillaPermanentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        // dd ($request->id);
+        $plantillaPermanent = PlantillaPermanent::where('id',$request->id)->delete();
+        $count = PlantillaPermanent::get()->count();
+        return response()->json($count);
     }
 }

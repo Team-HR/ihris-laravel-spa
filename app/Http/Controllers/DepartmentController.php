@@ -134,7 +134,6 @@ class DepartmentController extends Controller
     public function destroy($id)
     {
         $department = Department::where('id',$id)->delete();
-   
         $count = Department::get()->count();
         return response()->json($count);
     }

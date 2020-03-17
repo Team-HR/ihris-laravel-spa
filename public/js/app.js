@@ -2310,6 +2310,48 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2318,6 +2360,16 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
   // },
   data: function data() {
     return {
+      snackbar: {
+        color: 'success',
+        mode: '',
+        snackbar: false,
+        text: '',
+        timeout: 1000,
+        x: 'right',
+        y: 'bottom'
+      },
+      delete_dialog: false,
       csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
       dialog: false,
       search: '',
@@ -2407,7 +2459,8 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
         category: '',
         classification: ''
       },
-      departments: []
+      departments: [],
+      itemToDelete: []
     };
   },
   computed: {
@@ -2418,6 +2471,12 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
   watch: {
     dialog: function dialog(val) {
       val || this.close();
+      console.log(val);
+    },
+    delete_dialog: function delete_dialog(val) {
+      if (!val) {
+        this.itemToDelete = [];
+      }
     }
   },
   created: function created() {
@@ -2443,21 +2502,42 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
-    deleteItem: function deleteItem(item) {
-      var index = this.tableData.indexOf(item);
-      confirm('Are you sure you want to delete this item?') && this.tableData.splice(index, 1);
+    initDelete: function initDelete(item) {
+      // console.log(item)
+      this.delete_dialog = true;
+      this.itemToDelete = item; // const index = this.tableData.indexOf(item)
+      // this.tableData.splice(index, 1)
+      // confirm('Are you sure you want to delete this item?') && this.tableData.splice(index, 1)
+    },
+    execDelete: function execDelete() {
+      var _this3 = this;
+
+      var index = this.tableData.indexOf(this.itemToDelete);
+      axios["delete"]('plantilla_permanents', {
+        data: this.itemToDelete
+      }).then(function (data) {
+        _this3.tableData.splice(index, 1);
+
+        _this3.delete_dialog = false;
+
+        _this3.toast('Deleted successfully!');
+      });
+    },
+    toast: function toast(msg) {
+      this.snackbar.snackbar = true;
+      this.snackbar.text = msg;
     },
     close: function close() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.dialog = false;
       setTimeout(function () {
-        _this3.editedItem = Object.assign({}, _this3.defaultItem);
-        _this3.editedIndex = -1;
+        _this4.editedItem = Object.assign({}, _this4.defaultItem);
+        _this4.editedIndex = -1;
       }, 300);
     },
     save: function save() {
-      var _this4 = this;
+      var _this5 = this;
 
       if (this.editedIndex > -1) {
         // Edit Existing
@@ -2466,9 +2546,11 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
         }).then(function (data) {
           if (typeof data.data.error == 'undefined') {
             console.log('new no error');
-            Object.assign(_this4.tableData[_this4.editedIndex], _this4.editedItem);
+            Object.assign(_this5.tableData[_this5.editedIndex], _this5.editedItem);
 
-            _this4.close();
+            _this5.close();
+
+            _this5.toast('Edited successfully!');
           } else {
             console.log('new with error');
             console.log(data.data.error);
@@ -2480,11 +2562,15 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
           data: this.editedItem
         }).then(function (data) {
           if (typeof data.data.error == 'undefined') {
-            _this4.editedItem.id = data.data.id;
+            _this5.editedItem.id = data.data.id;
 
-            _this4.tableData.push(_this4.editedItem);
+            _this5.tableData.push(_this5.editedItem);
 
-            console.log('new no error', _this4.editedItem);
+            console.log('new no error', _this5.editedItem);
+
+            _this5.close();
+
+            _this5.toast('Added successfully!');
           } else {
             console.log('new with error');
             console.log(data.data.error);
@@ -39166,12 +39252,7 @@ var render = function() {
                                       },
                                       [
                                         _c("v-text-field", {
-                                          attrs: {
-                                            error: "",
-                                            "error-message":
-                                              "Item number already existing, must be unique.",
-                                            label: "Item no."
-                                          },
+                                          attrs: { label: "Item no." },
                                           model: {
                                             value: _vm.editedItem.item_no,
                                             callback: function($$v) {
@@ -39521,7 +39602,7 @@ var render = function() {
                             _c(
                               "v-btn",
                               {
-                                attrs: { color: "blue darken-1", text: "" },
+                                attrs: { color: "red", text: "" },
                                 on: { click: _vm.close }
                               },
                               [_vm._v("Cancel")]
@@ -39530,7 +39611,7 @@ var render = function() {
                             _c(
                               "v-btn",
                               {
-                                attrs: { color: "blue darken-1", text: "" },
+                                attrs: { color: "blue", text: "" },
                                 on: { click: _vm.save }
                               },
                               [_vm._v("Save")]
@@ -39546,6 +39627,109 @@ var render = function() {
                 )
               ],
               1
+            ),
+            _vm._v(" "),
+            _c(
+              "v-dialog",
+              {
+                attrs: { "max-width": "500px", persistent: "", app: "" },
+                model: {
+                  value: _vm.delete_dialog,
+                  callback: function($$v) {
+                    _vm.delete_dialog = $$v
+                  },
+                  expression: "delete_dialog"
+                }
+              },
+              [
+                _c(
+                  "v-card",
+                  [
+                    _c("v-card-title", [
+                      _c("span", { staticClass: "headline" }, [
+                        _vm._v("Delete")
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("v-card-text", [
+                      _c("p", [
+                        _vm._v("Are your sure you want to delete this item?")
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "v-card-actions",
+                      [
+                        _c("v-spacer"),
+                        _vm._v(" "),
+                        _c(
+                          "v-btn",
+                          {
+                            attrs: { color: "red", text: "" },
+                            on: {
+                              click: function($event) {
+                                _vm.delete_dialog = !_vm.delete_dialog
+                              }
+                            }
+                          },
+                          [_vm._v("Cancel")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-btn",
+                          {
+                            attrs: { color: "blue", text: "" },
+                            on: { click: _vm.execDelete }
+                          },
+                          [_vm._v("Confirm")]
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "v-snackbar",
+              {
+                attrs: {
+                  bottom: _vm.snackbar.y === "bottom",
+                  color: _vm.snackbar.color,
+                  left: _vm.snackbar.x === "left",
+                  "multi-line": _vm.snackbar.mode === "multi-line",
+                  right: _vm.snackbar.x === "right",
+                  timeout: _vm.snackbar.timeout,
+                  top: _vm.snackbar.y === "top",
+                  vertical: _vm.snackbar.mode === "vertical"
+                },
+                model: {
+                  value: _vm.snackbar.snackbar,
+                  callback: function($$v) {
+                    _vm.$set(_vm.snackbar, "snackbar", $$v)
+                  },
+                  expression: "snackbar.snackbar"
+                }
+              },
+              [
+                _vm._v("\n      " + _vm._s(_vm.snackbar.text) + "\n      "),
+                _c(
+                  "v-btn",
+                  {
+                    attrs: { dark: "", text: "" },
+                    on: {
+                      click: function($event) {
+                        _vm.snackbar.snackbar = false
+                      }
+                    }
+                  },
+                  [_vm._v("\n        Close\n      ")]
+                )
+              ],
+              1
             )
           ]
         },
@@ -39557,7 +39741,7 @@ var render = function() {
           var item = ref.item
           return [
             _vm._v(
-              "\n   " +
+              "\n " +
                 _vm._s(
                   _vm.tableData
                     .map(function(x) {
@@ -39565,7 +39749,7 @@ var render = function() {
                     })
                     .indexOf(item.id) + 1
                 ) +
-                "\n  "
+                "\n"
             )
           ]
         }
@@ -39586,7 +39770,7 @@ var render = function() {
                   }
                 }
               },
-              [_vm._v("\n      mdi-pencil\n    ")]
+              [_vm._v("\n  mdi-pencil\n")]
             ),
             _vm._v(" "),
             _c(
@@ -39595,11 +39779,11 @@ var render = function() {
                 attrs: { small: "" },
                 on: {
                   click: function($event) {
-                    return _vm.deleteItem(item)
+                    return _vm.initDelete(item)
                   }
                 }
               },
-              [_vm._v("\n      mdi-delete\n    ")]
+              [_vm._v("\nmdi-delete\n")]
             )
           ]
         }
