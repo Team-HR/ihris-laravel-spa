@@ -2354,6 +2354,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2362,6 +2371,7 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
   // },
   data: function data() {
     return {
+      vacant: false,
       snackbar: {
         color: 'success',
         mode: '',
@@ -7194,7 +7204,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\ntable .v-data-table-header tr th{\n    font-size: 9px !important;\n    font-weight: bold !important;\n    text-align: center;\n    border: 1px solid grey;\n    /*bottom-border: 2px solid grey;*/\n    background-color: #d0e7ff;\n}\ntable tbody tr td{\n    font-size: 11px !important;\n    border: 1px solid lightgrey;\n    /*font-weight: bold !important;*/\n}\n", ""]);
+exports.push([module.i, "\n.masterTable{\r\n  width: 100% !important;\n}\ntable .v-data-table-header tr th{\r\n      font-size: 9px !important;\r\n      font-weight: bold !important;\r\n      text-align: center;\r\n      border: 1px solid grey;\r\n      /*bottom-border: 2px solid grey;*/\r\n      background-color: #d0e7ff;\n}\ntable tbody tr td{\r\n      font-size: 11px !important;\r\n      border: 1px solid lightgrey;\r\n      /*font-weight: bold !important;*/\n}\n.vacantTr {\r\n    border: 0px none !important;\r\n    border-top: 1px solid lightgrey !important;\r\n    border-bottom: 1px solid lightgrey !important;\n}\r\n", ""]);
 
 // exports
 
@@ -39854,8 +39864,9 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("v-data-table", {
-    staticClass: "elevation-1",
+    staticClass: "elevation-1 masterTable",
     attrs: {
+      app: "",
       headers: _vm.headers,
       "headers:align": "center",
       items: _vm.tableData,
@@ -40451,54 +40462,61 @@ var render = function() {
         proxy: true
       },
       {
-        key: "item.number",
-        fn: function(ref) {
-          var item = ref.item
-          return [
-            _vm._v(
-              "\n " +
-                _vm._s(
-                  _vm.tableData
-                    .map(function(x) {
-                      return x.id
-                    })
-                    .indexOf(item.id) + 1
-                ) +
-                "\n"
-            )
-          ]
-        }
-      },
-      {
-        key: "item.actions",
+        key: "item",
         fn: function(ref) {
           var item = ref.item
           return [
             _c(
-              "v-icon",
-              {
-                staticClass: "mr-2",
-                attrs: { small: "" },
-                on: {
-                  click: function($event) {
-                    return _vm.editItem(item)
-                  }
-                }
-              },
-              [_vm._v("\n  mdi-pencil\n")]
-            ),
-            _vm._v(" "),
-            _c(
-              "v-icon",
-              {
-                attrs: { small: "" },
-                on: {
-                  click: function($event) {
-                    return _vm.initDelete(item)
-                  }
-                }
-              },
-              [_vm._v("\nmdi-delete\n")]
+              "tr",
+              [
+                _vm._l(_vm.headers, function(dat, ind) {
+                  return ind <= 8
+                    ? _c("td", [_vm._v(_vm._s(item[dat.value]))])
+                    : _vm._e()
+                }),
+                _vm._v(" "),
+                _vm._l(_vm.headers, function(dat, ind) {
+                  return ind > 8 && ind < 19 && !_vm.vacant
+                    ? _c("td", { staticClass: "vacantTr" }, [
+                        _vm._v(_vm._s(item[dat.value]))
+                      ])
+                    : _vm._e()
+                }),
+                _vm._v(" "),
+                _c(
+                  "td",
+                  [
+                    _c(
+                      "v-icon",
+                      {
+                        staticClass: "mr-2",
+                        attrs: { small: "" },
+                        on: {
+                          click: function($event) {
+                            return _vm.editItem(item)
+                          }
+                        }
+                      },
+                      [_vm._v("\n          mdi-pencil\n        ")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "v-icon",
+                      {
+                        attrs: { small: "" },
+                        on: {
+                          click: function($event) {
+                            return _vm.initDelete(item)
+                          }
+                        }
+                      },
+                      [_vm._v("\n        mdi-delete\n        ")]
+                    )
+                  ],
+                  1
+                )
+              ],
+              2
             )
           ]
         }

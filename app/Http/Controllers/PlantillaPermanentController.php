@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\AppointmentPermanent;
 use App\PlantillaPermanent;
 use App\User;
 use App\Http\Resources\PlantillaPermanentsResource;

@@ -1,13 +1,15 @@
 <template>
   <v-data-table
+  app
   :headers="headers"
   headers:align="center"
   :items="tableData"
   :search="search"
   sort-by="calories"
-  class="elevation-1"
+  class="elevation-1 masterTable"
   dense
   > 
+
   <template v-slot:top>
     <v-toolbar flat color="white">
       <v-toolbar-title>PLANTILLA OF PERMANENT EMPLOYEES</v-toolbar-title>
@@ -154,24 +156,31 @@
     </v-snackbar>
 
 </template>
-<template v-slot:item.number="{ item }">
+<!-- <template v-slot:item.number="{ item }">
  {{tableData.map(function(x) {return x.id; }).indexOf(item.id)+1}}
-</template>
-<template v-slot:item.actions="{ item }">
-  <v-icon
-  small
-  class="mr-2"
-  @click="editItem(item)"
-  >
-  mdi-pencil
-</v-icon>
-<v-icon
-small
-@click="initDelete(item)"
->
-mdi-delete
-</v-icon>
-</template>
+</template> -->
+  <template v-slot:item="{item}">
+    <tr>
+      <td v-for="(dat,ind) in headers" v-if="ind <= 8">{{item[dat.value]}}</td>
+      <td class="vacantTr" v-for="(dat,ind) in headers" v-if="ind > 8 && ind < 19 && !vacant">{{item[dat.value]}}</td>
+      <td>
+          <v-icon
+          small
+          class="mr-2"
+          @click="editItem(item)"
+          >
+          mdi-pencil
+        </v-icon>
+        <v-icon
+        small
+        @click="initDelete(item)"
+        >
+        mdi-delete
+        </v-icon>
+      </td>
+      <!-- <td>{{tableData.map(function(x) {return x.id; }).indexOf(item.id)+1}}</td> -->
+    </tr>
+  </template>
 <template v-slot:no-data>
   <v-btn color="primary" @click="fetchData()">Reset</v-btn>
 </template>
@@ -186,6 +195,7 @@ mdi-delete
     // },
     data () {
       return {
+        vacant: false,
         snackbar: {
           color: 'success',
           mode: '',
@@ -398,6 +408,9 @@ mdi-delete
 </script>
 
 <style type="text/css">
+.masterTable{
+  width: 100% !important;
+}
   table .v-data-table-header tr th{
       font-size: 9px !important;
       font-weight: bold !important;
@@ -410,5 +423,10 @@ mdi-delete
       font-size: 11px !important;
       border: 1px solid lightgrey;
       /*font-weight: bold !important;*/
+  }
+  .vacantTr {
+    border: 0px none !important;
+    border-top: 1px solid lightgrey !important;
+    border-bottom: 1px solid lightgrey !important;
   }
 </style>
