@@ -1,10 +1,12 @@
 <template>
   <v-data-table
   :headers="headers"
+  headers:align="center"
   :items="tableData"
   :search="search"
   sort-by="calories"
   class="elevation-1"
+  dense
   > 
   <template v-slot:top>
     <v-toolbar flat color="white">
@@ -198,29 +200,41 @@ mdi-delete
         dialog: false,
         search: '',
         headers: [
-        {
-          text: 'No.',
-          align: 'start',
-          sortable: false,
-          value: 'number',
-          width: 1
-        },
-        { text: 'ITEM NO',value: 'item_no' },
-        { text: 'POSITION TITLE',value: 'position_title' , },
-        { text: 'FUNCTION',value: 'functional_title', },
-        { text: 'OFFICE',value: 'department' },
-        { text: 'LVL',value: 'level', width: 1 },
-        { text: 'SG',value: 'salary_grade' },
-        { text: 'AUTH SALARY',value: 'authorized_salary' },
-        { text: 'ACTUAL SALARY',value: 'actual_salary' },
-        { text: 'STEP',value: 'step' },
-        { text: 'REGION CODE',value: 'region_code' },
-        { text: 'AREA TYPE',value: 'area_type' },
-        { text: 'CATEGORY',value: 'category' },
-        { text: 'CLASS',value: 'classification',width:1 },
-        { text: 'ACTIONS',value: 'actions', sortable: false},
+        // {
+        //   text: 'No.',
+        //   align: 'start',
+        //   sortable: false,
+        //   value: 'number',
+        //   width: 1
+        // },
+        { text: 'ITEM NO',value: 'item_no', width:100 ,align: "center",sortable: false},
+        { text: 'POSITION TITLE',value: 'position_title', width: 200 ,align: "center",sortable: false},
+        // { text: 'FUNCTION',value: 'functional_title', ,align: "center",sortable: false},
+        // { text: 'OFFICE',value: 'department' ,align: "center",sortable: false},
+        { text: 'SG',value: 'salary_grade', width:10 ,align: "center",sortable: false},
+        { text: 'AUTH SALARY',value: 'authorized_salary' ,align: "center",sortable: false},
+        { text: 'ACTUAL SALARY',value: 'actual_salary' ,align: "center",sortable: false},
+        { text: 'STEP',value: 'step' ,align: "center",sortable: false},
+        { text: 'CODE',value: 'region_code' ,align: "center", width: 30,sortable: false},
+        { text: 'TYPE',value: 'area_type' ,align: "center",sortable: false},
+        { text: 'LVL',value: 'level', width: 1 ,align: "center",sortable: false},
+        { text: 'LAST NAME',value: '' ,align: "center",sortable: false},
+        { text: 'FIRST NAME',value: '' ,align: "center",sortable: false},
+        { text: 'MIDDLE NAME',value: '' ,align: "center",sortable: false},
+        { text: 'SEX',value: '' ,align: "center",sortable: false},
+        { text: 'DATE OF BIRTH',value: '' ,align: "center",sortable: false},
+        { text: 'TIN',value: '' ,align: "center",sortable: false},
+        { text: 'DATE OF ORIGINAL APPOINTMENT',value: '' ,align: "center",sortable: false},
+        { text: 'DATE OF LAST PROMOTION',value: '' ,align: "center",sortable: false},
+        { text: 'STATUS',value: '' ,align: "center",sortable: false},
+        { text: 'CIVIL SERVICE ELGIBILITY',value: '' ,align: "center",sortable: false},
+        // { text: 'CATEGORY',value: 'category' ,align: "center"},
+        // { text: 'CLASS',value: 'classification',width:1 ,align: "center"},
+        { text: 'ACTIONS',value: 'actions',width:100 ,sortable: false,align: "center"},
         ],
         tableData: [],
+
+
         editedIndex: -1,
         editedItem: {
           id: 0,
@@ -348,7 +362,7 @@ mdi-delete
               console.log('new no error')
               Object.assign(this.tableData[this.editedIndex], this.editedItem)
               this.close()
-              this.toast('Edited successfully!')
+              this.toast('Updated successfully!')
             } else {
               console.log('new with error')
               console.log(data.data.error)
@@ -382,3 +396,19 @@ mdi-delete
     },
   }
 </script>
+
+<style type="text/css">
+  table .v-data-table-header tr th{
+      font-size: 9px !important;
+      font-weight: bold !important;
+      text-align: center;
+      border: 1px solid grey;
+      /*bottom-border: 2px solid grey;*/
+      background-color: #d0e7ff;
+  }
+  table tbody tr td{
+      font-size: 11px !important;
+      border: 1px solid lightgrey;
+      /*font-weight: bold !important;*/
+  }
+</style>
