@@ -119,6 +119,7 @@
     app
   >
 
+<!-- delete dialog start -->
   <v-card>
       <v-card-title>
         <span class="headline">Delete</span>
@@ -133,7 +134,11 @@
       </v-card-actions>
   </v-card>
   </v-dialog>
+<!-- delete dialog end -->
 
+
+
+<!-- snackbar start -->
   <v-snackbar
       v-model="snackbar.snackbar"
       :bottom="snackbar.y === 'bottom'"
@@ -153,7 +158,35 @@
       >
         Close
       </v-btn>
-    </v-snackbar>
+  </v-snackbar>
+<!-- snackbar end -->
+
+
+
+<!-- appoint dialog start -->
+  <v-dialog 
+    v-model="appoint_dialog" 
+    max-width="500px"
+    persistent
+    app
+  >
+
+  <v-card>
+      <v-card-title>
+        <span class="headline">Appoint</span>
+      </v-card-title>
+      <v-card-text>
+        <!-- <p>Are your sure you want to delete this item?</p> -->
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="red" text @click="appoint_dialog = !appoint_dialog">Cancel</v-btn>
+        <v-btn color="blue" text @click="">Confirm</v-btn>
+      </v-card-actions>
+  </v-card>
+  </v-dialog>
+<!-- appoint dialog end -->
+
 
 </template>
 <!-- <template v-slot:item.number="{ item }">
@@ -162,21 +195,29 @@
   <template v-slot:item="{item}">
     <tr>
       <td v-for="(dat,ind) in headers" v-if="ind <= 8">{{item[dat.value]}}</td>
-      <td class="vacantTr" v-for="(dat,ind) in headers" v-if="ind > 8 && ind < 19 && !vacant">{{item[dat.value]}}</td>
-      <td>
+      <td class="vacantTr" v-for="(dat,ind) in headers" v-if="ind > 8 && ind < 19 && vacant">{{item[dat.value]}}</td>
+      <td v-if="!vacant" colspan="10" align="center"><i>VACANT</i></td>
+      <td align="center">
           <v-icon
-          small
-          class="mr-2"
-          @click="editItem(item)"
+            small
+            mr-5
+            @click="initAppoint(item)"
           >
-          mdi-pencil
-        </v-icon>
-        <v-icon
-        small
-        @click="initDelete(item)"
-        >
-        mdi-delete
-        </v-icon>
+            mdi-clipboard-account
+          </v-icon>
+          <v-icon
+            small
+            mr-5
+            @click="editItem(item)"
+          >
+            mdi-pencil
+          </v-icon>
+          <v-icon
+            small
+            @click="initDelete(item)"
+          >
+            mdi-delete
+          </v-icon>
       </td>
       <!-- <td>{{tableData.map(function(x) {return x.id; }).indexOf(item.id)+1}}</td> -->
     </tr>
@@ -205,6 +246,8 @@
           x: 'right',
           y: 'bottom',
         },
+        appoint_dialog: false,
+        itemForAppointment: [],
         delete_dialog: false,
         csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
         dialog: false,
@@ -298,6 +341,11 @@
         if (!val) {
           this.itemToDelete = []
         }
+      },
+      appoint_dialog(val){
+        if (!val) {
+          this.itemForAppointment = [] 
+        }
       }
     },
 
@@ -323,6 +371,11 @@
         this.editedIndex = this.tableData.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
+      },
+
+      initAppoint (item) {
+        this.appoint_dialog = true
+        this.itemForAppointment = item
       },
 
       initDelete (item) {
@@ -415,9 +468,9 @@
       font-size: 9px !important;
       font-weight: bold !important;
       text-align: center;
-      border: 1px solid grey;
+      border: 1px solid lightgrey;
       /*bottom-border: 2px solid grey;*/
-      background-color: #d0e7ff;
+      background-color: #f0f0f0;
   }
   table tbody tr td{
       font-size: 11px !important;

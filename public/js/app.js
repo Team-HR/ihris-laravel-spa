@@ -2363,6 +2363,47 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2381,6 +2422,8 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
         x: 'right',
         y: 'bottom'
       },
+      appoint_dialog: false,
+      itemForAppointment: [],
       delete_dialog: false,
       csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
       dialog: false,
@@ -2555,6 +2598,11 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
       if (!val) {
         this.itemToDelete = [];
       }
+    },
+    appoint_dialog: function appoint_dialog(val) {
+      if (!val) {
+        this.itemForAppointment = [];
+      }
     }
   },
   created: function created() {
@@ -2579,6 +2627,10 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
       this.editedIndex = this.tableData.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
+    },
+    initAppoint: function initAppoint(item) {
+      this.appoint_dialog = true;
+      this.itemForAppointment = item;
     },
     initDelete: function initDelete(item) {
       // console.log(item)
@@ -7204,7 +7256,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.masterTable{\r\n  width: 100% !important;\n}\ntable .v-data-table-header tr th{\r\n      font-size: 9px !important;\r\n      font-weight: bold !important;\r\n      text-align: center;\r\n      border: 1px solid grey;\r\n      /*bottom-border: 2px solid grey;*/\r\n      background-color: #d0e7ff;\n}\ntable tbody tr td{\r\n      font-size: 11px !important;\r\n      border: 1px solid lightgrey;\r\n      /*font-weight: bold !important;*/\n}\n.vacantTr {\r\n    border: 0px none !important;\r\n    border-top: 1px solid lightgrey !important;\r\n    border-bottom: 1px solid lightgrey !important;\n}\r\n", ""]);
+exports.push([module.i, "\n.masterTable{\r\n  width: 100% !important;\n}\ntable .v-data-table-header tr th{\r\n      font-size: 9px !important;\r\n      font-weight: bold !important;\r\n      text-align: center;\r\n      border: 1px solid lightgrey;\r\n      /*bottom-border: 2px solid grey;*/\r\n      background-color: #f0f0f0;\n}\ntable tbody tr td{\r\n      font-size: 11px !important;\r\n      border: 1px solid lightgrey;\r\n      /*font-weight: bold !important;*/\n}\n.vacantTr {\r\n    border: 0px none !important;\r\n    border-top: 1px solid lightgrey !important;\r\n    border-bottom: 1px solid lightgrey !important;\n}\r\n", ""]);
 
 // exports
 
@@ -40456,6 +40508,66 @@ var render = function() {
                 )
               ],
               1
+            ),
+            _vm._v(" "),
+            _c(
+              "v-dialog",
+              {
+                attrs: { "max-width": "500px", persistent: "", app: "" },
+                model: {
+                  value: _vm.appoint_dialog,
+                  callback: function($$v) {
+                    _vm.appoint_dialog = $$v
+                  },
+                  expression: "appoint_dialog"
+                }
+              },
+              [
+                _c(
+                  "v-card",
+                  [
+                    _c("v-card-title", [
+                      _c("span", { staticClass: "headline" }, [
+                        _vm._v("Appoint")
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("v-card-text"),
+                    _vm._v(" "),
+                    _c(
+                      "v-card-actions",
+                      [
+                        _c("v-spacer"),
+                        _vm._v(" "),
+                        _c(
+                          "v-btn",
+                          {
+                            attrs: { color: "red", text: "" },
+                            on: {
+                              click: function($event) {
+                                _vm.appoint_dialog = !_vm.appoint_dialog
+                              }
+                            }
+                          },
+                          [_vm._v("Cancel")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-btn",
+                          {
+                            attrs: { color: "blue", text: "" },
+                            on: { click: function($event) {} }
+                          },
+                          [_vm._v("Confirm")]
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
             )
           ]
         },
@@ -40476,28 +40588,51 @@ var render = function() {
                 }),
                 _vm._v(" "),
                 _vm._l(_vm.headers, function(dat, ind) {
-                  return ind > 8 && ind < 19 && !_vm.vacant
+                  return ind > 8 && ind < 19 && _vm.vacant
                     ? _c("td", { staticClass: "vacantTr" }, [
                         _vm._v(_vm._s(item[dat.value]))
                       ])
                     : _vm._e()
                 }),
                 _vm._v(" "),
+                !_vm.vacant
+                  ? _c("td", { attrs: { colspan: "10", align: "center" } }, [
+                      _c("i", [_vm._v("VACANT")])
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
                 _c(
                   "td",
+                  { attrs: { align: "center" } },
                   [
                     _c(
                       "v-icon",
                       {
-                        staticClass: "mr-2",
-                        attrs: { small: "" },
+                        attrs: { small: "", "mr-5": "" },
+                        on: {
+                          click: function($event) {
+                            return _vm.initAppoint(item)
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n            mdi-clipboard-account\n          "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "v-icon",
+                      {
+                        attrs: { small: "", "mr-5": "" },
                         on: {
                           click: function($event) {
                             return _vm.editItem(item)
                           }
                         }
                       },
-                      [_vm._v("\n          mdi-pencil\n        ")]
+                      [_vm._v("\n            mdi-pencil\n          ")]
                     ),
                     _vm._v(" "),
                     _c(
@@ -40510,7 +40645,7 @@ var render = function() {
                           }
                         }
                       },
-                      [_vm._v("\n        mdi-delete\n        ")]
+                      [_vm._v("\n            mdi-delete\n          ")]
                     )
                   ],
                   1
