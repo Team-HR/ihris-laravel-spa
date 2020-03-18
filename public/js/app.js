@@ -2489,7 +2489,7 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
         sortable: false
       }, {
         text: 'LAST NAME',
-        value: '',
+        value: 'employee_id',
         align: "center",
         sortable: false
       }, {
@@ -2615,6 +2615,15 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
     });
   },
   methods: {
+    itemVacant: function itemVacant(item) {
+      var vacant = true;
+
+      if (item.employee_id) {
+        vacant = false;
+      }
+
+      return vacant;
+    },
     fetchData: function fetchData() {
       var _this2 = this;
 
@@ -40588,14 +40597,14 @@ var render = function() {
                 }),
                 _vm._v(" "),
                 _vm._l(_vm.headers, function(dat, ind) {
-                  return ind > 8 && ind < 19 && _vm.vacant
+                  return ind > 8 && ind < 19 && _vm.itemVacant(item) == false
                     ? _c("td", { staticClass: "vacantTr" }, [
                         _vm._v(_vm._s(item[dat.value]))
                       ])
                     : _vm._e()
                 }),
                 _vm._v(" "),
-                !_vm.vacant
+                _vm.itemVacant(item) == true
                   ? _c("td", { attrs: { colspan: "10", align: "center" } }, [
                       _c("i", [_vm._v("VACANT")])
                     ])

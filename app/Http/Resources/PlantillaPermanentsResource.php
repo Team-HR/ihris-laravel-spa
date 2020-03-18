@@ -31,8 +31,10 @@ class PlantillaPermanentsResource extends JsonResource
             'area_type' => $this->area_type,
             'category' => $this->category,
             'classification' => $this->classification,
-            'department_short' => $this->department_short,
-            'department' => $this->department,
+            'employee_id' => $this->employee_id
+            // 'department_short' => $this->department_short,
+            // 'department' => $this->department,
+            // 'test' => 'TESTING',
             // 'created_at' => Carbon::parse($this->created_at)->toDayDateTimeString(),
         ];
     }

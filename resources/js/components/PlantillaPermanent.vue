@@ -195,8 +195,8 @@
   <template v-slot:item="{item}">
     <tr>
       <td v-for="(dat,ind) in headers" v-if="ind <= 8">{{item[dat.value]}}</td>
-      <td class="vacantTr" v-for="(dat,ind) in headers" v-if="ind > 8 && ind < 19 && vacant">{{item[dat.value]}}</td>
-      <td v-if="!vacant" colspan="10" align="center"><i>VACANT</i></td>
+      <td class="vacantTr" v-for="(dat,ind) in headers" v-if="ind > 8 && ind < 19 && itemVacant(item)==false">{{item[dat.value]}}</td>
+      <td v-if="itemVacant(item)==true" colspan="10" align="center"><i>VACANT</i></td>
       <td align="center">
           <v-icon
             small
@@ -271,7 +271,7 @@
         { text: 'CODE',value: 'region_code' ,align: "center", width: 30,sortable: false},
         { text: 'TYPE',value: 'area_type' ,align: "center",sortable: false},
         { text: 'LVL',value: 'level', width: 1 ,align: "center",sortable: false},
-        { text: 'LAST NAME',value: '' ,align: "center",sortable: false},
+        { text: 'LAST NAME',value: 'employee_id' ,align: "center",sortable: false},
         { text: 'FIRST NAME',value: '' ,align: "center",sortable: false},
         { text: 'MIDDLE NAME',value: '' ,align: "center",sortable: false},
         { text: 'SEX',value: '' ,align: "center",sortable: false},
@@ -359,6 +359,15 @@
     },
 
     methods: {
+      
+      itemVacant(item) {
+        var vacant = true
+        if (item.employee_id){
+          vacant = false
+        }
+        return vacant
+      },
+
       fetchData() {
         axios.get('plantilla_permanents/data-table')
         .then(data => {

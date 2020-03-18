@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\AppointmentPermanent;
 use App\PlantillaPermanent;
+use App\Employee;
 use App\User;
 use App\Http\Resources\PlantillaPermanentsResource;
 use Illuminate\Http\Request;
@@ -27,7 +28,16 @@ class PlantillaPermanentController extends Controller
         $plantillaPermanents = $this->plantillaPermanent
             ->select('*')
             ->get();
-        return PlantillaPermanentsResource::collection($plantillaPermanents);
+
+        $appointmentPermanents = DB::table('appointment_permanents')
+            ->rightJoin('plantilla_permanents', 'plantilla_permanents.id', '=', 'appointment_permanents.plantilla_permanent_id')
+            // ->join('follows', 'follows.user_id', '=', 'users.id')
+            // ->where('follows.follower_id', '=', 3)
+            ->get();
+// dd($plantillaPermanents);
+        // $data = array('data'=>$appointmentPermanents->toArray());
+        // return $data;
+        return PlantillaPermanentsResource::collection($appointmentPermanents);
     }
 
     /**
