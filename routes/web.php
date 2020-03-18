@@ -78,5 +78,6 @@ Route::get('users', 'UsersController@index');
 Route::get('users-list', 'UsersController@usersList');
 
 
-// departments 
+// listers
 Route::get('departments-list', 'DepartmentController@listDepartment');
+Route::get('employees-list', 'EmployeeController@listEmployee');

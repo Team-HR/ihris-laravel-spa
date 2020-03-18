@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+
 class PlantillaPermanentsResource extends JsonResource
 {
     /**
@@ -12,10 +13,8 @@ class PlantillaPermanentsResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-
     public function toArray($request)
     {
-        // return parent::toArray($request);
         return [
             'id' => $this->id,
             'item_no' => $this->item_no,
@@ -31,11 +30,6 @@ class PlantillaPermanentsResource extends JsonResource
             'area_type' => $this->area_type,
             'category' => $this->category,
             'classification' => $this->classification,
-            'employee_id' => $this->employee_id
-            // 'department_short' => $this->department_short,
-            // 'department' => $this->department,
-            // 'test' => 'TESTING',
-            // 'created_at' => Carbon::parse($this->created_at)->toDayDateTimeString(),
         ];
     }
 

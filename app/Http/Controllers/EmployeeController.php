@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Resources\EmployeesResource;
 use Illuminate\Http\Request;
 use App\Employee;
 use App\Department;
@@ -61,6 +61,12 @@ class EmployeeController extends Controller
     public function create()
     {
         //
+    }
+
+    public function listEmployee(Employee $employee)
+    {
+        // return Response::json($department->all());
+        return EmployeesResource::collection($employee->all());
     }
 
     /**

@@ -5,11 +5,13 @@ use App\AppointmentPermanent;
 use App\PlantillaPermanent;
 use App\Employee;
 use App\User;
-use App\Http\Resources\PlantillaPermanentsResource;
 use Illuminate\Http\Request;
 use Redirect,Response,DB,Config;
 use Illuminate\Validation\Rule;
 use Validator;
+// resources
+use App\Http\Resources\PlantillaPermanentsResource;
+use App\Http\Resources\AppointmentPermanentsResource;
 
 class PlantillaPermanentController extends Controller
 {
@@ -25,19 +27,21 @@ class PlantillaPermanentController extends Controller
     {
         // $matchThese = ['department_id' => 1 ];
         // $plantillaPermanents = $this->plantillaPermanent->where($matchThese)
-        $plantillaPermanents = $this->plantillaPermanent
-            ->select('*')
+        // $plantillaPermanents = $this->plantillaPermanent
+        //     ->select('*')
+        //     ->get();
+
+
+        $plantilla = DB::table('plantilla_permanents')
+            // ->leftJoin('appointment_permanents', 'appointment_permanents.plantilla_permanent_id', '=', 'plantilla_permanents.id')
+            // ->leftJoin('employees', 'appointment_permanents.employee_id', '=', 'employees.id')
+            
             ->get();
 
-        $appointmentPermanents = DB::table('appointment_permanents')
-            ->rightJoin('plantilla_permanents', 'plantilla_permanents.id', '=', 'appointment_permanents.plantilla_permanent_id')
-            // ->join('follows', 'follows.user_id', '=', 'users.id')
-            // ->where('follows.follower_id', '=', 3)
-            ->get();
-// dd($plantillaPermanents);
+        dd($plantilla);
         // $data = array('data'=>$appointmentPermanents->toArray());
         // return $data;
-        return PlantillaPermanentsResource::collection($appointmentPermanents);
+        return AppointmentPermanentsResource::collection($appointments);
     }
 
     /**

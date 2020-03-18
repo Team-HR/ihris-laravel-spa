@@ -2404,6 +2404,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2489,17 +2497,17 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
         sortable: false
       }, {
         text: 'LAST NAME',
-        value: 'employee_id',
+        value: 'last_name',
         align: "center",
         sortable: false
       }, {
         text: 'FIRST NAME',
-        value: '',
+        value: 'first_name',
         align: "center",
         sortable: false
       }, {
-        text: 'MIDDLE NAME',
-        value: '',
+        text: 'M.I.',
+        value: 'middle_name',
         align: "center",
         sortable: false
       }, {
@@ -2581,7 +2589,8 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
         classification: ''
       },
       departments: [],
-      itemToDelete: []
+      itemToDelete: [],
+      employees: []
     };
   },
   computed: {
@@ -2613,12 +2622,16 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
       _this.departments = data.data.data;
       console.log(_this.departments);
     });
+    axios.get('employees-list').then(function (data) {
+      _this.employees = data.data.data;
+      console.log(_this.employees);
+    });
   },
   methods: {
     itemVacant: function itemVacant(item) {
       var vacant = true;
 
-      if (item.employee_id) {
+      if (item.last_name) {
         vacant = false;
       }
 
@@ -2633,6 +2646,7 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
       });
     },
     editItem: function editItem(item) {
+      console.log(item);
       this.editedIndex = this.tableData.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
@@ -7265,7 +7279,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.masterTable{\r\n  width: 100% !important;\n}\ntable .v-data-table-header tr th{\r\n      font-size: 9px !important;\r\n      font-weight: bold !important;\r\n      text-align: center;\r\n      border: 1px solid lightgrey;\r\n      /*bottom-border: 2px solid grey;*/\r\n      background-color: #f0f0f0;\n}\ntable tbody tr td{\r\n      font-size: 11px !important;\r\n      border: 1px solid lightgrey;\r\n      /*font-weight: bold !important;*/\n}\n.vacantTr {\r\n    border: 0px none !important;\r\n    border-top: 1px solid lightgrey !important;\r\n    border-bottom: 1px solid lightgrey !important;\n}\r\n", ""]);
+exports.push([module.i, "\n.masterTable{\r\n  width: 100% !important;\n}\ntable .v-data-table-header tr th{\r\n      font-size: 9px !important;\r\n      font-weight: bold !important;\r\n      text-align: center;\r\n      border: 1px solid lightgrey;\r\n      /*bottom-border: 2px solid grey;*/\r\n      background-color: #f0f0f0;\n}\ntable tbody tr td{\r\n      font-size: 11px !important;\r\n      border: 1px solid lightgrey;\r\n      /*font-weight: bold !important;*/\n}\n.vacantTr {\r\n    background-color: #efffdc;\n}\r\n", ""]);
 
 // exports
 
@@ -40541,7 +40555,23 @@ var render = function() {
                       ])
                     ]),
                     _vm._v(" "),
-                    _c("v-card-text"),
+                    _c(
+                      "v-card-text",
+                      [
+                        _c("v-autocomplete", {
+                          attrs: {
+                            items: _vm.employees,
+                            "item-text": "full_name",
+                            "item-value": "id",
+                            dense: "",
+                            chips: "",
+                            "deletable-chips": "",
+                            label: "Outlined"
+                          }
+                        })
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
                     _c(
                       "v-card-actions",
@@ -40592,27 +40622,35 @@ var render = function() {
               [
                 _vm._l(_vm.headers, function(dat, ind) {
                   return ind <= 8
-                    ? _c("td", [_vm._v(_vm._s(item[dat.value]))])
-                    : _vm._e()
-                }),
-                _vm._v(" "),
-                _vm._l(_vm.headers, function(dat, ind) {
-                  return ind > 8 && ind < 19 && _vm.itemVacant(item) == false
-                    ? _c("td", { staticClass: "vacantTr" }, [
+                    ? _c("td", { class: { vacantTr: _vm.itemVacant(item) } }, [
                         _vm._v(_vm._s(item[dat.value]))
                       ])
                     : _vm._e()
                 }),
                 _vm._v(" "),
+                _vm._l(_vm.headers, function(dat, ind) {
+                  return ind > 8 && ind < 19 && _vm.itemVacant(item) == false
+                    ? _c("td", [_vm._v(_vm._s(item[dat.value]))])
+                    : _vm._e()
+                }),
+                _vm._v(" "),
                 _vm.itemVacant(item) == true
-                  ? _c("td", { attrs: { colspan: "10", align: "center" } }, [
-                      _c("i", [_vm._v("VACANT")])
-                    ])
+                  ? _c(
+                      "td",
+                      {
+                        staticClass: "vacantTr",
+                        attrs: { colspan: "10", align: "center" }
+                      },
+                      [_c("i", [_vm._v("VACANT")])]
+                    )
                   : _vm._e(),
                 _vm._v(" "),
                 _c(
                   "td",
-                  { attrs: { align: "center" } },
+                  {
+                    class: { vacantTr: _vm.itemVacant(item) },
+                    attrs: { align: "center" }
+                  },
                   [
                     _c(
                       "v-icon",

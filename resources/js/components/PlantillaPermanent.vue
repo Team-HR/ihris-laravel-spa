@@ -176,7 +176,15 @@
         <span class="headline">Appoint</span>
       </v-card-title>
       <v-card-text>
-        <!-- <p>Are your sure you want to delete this item?</p> -->
+        <v-autocomplete
+            :items="employees"
+            item-text="full_name"
+            item-value="id"
+            dense
+            chips
+            deletable-chips
+            label="Outlined"
+          ></v-autocomplete>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -194,10 +202,10 @@
 </template> -->
   <template v-slot:item="{item}">
     <tr>
-      <td v-for="(dat,ind) in headers" v-if="ind <= 8">{{item[dat.value]}}</td>
-      <td class="vacantTr" v-for="(dat,ind) in headers" v-if="ind > 8 && ind < 19 && itemVacant(item)==false">{{item[dat.value]}}</td>
-      <td v-if="itemVacant(item)==true" colspan="10" align="center"><i>VACANT</i></td>
-      <td align="center">
+      <td :class="{vacantTr:itemVacant(item)}" v-for="(dat,ind) in headers" v-if="ind <= 8">{{item[dat.value]}}</td>
+      <td v-for="(dat,ind) in headers" v-if="ind > 8 && ind < 19 && itemVacant(item)==false">{{item[dat.value]}}</td>
+      <td class="vacantTr" v-if="itemVacant(item)==true" colspan="10" align="center"><i>VACANT</i></td>
+      <td :class="{vacantTr:itemVacant(item)}" align="center">
           <v-icon
             small
             mr-5
@@ -271,9 +279,9 @@
         { text: 'CODE',value: 'region_code' ,align: "center", width: 30,sortable: false},
         { text: 'TYPE',value: 'area_type' ,align: "center",sortable: false},
         { text: 'LVL',value: 'level', width: 1 ,align: "center",sortable: false},
-        { text: 'LAST NAME',value: 'employee_id' ,align: "center",sortable: false},
-        { text: 'FIRST NAME',value: '' ,align: "center",sortable: false},
-        { text: 'MIDDLE NAME',value: '' ,align: "center",sortable: false},
+        { text: 'LAST NAME',value: 'last_name' ,align: "center",sortable: false},
+        { text: 'FIRST NAME',value: 'first_name' ,align: "center",sortable: false},
+        { text: 'M.I.',value: 'middle_name' ,align: "center",sortable: false},
         { text: 'SEX',value: '' ,align: "center",sortable: false},
         { text: 'DATE OF BIRTH',value: '' ,align: "center",sortable: false},
         { text: 'TIN',value: '' ,align: "center",sortable: false},
@@ -286,8 +294,6 @@
         { text: 'ACTIONS',value: 'actions',width:100 ,sortable: false,align: "center"},
         ],
         tableData: [],
-
-
         editedIndex: -1,
         editedItem: {
           id: 0,
@@ -322,11 +328,14 @@
           classification: '',
         },
         departments:[],
-        itemToDelete: []
+        itemToDelete: [],
+        employees:[]
       }
     },
 
     computed: {
+      
+
       formTitle () {
         return this.editedIndex === -1 ? 'New Plantilla' : 'Edit Plantilla'
       },
@@ -356,13 +365,20 @@
         this.departments = data.data.data
         console.log(this.departments);
       })
+
+      axios.get('employees-list')
+      .then(data => {
+        this.employees = data.data.data
+        console.log(this.employees);
+      })
+
     },
 
     methods: {
       
       itemVacant(item) {
         var vacant = true
-        if (item.employee_id){
+        if (item.last_name){
           vacant = false
         }
         return vacant
@@ -377,10 +393,12 @@
       },
 
       editItem (item) {
+        console.log(item)
         this.editedIndex = this.tableData.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
+
 
       initAppoint (item) {
         this.appoint_dialog = true
@@ -487,8 +505,6 @@
       /*font-weight: bold !important;*/
   }
   .vacantTr {
-    border: 0px none !important;
-    border-top: 1px solid lightgrey !important;
-    border-bottom: 1px solid lightgrey !important;
+    background-color: #efffdc;
   }
 </style>
