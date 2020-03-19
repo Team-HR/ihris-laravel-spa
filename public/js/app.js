@@ -2494,10 +2494,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -7389,7 +7385,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.masterTable {\n  width: 100% !important;\n}\ntable .v-data-table-header tr th {\n  font-size: 9px !important;\n  font-weight: bold !important;\n  text-align: center;\n  border: 1px solid lightgrey;\n  /*bottom-border: 2px solid grey;*/\n  background-color: #f0f0f0;\n}\ntable tbody tr td {\n  font-size: 11px !important;\n  border: 1px solid lightgrey;\n  /*font-weight: bold !important;*/\n}\n.vacantTr {\n  background-color: #efffdc;\n}\n.vacantTr:hover {\n  background-color: #efffdc;\n}\n.appointmentTable {\n  width: 100% !important;\n}\n.appointmentTable th, td{\n  padding-left: 10px;\n}\n\n", ""]);
+exports.push([module.i, "\n.masterTable {\n  width: 100% !important;\n}\ntable .v-data-table-header tr th {\n  font-size: 9px !important;\n  font-weight: bold !important;\n  text-align: center;\n  border: 1px solid lightgrey;\n  /*bottom-border: 2px solid grey;*/\n  background-color: #f0f0f0;\n}\n.masterTable table tbody tr td {\n  font-size: 11px !important;\n  border: 1px solid lightgrey;\n  /*font-weight: bold !important;*/\n}\n.vacantTr {\n  background-color: #efffdc;\n}\n.vacantTr:hover {\n  background-color: #efffdc;\n}\n.appointmentTable {\n  width: 100% !important;\n}\n.appointmentTable th, td{\n  padding-left: 10px;\n}\n\n", ""]);
 
 // exports
 
@@ -40713,9 +40709,12 @@ var render = function() {
                                       _vm._g(
                                         {
                                           attrs: {
-                                            label: "Picker in menu",
-                                            "prepend-icon":
-                                              "mdi-calendar-export",
+                                            label: _vm.appoint
+                                              ? "Date Appointed"
+                                              : "Date Vacated",
+                                            "prepend-icon": _vm.appoint
+                                              ? "mdi-calendar-import"
+                                              : "mdi-calendar-export",
                                             readonly: ""
                                           },
                                           model: {

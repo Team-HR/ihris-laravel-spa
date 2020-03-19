@@ -150,8 +150,6 @@
 
             <!-- <v-container> -->
               <v-autocomplete :readonly="(appoint?false:true)" :items="employees" item-text="full_name" item-value="id" dense :label="(appoint?'Select employee':'Appointed Employee')" outlined placeholder="Appoint employee"></v-autocomplete>
-
-
               <v-menu
                 ref="menu"
                 v-model="menu"
@@ -164,8 +162,8 @@
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="date"
-                    label="Picker in menu"
-                    prepend-icon="mdi-calendar-export"
+                    :label="appoint?'Date Appointed':'Date Vacated'"
+                    :prepend-icon="appoint?'mdi-calendar-import':'mdi-calendar-export'"
                     readonly
                     v-on="on"
                   ></v-text-field>
@@ -176,8 +174,6 @@
                   <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
                 </v-date-picker>
               </v-menu>
-
-
               <v-spacer></v-spacer>
               <v-slide-x-reverse-transition
                 mode="out-in"
@@ -620,7 +616,7 @@
     background-color: #f0f0f0;
   }
 
-  table tbody tr td {
+  .masterTable table tbody tr td {
     font-size: 11px !important;
     border: 1px solid lightgrey;
     /*font-weight: bold !important;*/
