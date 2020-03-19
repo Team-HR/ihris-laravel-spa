@@ -201,11 +201,10 @@
  {{tableData.map(function(x) {return x.id; }).indexOf(item.id)+1}}
 </template> -->
   <template v-slot:item="{item}">
-    <tr>
-      <td :class="{vacantTr:itemVacant(item)}" v-for="(dat,ind) in headers" v-if="ind <= 8">{{item[dat.value]}}</td>
-      <td v-for="(dat,ind) in headers" v-if="ind > 8 && ind < 19 && itemVacant(item)==false">{{item[dat.value]}}</td>
-      <td class="vacantTr" v-if="itemVacant(item)==true" colspan="10" align="center"><i>VACANT</i></td>
-      <td :class="{vacantTr:itemVacant(item)}" align="center">
+    <tr v-if="!itemVacant(item)">
+      <td v-for="(dat,ind) in headers" v-if="ind <= 8">{{item[dat.value]}}</td>
+      <td v-for="(dat,ind) in headers" v-if="ind > 8 && ind < 19">{{item[dat.value]}}</td>
+      <td align="center">
           <v-icon
             small
             mr-5
@@ -227,7 +226,32 @@
             mdi-delete
           </v-icon>
       </td>
-      <!-- <td>{{tableData.map(function(x) {return x.id; }).indexOf(item.id)+1}}</td> -->
+    </tr>
+    <tr v-else="itemVacant(item)" class="vacantTr">
+      <td v-for="(dat,ind) in headers" v-if="ind <= 8">{{item[dat.value]}}</td>
+      <td colspan="10" align="center"><strong>(VACANT)</strong></td>
+      <td align="center">
+          <v-icon
+            small
+            mr-5
+            @click="initAppoint(item)"
+          >
+            mdi-clipboard-account
+          </v-icon>
+          <v-icon
+            small
+            mr-5
+            @click="editItem(item)"
+          >
+            mdi-pencil
+          </v-icon>
+          <v-icon
+            small
+            @click="initDelete(item)"
+          >
+            mdi-delete
+          </v-icon>
+      </td>
     </tr>
   </template>
 <template v-slot:no-data>
@@ -296,7 +320,7 @@
         tableData: [],
         editedIndex: -1,
         editedItem: {
-          id: 0,
+          plantilla_id: 0,
           item_no: '',
           position_title: '',
           functional_title: '',
@@ -312,7 +336,7 @@
           classification: '',
         },
         defaultItem: {
-          id: null,
+          plantilla_id: null,
           item_no: '',
           position_title: '',
           functional_title: '',
@@ -344,7 +368,6 @@
     watch: {
       dialog (val) {
         val || this.close()
-        console.log(val)
       },
       delete_dialog(val){
         if (!val) {
@@ -363,13 +386,11 @@
       axios.get('departments-list')
       .then(data => {
         this.departments = data.data.data
-        console.log(this.departments);
       })
 
       axios.get('employees-list')
       .then(data => {
         this.employees = data.data.data
-        console.log(this.employees);
       })
 
     },
@@ -388,12 +409,10 @@
         axios.get('plantilla_permanents/data-table')
         .then(data => {
           this.tableData = data.data.data
-          console.log(this.tableData);
         })
       },
 
       editItem (item) {
-        console.log(item)
         this.editedIndex = this.tableData.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
@@ -406,12 +425,9 @@
       },
 
       initDelete (item) {
-        // console.log(item)
         this.delete_dialog = true
         this.itemToDelete = item
-        // const index = this.tableData.indexOf(item)
-        // this.tableData.splice(index, 1)
-        // confirm('Are you sure you want to delete this item?') && this.tableData.splice(index, 1)
+        // console.log('initDelete: ',this.itemToDelete);
       },
 
       execDelete(){
@@ -468,7 +484,7 @@
             data => {
 
               if (typeof data.data.error == 'undefined') {
-                this.editedItem.id = data.data.id
+                this.editedItem.plantilla_id = data.data.id
                 this.tableData.push(this.editedItem)
                 console.log('new no error',this.editedItem)
                 this.close()
@@ -505,6 +521,9 @@
       /*font-weight: bold !important;*/
   }
   .vacantTr {
+    background-color: #efffdc;
+  }
+  .vacantTr:hover {
     background-color: #efffdc;
   }
 </style>

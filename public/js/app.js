@@ -2412,6 +2412,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2557,7 +2581,7 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
       tableData: [],
       editedIndex: -1,
       editedItem: {
-        id: 0,
+        plantilla_id: 0,
         item_no: '',
         position_title: '',
         functional_title: '',
@@ -2573,7 +2597,7 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
         classification: ''
       },
       defaultItem: {
-        id: null,
+        plantilla_id: null,
         item_no: '',
         position_title: '',
         functional_title: '',
@@ -2601,7 +2625,6 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
   watch: {
     dialog: function dialog(val) {
       val || this.close();
-      console.log(val);
     },
     delete_dialog: function delete_dialog(val) {
       if (!val) {
@@ -2620,11 +2643,9 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
     this.fetchData();
     axios.get('departments-list').then(function (data) {
       _this.departments = data.data.data;
-      console.log(_this.departments);
     });
     axios.get('employees-list').then(function (data) {
       _this.employees = data.data.data;
-      console.log(_this.employees);
     });
   },
   methods: {
@@ -2642,11 +2663,9 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
 
       axios.get('plantilla_permanents/data-table').then(function (data) {
         _this2.tableData = data.data.data;
-        console.log(_this2.tableData);
       });
     },
     editItem: function editItem(item) {
-      console.log(item);
       this.editedIndex = this.tableData.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
@@ -2656,11 +2675,8 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
       this.itemForAppointment = item;
     },
     initDelete: function initDelete(item) {
-      // console.log(item)
       this.delete_dialog = true;
-      this.itemToDelete = item; // const index = this.tableData.indexOf(item)
-      // this.tableData.splice(index, 1)
-      // confirm('Are you sure you want to delete this item?') && this.tableData.splice(index, 1)
+      this.itemToDelete = item; // console.log('initDelete: ',this.itemToDelete);
     },
     execDelete: function execDelete() {
       var _this3 = this;
@@ -2715,7 +2731,7 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
           data: this.editedItem
         }).then(function (data) {
           if (typeof data.data.error == 'undefined') {
-            _this5.editedItem.id = data.data.id;
+            _this5.editedItem.plantilla_id = data.data.id;
 
             _this5.tableData.push(_this5.editedItem);
 
@@ -7279,7 +7295,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.masterTable{\r\n  width: 100% !important;\n}\ntable .v-data-table-header tr th{\r\n      font-size: 9px !important;\r\n      font-weight: bold !important;\r\n      text-align: center;\r\n      border: 1px solid lightgrey;\r\n      /*bottom-border: 2px solid grey;*/\r\n      background-color: #f0f0f0;\n}\ntable tbody tr td{\r\n      font-size: 11px !important;\r\n      border: 1px solid lightgrey;\r\n      /*font-weight: bold !important;*/\n}\n.vacantTr {\r\n    background-color: #efffdc;\n}\r\n", ""]);
+exports.push([module.i, "\n.masterTable{\r\n  width: 100% !important;\n}\ntable .v-data-table-header tr th{\r\n      font-size: 9px !important;\r\n      font-weight: bold !important;\r\n      text-align: center;\r\n      border: 1px solid lightgrey;\r\n      /*bottom-border: 2px solid grey;*/\r\n      background-color: #f0f0f0;\n}\ntable tbody tr td{\r\n      font-size: 11px !important;\r\n      border: 1px solid lightgrey;\r\n      /*font-weight: bold !important;*/\n}\n.vacantTr {\r\n    background-color: #efffdc;\n}\n.vacantTr:hover {\r\n    background-color: #efffdc;\n}\r\n", ""]);
 
 // exports
 
@@ -40617,89 +40633,140 @@ var render = function() {
         fn: function(ref) {
           var item = ref.item
           return [
-            _c(
-              "tr",
-              [
-                _vm._l(_vm.headers, function(dat, ind) {
-                  return ind <= 8
-                    ? _c("td", { class: { vacantTr: _vm.itemVacant(item) } }, [
-                        _vm._v(_vm._s(item[dat.value]))
-                      ])
-                    : _vm._e()
-                }),
-                _vm._v(" "),
-                _vm._l(_vm.headers, function(dat, ind) {
-                  return ind > 8 && ind < 19 && _vm.itemVacant(item) == false
-                    ? _c("td", [_vm._v(_vm._s(item[dat.value]))])
-                    : _vm._e()
-                }),
-                _vm._v(" "),
-                _vm.itemVacant(item) == true
-                  ? _c(
-                      "td",
-                      {
-                        staticClass: "vacantTr",
-                        attrs: { colspan: "10", align: "center" }
-                      },
-                      [_c("i", [_vm._v("VACANT")])]
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _c(
-                  "td",
-                  {
-                    class: { vacantTr: _vm.itemVacant(item) },
-                    attrs: { align: "center" }
-                  },
+            !_vm.itemVacant(item)
+              ? _c(
+                  "tr",
                   [
+                    _vm._l(_vm.headers, function(dat, ind) {
+                      return ind <= 8
+                        ? _c("td", [_vm._v(_vm._s(item[dat.value]))])
+                        : _vm._e()
+                    }),
+                    _vm._v(" "),
+                    _vm._l(_vm.headers, function(dat, ind) {
+                      return ind > 8 && ind < 19
+                        ? _c("td", [_vm._v(_vm._s(item[dat.value]))])
+                        : _vm._e()
+                    }),
+                    _vm._v(" "),
                     _c(
-                      "v-icon",
-                      {
-                        attrs: { small: "", "mr-5": "" },
-                        on: {
-                          click: function($event) {
-                            return _vm.initAppoint(item)
-                          }
-                        }
-                      },
+                      "td",
+                      { attrs: { align: "center" } },
                       [
-                        _vm._v(
-                          "\n            mdi-clipboard-account\n          "
+                        _c(
+                          "v-icon",
+                          {
+                            attrs: { small: "", "mr-5": "" },
+                            on: {
+                              click: function($event) {
+                                return _vm.initAppoint(item)
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n            mdi-clipboard-account\n          "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-icon",
+                          {
+                            attrs: { small: "", "mr-5": "" },
+                            on: {
+                              click: function($event) {
+                                return _vm.editItem(item)
+                              }
+                            }
+                          },
+                          [_vm._v("\n            mdi-pencil\n          ")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-icon",
+                          {
+                            attrs: { small: "" },
+                            on: {
+                              click: function($event) {
+                                return _vm.initDelete(item)
+                              }
+                            }
+                          },
+                          [_vm._v("\n            mdi-delete\n          ")]
                         )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "v-icon",
-                      {
-                        attrs: { small: "", "mr-5": "" },
-                        on: {
-                          click: function($event) {
-                            return _vm.editItem(item)
-                          }
-                        }
-                      },
-                      [_vm._v("\n            mdi-pencil\n          ")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "v-icon",
-                      {
-                        attrs: { small: "" },
-                        on: {
-                          click: function($event) {
-                            return _vm.initDelete(item)
-                          }
-                        }
-                      },
-                      [_vm._v("\n            mdi-delete\n          ")]
+                      ],
+                      1
                     )
                   ],
-                  1
+                  2
                 )
-              ],
-              2
-            )
+              : _c(
+                  "tr",
+                  { staticClass: "vacantTr" },
+                  [
+                    _vm._l(_vm.headers, function(dat, ind) {
+                      return ind <= 8
+                        ? _c("td", [_vm._v(_vm._s(item[dat.value]))])
+                        : _vm._e()
+                    }),
+                    _vm._v(" "),
+                    _c("td", { attrs: { colspan: "10", align: "center" } }, [
+                      _c("strong", [_vm._v("(VACANT)")])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "td",
+                      { attrs: { align: "center" } },
+                      [
+                        _c(
+                          "v-icon",
+                          {
+                            attrs: { small: "", "mr-5": "" },
+                            on: {
+                              click: function($event) {
+                                return _vm.initAppoint(item)
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n            mdi-clipboard-account\n          "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-icon",
+                          {
+                            attrs: { small: "", "mr-5": "" },
+                            on: {
+                              click: function($event) {
+                                return _vm.editItem(item)
+                              }
+                            }
+                          },
+                          [_vm._v("\n            mdi-pencil\n          ")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-icon",
+                          {
+                            attrs: { small: "" },
+                            on: {
+                              click: function($event) {
+                                return _vm.initDelete(item)
+                              }
+                            }
+                          },
+                          [_vm._v("\n            mdi-delete\n          ")]
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  2
+                )
           ]
         }
       },

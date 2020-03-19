@@ -31,17 +31,15 @@ class PlantillaPermanentController extends Controller
         //     ->select('*')
         //     ->get();
 
-
-        $plantilla = DB::table('plantilla_permanents')
-            // ->leftJoin('appointment_permanents', 'appointment_permanents.plantilla_permanent_id', '=', 'plantilla_permanents.id')
-            // ->leftJoin('employees', 'appointment_permanents.employee_id', '=', 'employees.id')
-            
+        $plantilla = PlantillaPermanent::leftJoin('appointment_permanents','appointment_permanents.plantilla_permanent_id','=','plantilla_permanents.id')
+            ->leftJoin('employees', 'appointment_permanents.employee_id', '=', 'employees.id')
+            ->select('plantilla_permanents.id as plantilla_id','plantilla_permanents.*','appointment_permanents.*','employees.*')
             ->get();
 
-        dd($plantilla);
+        // dd($plantilla->toArray());
         // $data = array('data'=>$appointmentPermanents->toArray());
         // return $data;
-        return AppointmentPermanentsResource::collection($appointments);
+        return PlantillaPermanentsResource::collection($plantilla);
     }
 
     /**
@@ -72,7 +70,7 @@ class PlantillaPermanentController extends Controller
      */
     public function store(Request $request)
     {
-        $id = $request->data['id'];
+        $id = $request->data['plantilla_id'];
         $item_no = $request->data['item_no'];
         $position_title = $request->data['position_title'];
         $functional_title = $request->data['functional_title'];
@@ -164,7 +162,7 @@ class PlantillaPermanentController extends Controller
     public function destroy(Request $request)
     {
         // dd ($request->id);
-        $plantillaPermanent = PlantillaPermanent::where('id',$request->id)->delete();
+        $plantillaPermanent = PlantillaPermanent::where('id',$request->plantilla_id)->delete();
         $count = PlantillaPermanent::get()->count();
         return response()->json($count);
     }
