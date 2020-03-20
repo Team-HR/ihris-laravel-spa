@@ -119,86 +119,128 @@
           
           <v-card-text>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <!-- <v-container> -->
-              <v-autocomplete :readonly="(appoint?false:true)" :items="employees" item-text="full_name" item-value="id" dense :label="(appoint?'Select employee':'Appointed Employee')" outlined placeholder="Appoint employee"></v-autocomplete>
-              <v-menu
-                ref="menu"
-                v-model="menu"
-                :close-on-content-click="false"
-                :return-value.sync="date"
-                transition="scale-transition"
-                offset-y
-                min-width="290px"
-              >
-                <template v-slot:activator="{ on }">
-                  <v-text-field
-                    v-model="date"
-                    :label="appoint?'Date Appointed':'Date Vacated'"
-                    :prepend-icon="appoint?'mdi-calendar-import':'mdi-calendar-export'"
-                    readonly
-                    v-on="on"
-                  ></v-text-field>
-                </template>
-                <v-date-picker v-model="date" no-title scrollable>
-                  <v-spacer></v-spacer>
-                  <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-                  <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
-                </v-date-picker>
-              </v-menu>
-              <v-spacer></v-spacer>
-              <v-slide-x-reverse-transition
-                mode="out-in"
-              >
-              <v-btn :key="`btn-${appoint}`" v-model="appoint" right :color="(appoint?'green':'red')" text @click="appoint = !appoint">{{(appoint?'Appoint':'Vacate')}}</v-btn>
-              </v-slide-x-reverse-transition>
-              <v-subheader>Appointment Hisory</v-subheader>
+              <v-autocomplete v-model="appointed_employee" :readonly="(appoint?false:true)" :items="employees" item-text="full_name" item-value="id" dense :label="(appoint?'Select employee':'Appointed Employee')" outlined placeholder="Appoint employee">
 
+                
+              </v-autocomplete>
+              <v-spacer></v-spacer>
+
+
+
+              
+            <v-dialog
+              v-model="appoint_date_dialog"
+              persistent
+              width="290px"
+            >
+              <v-date-picker v-model="appoint_date" scrollable>
+                <v-spacer></v-spacer>
+                <v-btn text color="primary" @click="appoint_date_dialog = false">Cancel</v-btn>
+                <v-btn text color="primary" @click="appointSave(appoint_date)">OK</v-btn>
+              </v-date-picker>
+            </v-dialog>
+
+
+            <v-slide-x-reverse-transition
+              mode="out-in"
+            >
+              <v-btn inset :disabled="appointed_employee?false:true" :key="`btn-${appoint}`" v-model="appoint" right :color="(appoint?'green':'red')" text @click="selectEmployee()">{{(appoint?'Appoint':'Vacate')}}</v-btn>
+            </v-slide-x-reverse-transition>
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+            appointment_id: 201,
+            plantilla_id: 201,
+            employee_id: 201,
+            name: 'ALBINA, JEFFREY C.',
+            date_of_appointment: 'Date vacated: July 16, 2020',
+            date_vacated: 'Date vacated: July 16, 2020',
+            appointed: true -->
+
+
+
+
+
+              
+              <v-subheader>Appointment Hisory</v-subheader>
 
               <div class="twoLineList">
               <v-list two-line>
                 <v-list-item-group
                   v-model="selected"
+                  active-class="primary--text"
                 >
                   <template v-for="(item, index) in appointHistory">
-                    <v-list-item :key="item.title">
+                    <v-list-item :key="item.name" class="v-list-item--active text--primary">
                       <template v-slot:default="{ active, toggle }">
                         <v-list-item-content>
-                          <v-list-item-title v-text="item.title"></v-list-item-title>
+                          <v-list-item-title v-text="item.name"></v-list-item-title>
                           <!-- <v-list-item-subtitle class="text--primary" v-text="item.headline"></v-list-item-subtitle> -->
-                          <v-list-item-subtitle v-text="item.subtitle"></v-list-item-subtitle>
+                          <v-list-item-subtitle v-text="item.date_of_appointment"></v-list-item-subtitle>
                         </v-list-item-content>
-          
+          <!-- 
+
+MAMM NICK CERTS
+CERT#1
+    CERTIFICATE OF COMPLETION
+      -For successfully completing all the Lead, Deliver and Nurture modules of City of Bayawan LGU's Executive Talent Academy delivered by LDN Consultancy.
+      -Feb 24, 2020
+      -Rhoda A. Philips
+CERT#2
+    CERTIFICATE OF APPRECIATION
+      -Presented to NEGROS ORIENTAL COUNCIL OF HUMAN RESOURCE MANAGEMENT PRACTICIONERS (NOCHRMPs)
+      -In grateful appreciation for its valuable support and contribution as demonstrated by its partnership in the implementation of the Commission's programs
+      -Sep 11 2019 at Capitol Social Hall, Cebu on the occasion of the 119th Phil Civil Service Anniversary Regional Awards Rites
+      -from Carlos A. Evangelista
+CERT#3
+    CERTIFICATE OF APPRECIATION
+      -As Resource Speaker during the Executive-Legislative Agenda (ELA) Formulation Workshop held on 
+      August 28-30 2019
+      -At O Hotel, Bacolod City, Province of Negros Occidental, Philippines
+      -Given this 30th day of August 2019 at O Hotel, Bacolod
+      -from PEVE OBANIANA-LIGAN
+CERT#4
+    CERTIFICATE OF APPRECIATION
+      -As Resource Speaker during the Executive-Legislative Agenda (ELA) Formulation Workshop held on 
+      August 28-30 2019
+      -At O Hotel, Bacolod City, Province of Negros Occidental, Philippines
+      -Given this 30th day of August 2019 at O Hotel, Bacolod
+      -from PEVE OBANIANA-LIGAN
+CERT#5 (INCLUDING MAYOR PRYDE AND HON RUSMAR TIJING)
+    CERTIFICATE OF TRAINING
+      -completed CONVERSATION WITH LOCAL EXECUTIVES
+      -by CIVIL SERVICE COMMISSION REGIONAL OFFICE NO. VII
+      -at the Bethel Guest House, Rizal Blvd., Dumaguete City
+      -on Aug 5, 2019
+      -8 hrs
+      -issued this Aug 13, 2019
+      -from ATTY. ARIEL B. BACATAN
+  
+           -->
+
+
                         <v-list-item-action>
-                          <v-list-item-action-text v-text="item.action"></v-list-item-action-text>
+                          <v-list-item-action-text v-text="item.date_vacated"></v-list-item-action-text>
                           <v-icon
                             v-if="!active"
                             color="grey lighten-1"
@@ -227,36 +269,6 @@
               
             <!-- </v-container> -->
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -267,17 +279,6 @@
 
       </v-dialog>
       <!-- appoint dialog end -->
-
-
-
-
-
-
-
-
-
-
-
     </template>
     <!-- <template v-slot:item.number="{ item }">
  {{tableData.map(function(x) {return x.id; }).indexOf(item.id)+1}}
@@ -329,6 +330,9 @@
     // },
     data() {
       return {
+        appoint_date_dialog: false,
+        appoint_date: '',
+        appointed_employee: null,
         date: new Date().toISOString().substr(0, 10),
         menu: false,
         modal: false,
@@ -336,35 +340,50 @@
         appoint: true,
         selected: [2],
         appointHistory: [
-        {
-          action: '10 yrs 5 mnths',
-          title: 'ALBINA, JEFFREY C.',
-          headline: 'Ali Connors',
-          subtitle: 'Date vacated: July 16, 2020',
+        { 
+          appointment_id: 201,
+          plantilla_id: 201,
+          employee_id: 201,
+          name: 'ALBINA, JEFFREY C.',
+          date_of_appointment: 'Date appointed: July 16, 2020',
+          date_vacated: 'Date vacated: July 16, 2020',
+          appointed: true
         },
         {
-          action: '2 hr',
-          title: 'AMOR, MARY JEAN  C.',
-          headline: 'me, Scrott, Jennifer',
-          subtitle: 'Date vacated: January 11, 2018',
+          appointment_id: 321,
+          plantilla_id: 321,
+          employee_id: 321,
+          name: 'AMOR, MARY JEAN  C.',
+          date_of_appointment: 'Date appointed: January 11, 2018',
+          date_vacated: 'Date vacated: January 11, 2018',
+          appointed: false
         },
         {
-          action: '6 hr',
-          title: 'CABEL, RENATO B. JR.',
-          headline: 'Sandra Adams',
-          subtitle: 'Date vacated: September 10, 2016',
+          appointment_id: 111,
+          plantilla_id: 111,
+          employee_id: 111,
+          name: 'CABEL, RENATO B. JR.',
+          date_of_appointment: 'Date appointed: September 10, 2016',
+          date_vacated: 'Date vacated: September 10, 2016',
+          appointed: false
         },
         {
-          action: '12 hr',
-          title: 'OSTIGUE, AMORSOLO B.',
-          headline: 'Trevor Hansen',
-          subtitle: 'Date vacated: April 2, 2010',
+          appointment_id: 987,
+          plantilla_id: 987,
+          employee_id: 987,
+          name: 'OSTIGUE, AMORSOLO B.',
+          date_of_appointment: 'Date appointed: April 2, 2010',
+          date_vacated: 'Date vacated: April 2, 2010',
+          appointed: false
         },
         {
-          action: '18hr',
-          title: 'SORIA , NIKKA SOLIEL T.',
-          headline: 'Britta Holt',
-          subtitle: 'Date vacated: October 20, 2005',
+          appointment_id: '18hr',
+          plantilla_id: '18hr',
+          employee_id: '18hr',
+          name: 'SORIA , NIKKA SOLIEL T.',
+          date_of_appointment: 'Date appointed: October 20, 2005',
+          date_vacated: 'Date vacated: October 20, 2005',
+          appointed: false
         },
       ],
 
@@ -497,6 +516,14 @@
     },
 
     methods: {
+      appointSave(appoint_date){
+        console.log('appoint_date:',appoint_date)
+        this.appoint_date_dialog = !this.appoint_date_dialog
+        this.appoint = false
+      },
+      selectEmployee(){ 
+        this.appoint_date_dialog = !this.appoint_date_dialog
+      },
 
       itemVacant(item) {
         var vacant = true
@@ -518,7 +545,7 @@
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
-
+      
 
 
       initAppoint(item) {

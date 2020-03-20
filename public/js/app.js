@@ -2497,6 +2497,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2505,6 +2506,9 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
   // },
   data: function data() {
     return {
+      appoint_date_dialog: false,
+      appoint_date: '',
+      appointed_employee: null,
       date: new Date().toISOString().substr(0, 10),
       menu: false,
       modal: false,
@@ -2512,30 +2516,45 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
       appoint: true,
       selected: [2],
       appointHistory: [{
-        action: '10 yrs 5 mnths',
-        title: 'ALBINA, JEFFREY C.',
-        headline: 'Ali Connors',
-        subtitle: 'Date vacated: July 16, 2020'
+        appointment_id: 201,
+        plantilla_id: 201,
+        employee_id: 201,
+        name: 'ALBINA, JEFFREY C.',
+        date_of_appointment: 'Date appointed: July 16, 2020',
+        date_vacated: 'Date vacated: July 16, 2020',
+        appointed: true
       }, {
-        action: '2 hr',
-        title: 'AMOR, MARY JEAN  C.',
-        headline: 'me, Scrott, Jennifer',
-        subtitle: 'Date vacated: January 11, 2018'
+        appointment_id: 321,
+        plantilla_id: 321,
+        employee_id: 321,
+        name: 'AMOR, MARY JEAN  C.',
+        date_of_appointment: 'Date appointed: January 11, 2018',
+        date_vacated: 'Date vacated: January 11, 2018',
+        appointed: false
       }, {
-        action: '6 hr',
-        title: 'CABEL, RENATO B. JR.',
-        headline: 'Sandra Adams',
-        subtitle: 'Date vacated: September 10, 2016'
+        appointment_id: 111,
+        plantilla_id: 111,
+        employee_id: 111,
+        name: 'CABEL, RENATO B. JR.',
+        date_of_appointment: 'Date appointed: September 10, 2016',
+        date_vacated: 'Date vacated: September 10, 2016',
+        appointed: false
       }, {
-        action: '12 hr',
-        title: 'OSTIGUE, AMORSOLO B.',
-        headline: 'Trevor Hansen',
-        subtitle: 'Date vacated: April 2, 2010'
+        appointment_id: 987,
+        plantilla_id: 987,
+        employee_id: 987,
+        name: 'OSTIGUE, AMORSOLO B.',
+        date_of_appointment: 'Date appointed: April 2, 2010',
+        date_vacated: 'Date vacated: April 2, 2010',
+        appointed: false
       }, {
-        action: '18hr',
-        title: 'SORIA , NIKKA SOLIEL T.',
-        headline: 'Britta Holt',
-        subtitle: 'Date vacated: October 20, 2005'
+        appointment_id: '18hr',
+        plantilla_id: '18hr',
+        employee_id: '18hr',
+        name: 'SORIA , NIKKA SOLIEL T.',
+        date_of_appointment: 'Date appointed: October 20, 2005',
+        date_vacated: 'Date vacated: October 20, 2005',
+        appointed: false
       }],
       vacant: false,
       snackbar: {
@@ -2742,6 +2761,14 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
     });
   },
   methods: {
+    appointSave: function appointSave(appoint_date) {
+      console.log('appoint_date:', appoint_date);
+      this.appoint_date_dialog = !this.appoint_date_dialog;
+      this.appoint = false;
+    },
+    selectEmployee: function selectEmployee() {
+      this.appoint_date_dialog = !this.appoint_date_dialog;
+    },
     itemVacant: function itemVacant(item) {
       var vacant = true;
 
@@ -40679,82 +40706,41 @@ var render = function() {
                               : "Appointed Employee",
                             outlined: "",
                             placeholder: "Appoint employee"
+                          },
+                          model: {
+                            value: _vm.appointed_employee,
+                            callback: function($$v) {
+                              _vm.appointed_employee = $$v
+                            },
+                            expression: "appointed_employee"
                           }
                         }),
                         _vm._v(" "),
+                        _c("v-spacer"),
+                        _vm._v(" "),
                         _c(
-                          "v-menu",
+                          "v-dialog",
                           {
-                            ref: "menu",
-                            attrs: {
-                              "close-on-content-click": false,
-                              "return-value": _vm.date,
-                              transition: "scale-transition",
-                              "offset-y": "",
-                              "min-width": "290px"
-                            },
-                            on: {
-                              "update:returnValue": function($event) {
-                                _vm.date = $event
-                              },
-                              "update:return-value": function($event) {
-                                _vm.date = $event
-                              }
-                            },
-                            scopedSlots: _vm._u([
-                              {
-                                key: "activator",
-                                fn: function(ref) {
-                                  var on = ref.on
-                                  return [
-                                    _c(
-                                      "v-text-field",
-                                      _vm._g(
-                                        {
-                                          attrs: {
-                                            label: _vm.appoint
-                                              ? "Date Appointed"
-                                              : "Date Vacated",
-                                            "prepend-icon": _vm.appoint
-                                              ? "mdi-calendar-import"
-                                              : "mdi-calendar-export",
-                                            readonly: ""
-                                          },
-                                          model: {
-                                            value: _vm.date,
-                                            callback: function($$v) {
-                                              _vm.date = $$v
-                                            },
-                                            expression: "date"
-                                          }
-                                        },
-                                        on
-                                      )
-                                    )
-                                  ]
-                                }
-                              }
-                            ]),
+                            attrs: { persistent: "", width: "290px" },
                             model: {
-                              value: _vm.menu,
+                              value: _vm.appoint_date_dialog,
                               callback: function($$v) {
-                                _vm.menu = $$v
+                                _vm.appoint_date_dialog = $$v
                               },
-                              expression: "menu"
+                              expression: "appoint_date_dialog"
                             }
                           },
                           [
-                            _vm._v(" "),
                             _c(
                               "v-date-picker",
                               {
-                                attrs: { "no-title": "", scrollable: "" },
+                                attrs: { scrollable: "" },
                                 model: {
-                                  value: _vm.date,
+                                  value: _vm.appoint_date,
                                   callback: function($$v) {
-                                    _vm.date = $$v
+                                    _vm.appoint_date = $$v
                                   },
-                                  expression: "date"
+                                  expression: "appoint_date"
                                 }
                               },
                               [
@@ -40766,7 +40752,7 @@ var render = function() {
                                     attrs: { text: "", color: "primary" },
                                     on: {
                                       click: function($event) {
-                                        _vm.menu = false
+                                        _vm.appoint_date_dialog = false
                                       }
                                     }
                                   },
@@ -40779,7 +40765,7 @@ var render = function() {
                                     attrs: { text: "", color: "primary" },
                                     on: {
                                       click: function($event) {
-                                        return _vm.$refs.menu.save(_vm.date)
+                                        return _vm.appointSave(_vm.appoint_date)
                                       }
                                     }
                                   },
@@ -40792,8 +40778,6 @@ var render = function() {
                           1
                         ),
                         _vm._v(" "),
-                        _c("v-spacer"),
-                        _vm._v(" "),
                         _c(
                           "v-slide-x-reverse-transition",
                           { attrs: { mode: "out-in" } },
@@ -40803,13 +40787,17 @@ var render = function() {
                               {
                                 key: "btn-" + _vm.appoint,
                                 attrs: {
+                                  inset: "",
+                                  disabled: _vm.appointed_employee
+                                    ? false
+                                    : true,
                                   right: "",
                                   color: _vm.appoint ? "green" : "red",
                                   text: ""
                                 },
                                 on: {
                                   click: function($event) {
-                                    _vm.appoint = !_vm.appoint
+                                    return _vm.selectEmployee()
                                   }
                                 },
                                 model: {
@@ -40843,6 +40831,7 @@ var render = function() {
                                 _c(
                                   "v-list-item-group",
                                   {
+                                    attrs: { "active-class": "primary--text" },
                                     model: {
                                       value: _vm.selected,
                                       callback: function($$v) {
@@ -40858,7 +40847,9 @@ var render = function() {
                                     ) {
                                       return [
                                         _c("v-list-item", {
-                                          key: item.title,
+                                          key: item.name,
+                                          staticClass:
+                                            "v-list-item--active text--primary",
                                           scopedSlots: _vm._u(
                                             [
                                               {
@@ -40875,7 +40866,7 @@ var render = function() {
                                                           {
                                                             domProps: {
                                                               textContent: _vm._s(
-                                                                item.title
+                                                                item.name
                                                               )
                                                             }
                                                           }
@@ -40886,7 +40877,7 @@ var render = function() {
                                                           {
                                                             domProps: {
                                                               textContent: _vm._s(
-                                                                item.subtitle
+                                                                item.date_of_appointment
                                                               )
                                                             }
                                                           }
@@ -40903,7 +40894,7 @@ var render = function() {
                                                           {
                                                             domProps: {
                                                               textContent: _vm._s(
-                                                                item.action
+                                                                item.date_vacated
                                                               )
                                                             }
                                                           }
