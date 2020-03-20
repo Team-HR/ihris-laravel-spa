@@ -2494,6 +2494,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -7385,7 +7388,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.masterTable {\n  width: 100% !important;\n}\ntable .v-data-table-header tr th {\n  font-size: 9px !important;\n  font-weight: bold !important;\n  text-align: center;\n  border: 1px solid lightgrey;\n  /*bottom-border: 2px solid grey;*/\n  background-color: #f0f0f0;\n}\n.masterTable table tbody tr td {\n  font-size: 11px !important;\n  border: 1px solid lightgrey;\n  /*font-weight: bold !important;*/\n}\n.vacantTr {\n  background-color: #efffdc;\n}\n.vacantTr:hover {\n  background-color: #efffdc;\n}\n.appointmentTable {\n  width: 100% !important;\n}\n.appointmentTable th, td{\n  padding-left: 10px;\n}\n\n", ""]);
+exports.push([module.i, "\n.masterTable {\n  width: 100% !important;\n}\ntable .v-data-table-header tr th {\n  font-size: 9px !important;\n  font-weight: bold !important;\n  text-align: center;\n  border: 1px solid lightgrey;\n  /*bottom-border: 2px solid grey;*/\n  background-color: #f0f0f0;\n}\n.masterTable table tbody tr td {\n  font-size: 11px !important;\n  border: 1px solid lightgrey;\n  /*font-weight: bold !important;*/\n}\n.vacantTr {\n  background-color: #efffdc;\n}\n.vacantTr:hover {\n  background-color: #efffdc;\n}\n.appointmentTable {\n  width: 100% !important;\n}\n.appointmentTable th, td{\n  padding-left: 10px;\n}\n.twoLineList {\n  max-height: 300px;\n  overflow-y: scroll;\n}\n", ""]);
 
 // exports
 
@@ -40830,119 +40833,133 @@ var render = function() {
                         _c("v-subheader", [_vm._v("Appointment Hisory")]),
                         _vm._v(" "),
                         _c(
-                          "v-list",
-                          { attrs: { "two-line": "" } },
+                          "div",
+                          { staticClass: "twoLineList" },
                           [
                             _c(
-                              "v-list-item-group",
-                              {
-                                model: {
-                                  value: _vm.selected,
-                                  callback: function($$v) {
-                                    _vm.selected = $$v
-                                  },
-                                  expression: "selected"
-                                }
-                              },
+                              "v-list",
+                              { attrs: { "two-line": "" } },
                               [
-                                _vm._l(_vm.appointHistory, function(
-                                  item,
-                                  index
-                                ) {
-                                  return [
-                                    _c("v-list-item", {
-                                      key: item.title,
-                                      scopedSlots: _vm._u(
-                                        [
-                                          {
-                                            key: "default",
-                                            fn: function(ref) {
-                                              var active = ref.active
-                                              var toggle = ref.toggle
-                                              return [
-                                                _c(
-                                                  "v-list-item-content",
-                                                  [
-                                                    _c("v-list-item-title", {
-                                                      domProps: {
-                                                        textContent: _vm._s(
-                                                          item.title
-                                                        )
-                                                      }
-                                                    }),
-                                                    _vm._v(" "),
-                                                    _c("v-list-item-subtitle", {
-                                                      domProps: {
-                                                        textContent: _vm._s(
-                                                          item.subtitle
-                                                        )
-                                                      }
-                                                    })
-                                                  ],
-                                                  1
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "v-list-item-action",
-                                                  [
+                                _c(
+                                  "v-list-item-group",
+                                  {
+                                    model: {
+                                      value: _vm.selected,
+                                      callback: function($$v) {
+                                        _vm.selected = $$v
+                                      },
+                                      expression: "selected"
+                                    }
+                                  },
+                                  [
+                                    _vm._l(_vm.appointHistory, function(
+                                      item,
+                                      index
+                                    ) {
+                                      return [
+                                        _c("v-list-item", {
+                                          key: item.title,
+                                          scopedSlots: _vm._u(
+                                            [
+                                              {
+                                                key: "default",
+                                                fn: function(ref) {
+                                                  var active = ref.active
+                                                  var toggle = ref.toggle
+                                                  return [
                                                     _c(
-                                                      "v-list-item-action-text",
-                                                      {
-                                                        domProps: {
-                                                          textContent: _vm._s(
-                                                            item.action
-                                                          )
-                                                        }
-                                                      }
+                                                      "v-list-item-content",
+                                                      [
+                                                        _c(
+                                                          "v-list-item-title",
+                                                          {
+                                                            domProps: {
+                                                              textContent: _vm._s(
+                                                                item.title
+                                                              )
+                                                            }
+                                                          }
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "v-list-item-subtitle",
+                                                          {
+                                                            domProps: {
+                                                              textContent: _vm._s(
+                                                                item.subtitle
+                                                              )
+                                                            }
+                                                          }
+                                                        )
+                                                      ],
+                                                      1
                                                     ),
                                                     _vm._v(" "),
-                                                    !active
-                                                      ? _c(
-                                                          "v-icon",
+                                                    _c(
+                                                      "v-list-item-action",
+                                                      [
+                                                        _c(
+                                                          "v-list-item-action-text",
                                                           {
-                                                            attrs: {
-                                                              color:
-                                                                "grey lighten-1"
+                                                            domProps: {
+                                                              textContent: _vm._s(
+                                                                item.action
+                                                              )
                                                             }
-                                                          },
-                                                          [
-                                                            _vm._v(
-                                                              "\n                          mdi-exit-run\n                          "
+                                                          }
+                                                        ),
+                                                        _vm._v(" "),
+                                                        !active
+                                                          ? _c(
+                                                              "v-icon",
+                                                              {
+                                                                attrs: {
+                                                                  color:
+                                                                    "grey lighten-1"
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "\n                          mdi-exit-run\n                          "
+                                                                )
+                                                              ]
                                                             )
-                                                          ]
-                                                        )
-                                                      : _c(
-                                                          "v-icon",
-                                                          {
-                                                            attrs: {
-                                                              color: "primary"
-                                                            }
-                                                          },
-                                                          [
-                                                            _vm._v(
-                                                              "\n                          mdi-account-check\n                          "
+                                                          : _c(
+                                                              "v-icon",
+                                                              {
+                                                                attrs: {
+                                                                  color:
+                                                                    "primary"
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "\n                          mdi-account-check\n                          "
+                                                                )
+                                                              ]
                                                             )
-                                                          ]
-                                                        )
-                                                  ],
-                                                  1
-                                                )
-                                              ]
-                                            }
-                                          }
-                                        ],
-                                        null,
-                                        true
-                                      )
-                                    }),
-                                    _vm._v(" "),
-                                    index + 1 < _vm.appointHistory.length
-                                      ? _c("v-divider", { key: index })
-                                      : _vm._e()
-                                  ]
-                                })
+                                                      ],
+                                                      1
+                                                    )
+                                                  ]
+                                                }
+                                              }
+                                            ],
+                                            null,
+                                            true
+                                          )
+                                        }),
+                                        _vm._v(" "),
+                                        index + 1 < _vm.appointHistory.length
+                                          ? _c("v-divider", { key: index })
+                                          : _vm._e()
+                                      ]
+                                    })
+                                  ],
+                                  2
+                                )
                               ],
-                              2
+                              1
                             )
                           ],
                           1

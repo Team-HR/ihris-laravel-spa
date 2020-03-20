@@ -181,6 +181,9 @@
               <v-btn :key="`btn-${appoint}`" v-model="appoint" right :color="(appoint?'green':'red')" text @click="appoint = !appoint">{{(appoint?'Appoint':'Vacate')}}</v-btn>
               </v-slide-x-reverse-transition>
               <v-subheader>Appointment Hisory</v-subheader>
+
+
+              <div class="twoLineList">
               <v-list two-line>
                 <v-list-item-group
                   v-model="selected"
@@ -220,7 +223,7 @@
                   </template>
                 </v-list-item-group>
               </v-list>
-
+            </div>
               
             <!-- </v-container> -->
 
@@ -636,4 +639,8 @@
     padding-left: 10px;
   }
 
+  .twoLineList {
+    max-height: 300px;
+    overflow-y: scroll;
+  }
 </style>

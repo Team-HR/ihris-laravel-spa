@@ -33,8 +33,8 @@ Route::delete('plantilla_permanents', 'PlantillaPermanentController@destroy');
 // Route::delete('api/users/{id}', 'UserController@destroy');
 
 
-Route::get('welcome', function(){
-	return view('welcome');
+Route::get('dev_plantilla_permanent', function(){
+	return view('plantilla_permanent_dev');
 });
 // plantilla permanent end
 
