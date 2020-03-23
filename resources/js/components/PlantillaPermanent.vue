@@ -120,15 +120,10 @@
           <v-card-text>
 
             <!-- <v-container> -->
-              <v-autocomplete v-model="appointed_employee" :readonly="(appoint?false:true)" :items="employees" item-text="full_name" item-value="id" dense :label="(appoint?'Select employee':'Appointed Employee')" outlined placeholder="Appoint employee">
-
-                
-              </v-autocomplete>
+              <!-- usob -->
+              <v-autocomplete v-model="appointed_employee" :readonly="(appoint?false:true)" :items="employees" item-text="full_name" item-value="id" dense :label="(appoint?'Select employee':'Appointed Employee')" outlined placeholder="Appoint employee"></v-autocomplete>
               <v-spacer></v-spacer>
 
-
-
-              
             <v-dialog
               v-model="appoint_date_dialog"
               persistent
@@ -137,7 +132,7 @@
               <v-date-picker v-model="appoint_date" scrollable>
                 <v-spacer></v-spacer>
                 <v-btn text color="primary" @click="appoint_date_dialog = false">Cancel</v-btn>
-                <v-btn text color="primary" @click="appointSave(appoint_date)">OK</v-btn>
+                <v-btn text color="primary" @click="appointSave">OK</v-btn>
               </v-date-picker>
             </v-dialog>
 
@@ -148,101 +143,25 @@
               <v-btn inset :disabled="appointed_employee?false:true" :key="`btn-${appoint}`" v-model="appoint" right :color="(appoint?'green':'red')" text @click="selectEmployee()">{{(appoint?'Appoint':'Vacate')}}</v-btn>
             </v-slide-x-reverse-transition>
             
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- 
-            appointment_id: 201,
-            plantilla_id: 201,
-            employee_id: 201,
-            name: 'ALBINA, JEFFREY C.',
-            date_of_appointment: 'Date vacated: July 16, 2020',
-            date_vacated: 'Date vacated: July 16, 2020',
-            appointed: true -->
-
-
-
-
-
-              
               <v-subheader>Appointment Hisory</v-subheader>
 
               <div class="twoLineList">
-              <v-list two-line>
+              <v-list two-line disabled>
                 <v-list-item-group
                   v-model="selected"
-                  active-class="primary--text"
                 >
                   <template v-for="(item, index) in appointHistory">
-                    <v-list-item :key="item.name" class="v-list-item--active text--primary">
+                    <v-list-item :key="item.name" :class="item.appointed?'v-list-item--active text-primary':''">
                       <template v-slot:default="{ active, toggle }">
                         <v-list-item-content>
                           <v-list-item-title v-text="item.name"></v-list-item-title>
-                          <!-- <v-list-item-subtitle class="text--primary" v-text="item.headline"></v-list-item-subtitle> -->
-                          <v-list-item-subtitle v-text="item.date_of_appointment"></v-list-item-subtitle>
+                          <v-list-item-subtitle v-text="item.date_appointed"></v-list-item-subtitle>
                         </v-list-item-content>
-          <!-- 
-
-MAMM NICK CERTS
-CERT#1
-    CERTIFICATE OF COMPLETION
-      -For successfully completing all the Lead, Deliver and Nurture modules of City of Bayawan LGU's Executive Talent Academy delivered by LDN Consultancy.
-      -Feb 24, 2020
-      -Rhoda A. Philips
-CERT#2
-    CERTIFICATE OF APPRECIATION
-      -Presented to NEGROS ORIENTAL COUNCIL OF HUMAN RESOURCE MANAGEMENT PRACTICIONERS (NOCHRMPs)
-      -In grateful appreciation for its valuable support and contribution as demonstrated by its partnership in the implementation of the Commission's programs
-      -Sep 11 2019 at Capitol Social Hall, Cebu on the occasion of the 119th Phil Civil Service Anniversary Regional Awards Rites
-      -from Carlos A. Evangelista
-CERT#3
-    CERTIFICATE OF APPRECIATION
-      -As Resource Speaker during the Executive-Legislative Agenda (ELA) Formulation Workshop held on 
-      August 28-30 2019
-      -At O Hotel, Bacolod City, Province of Negros Occidental, Philippines
-      -Given this 30th day of August 2019 at O Hotel, Bacolod
-      -from PEVE OBANIANA-LIGAN
-CERT#4
-    CERTIFICATE OF APPRECIATION
-      -As Resource Speaker during the Executive-Legislative Agenda (ELA) Formulation Workshop held on 
-      August 28-30 2019
-      -At O Hotel, Bacolod City, Province of Negros Occidental, Philippines
-      -Given this 30th day of August 2019 at O Hotel, Bacolod
-      -from PEVE OBANIANA-LIGAN
-CERT#5 (INCLUDING MAYOR PRYDE AND HON RUSMAR TIJING)
-    CERTIFICATE OF TRAINING
-      -completed CONVERSATION WITH LOCAL EXECUTIVES
-      -by CIVIL SERVICE COMMISSION REGIONAL OFFICE NO. VII
-      -at the Bethel Guest House, Rizal Blvd., Dumaguete City
-      -on Aug 5, 2019
-      -8 hrs
-      -issued this Aug 13, 2019
-      -from ATTY. ARIEL B. BACATAN
-  
-           -->
-
 
                         <v-list-item-action>
                           <v-list-item-action-text v-text="item.date_vacated"></v-list-item-action-text>
                           <v-icon
-                            v-if="!active"
+                            v-if="!item.appointed"
                             color="grey lighten-1"
                           >
                           mdi-exit-run
@@ -257,12 +176,38 @@ CERT#5 (INCLUDING MAYOR PRYDE AND HON RUSMAR TIJING)
                         </v-list-item-action>
                       </template>
                     </v-list-item>
-          
+                    
                     <v-divider
                       v-if="index + 1 < appointHistory.length"
                       :key="index"
                     ></v-divider>
                   </template>
+                  <template v-if="appointHistory.length == 0">
+                    <v-list-item>
+
+                      <template v-slot:default="{ active, toggle }">
+<v-list-item-content> 
+  <v-list-item-title>Vacant</v-list-item-title>
+  <v-list-item-subtitle>No appointed employee.</v-list-item-subtitle>
+</v-list-item-content>
+
+  <v-list-item-action>
+    <v-icon
+      color="grey lighten-1"
+    >
+    mdi-image-filter-none
+    </v-icon>
+  </v-list-item-action>
+
+
+
+
+                      </template>
+
+                    </v-list-item>
+                  </template>
+
+                
                 </v-list-item-group>
               </v-list>
             </div>
@@ -272,8 +217,8 @@ CERT#5 (INCLUDING MAYOR PRYDE AND HON RUSMAR TIJING)
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="red" text @click="appoint_dialog = !appoint_dialog">Cancel</v-btn>
-            <v-btn color="blue" text>Save</v-btn>
+            <v-btn color="red" text @click="appoint_dialog = !appoint_dialog">Close</v-btn>
+            <!-- <v-btn color="blue" text>Save</v-btn> -->
           </v-card-actions>
         </v-card>
 
@@ -284,25 +229,10 @@ CERT#5 (INCLUDING MAYOR PRYDE AND HON RUSMAR TIJING)
  {{tableData.map(function(x) {return x.id; }).indexOf(item.id)+1}}
 </template> -->
     <template v-slot:item="{item}">
-      <tr v-if="!itemVacant(item)">
+      <tr :class="{vacantTr:itemVacant(item)}">
         <td v-for="(dat,ind) in headers" v-if="ind <= 8">{{item[dat.value]}}</td>
-        <td v-for="(dat,ind) in headers" v-if="ind > 8 && ind < 19">{{item[dat.value]}}</td>
-        <td align="center">
-          <v-icon small mr-5 @click="initAppoint(item)">
-            mdi-clipboard-account
-          </v-icon>
-          <v-icon small mr-5 @click="editItem(item)">
-            mdi-pencil
-          </v-icon>
-          <v-icon small @click="initDelete(item)">
-            mdi-delete
-          </v-icon>
-        </td>
-      </tr>
-
-      <tr v-else="itemVacant(item)" class="vacantTr">
-        <td v-for="(dat,ind) in headers" v-if="ind <= 8">{{item[dat.value]}}</td>
-        <td colspan="10" align="center"><strong>(VACANT)</strong></td>
+        <td v-for="(dat,ind) in headers" v-if="ind > 8 && ind < 19 && !itemVacant(item)">{{item[dat.value]}}</td>
+        <td v-else-if="ind == 19 && itemVacant(item)" colspan="10" align="center"><strong>(VACANT)</strong></td>
         <td align="center">
           <v-icon small mr-5 @click="initAppoint(item)">
             mdi-clipboard-account
@@ -325,9 +255,6 @@ CERT#5 (INCLUDING MAYOR PRYDE AND HON RUSMAR TIJING)
 
   const qs = require('qs');
   export default {
-    // props: {
-    //     fetchUrl: { type: String, required: true },
-    // },
     data() {
       return {
         appoint_date_dialog: false,
@@ -339,55 +266,28 @@ CERT#5 (INCLUDING MAYOR PRYDE AND HON RUSMAR TIJING)
         menu2: false,
         appoint: true,
         selected: [2],
-        appointHistory: [
-        { 
-          appointment_id: 201,
-          plantilla_id: 201,
-          employee_id: 201,
-          name: 'ALBINA, JEFFREY C.',
-          date_of_appointment: 'Date appointed: July 16, 2020',
-          date_vacated: 'Date vacated: July 16, 2020',
-          appointed: true
-        },
-        {
-          appointment_id: 321,
-          plantilla_id: 321,
-          employee_id: 321,
-          name: 'AMOR, MARY JEAN  C.',
-          date_of_appointment: 'Date appointed: January 11, 2018',
-          date_vacated: 'Date vacated: January 11, 2018',
-          appointed: false
-        },
-        {
-          appointment_id: 111,
-          plantilla_id: 111,
-          employee_id: 111,
-          name: 'CABEL, RENATO B. JR.',
-          date_of_appointment: 'Date appointed: September 10, 2016',
-          date_vacated: 'Date vacated: September 10, 2016',
-          appointed: false
-        },
-        {
-          appointment_id: 987,
-          plantilla_id: 987,
-          employee_id: 987,
-          name: 'OSTIGUE, AMORSOLO B.',
-          date_of_appointment: 'Date appointed: April 2, 2010',
-          date_vacated: 'Date vacated: April 2, 2010',
-          appointed: false
-        },
-        {
-          appointment_id: '18hr',
-          plantilla_id: '18hr',
-          employee_id: '18hr',
-          name: 'SORIA , NIKKA SOLIEL T.',
-          date_of_appointment: 'Date appointed: October 20, 2005',
-          date_vacated: 'Date vacated: October 20, 2005',
-          appointed: false
-        },
-      ],
-
-
+        appointedItemIndex: -1,
+        appointedItem:
+          {
+            appointment_id: 0,
+            plantilla_id: 0,
+            employee_id: 0,
+            name: '',
+            date_appointed: '',
+            date_vacated: '',
+            appointed: false
+          },
+        appointedItemDefault:
+          {
+            appointment_id: 0,
+            plantilla_id: 0,
+            employee_id: 0,
+            name: '',
+            date_appointed: '',
+            date_vacated: '',
+            appointed: false
+          },
+        appointHistory: [],
         vacant: false,
         snackbar: {
           color: 'success',
@@ -405,17 +305,8 @@ CERT#5 (INCLUDING MAYOR PRYDE AND HON RUSMAR TIJING)
         dialog: false,
         search: '',
         headers: [
-          // {
-          //   text: 'No.',
-          //   align: 'start',
-          //   sortable: false,
-          //   value: 'number',
-          //   width: 1
-          // },
           { text: 'ITEM NO', value: 'item_no', width: 100, align: "center", sortable: false },
           { text: 'POSITION TITLE', value: 'position_title', width: 200, align: "center", sortable: false },
-          // { text: 'FUNCTION',value: 'functional_title', ,align: "center",sortable: false},
-          // { text: 'OFFICE',value: 'department' ,align: "center",sortable: false},
           { text: 'SG', value: 'salary_grade', width: 10, align: "center", sortable: false },
           { text: 'AUTH SALARY', value: 'authorized_salary', align: "center", sortable: false },
           { text: 'ACTUAL SALARY', value: 'actual_salary', align: "center", sortable: false },
@@ -433,8 +324,6 @@ CERT#5 (INCLUDING MAYOR PRYDE AND HON RUSMAR TIJING)
           { text: 'DATE OF LAST PROMOTION', value: '', align: "center", sortable: false },
           { text: 'STATUS', value: '', align: "center", sortable: false },
           { text: 'CIVIL SERVICE ELGIBILITY', value: '', align: "center", sortable: false },
-          // { text: 'CATEGORY',value: 'category' ,align: "center"},
-          // { text: 'CLASS',value: 'classification',width:1 ,align: "center"},
           { text: 'ACTIONS', value: 'actions', width: 100, sortable: false, align: "center" },
         ],
         tableData: [],
@@ -497,6 +386,7 @@ CERT#5 (INCLUDING MAYOR PRYDE AND HON RUSMAR TIJING)
       appoint_dialog(val) {
         if (!val) {
           this.itemForAppointment = []
+            
         }
       }
     },
@@ -516,10 +406,8 @@ CERT#5 (INCLUDING MAYOR PRYDE AND HON RUSMAR TIJING)
     },
 
     methods: {
-      appointSave(appoint_date){
-        console.log('appoint_date:',appoint_date)
-        this.appoint_date_dialog = !this.appoint_date_dialog
-        this.appoint = false
+      appointSave(){
+
       },
       selectEmployee(){ 
         this.appoint_date_dialog = !this.appoint_date_dialog
@@ -547,13 +435,16 @@ CERT#5 (INCLUDING MAYOR PRYDE AND HON RUSMAR TIJING)
       },
       
 
-
       initAppoint(item) {
+        console.log('plantilla_id:',item.plantilla_id)
         this.appoint_dialog = true
         this.itemForAppointment = item
+        
       },
 
       initDelete(item) {
+        
+
         this.delete_dialog = true
         this.itemToDelete = item
         // console.log('initDelete: ',this.itemToDelete);
@@ -588,6 +479,7 @@ CERT#5 (INCLUDING MAYOR PRYDE AND HON RUSMAR TIJING)
       save() {
         if (this.editedIndex > -1) {
           // Edit Existing
+          console.log('this.editedItem:',this.editedItem)
           axios.post('plantilla_permanents', {
             data: this.editedItem,
           })

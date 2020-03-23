@@ -66,11 +66,6 @@ Route::get('admin/employee/','EmployeeController@index')->middleware('is_admin')
 Route::resource('admin/department','DepartmentController');
 Route::resource('admin/position','PositionController')->middleware('is_admin');
 
-//  test
-Route::resource('ajax-crud','AjaxController');
-Route::resource('shows', 'ShowController');
-
-
 
 
 // datatables test

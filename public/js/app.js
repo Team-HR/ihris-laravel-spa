@@ -2428,82 +2428,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  // props: {
-  //     fetchUrl: { type: String, required: true },
-  // },
   data: function data() {
     return {
       appoint_date_dialog: false,
@@ -2515,47 +2442,26 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
       menu2: false,
       appoint: true,
       selected: [2],
-      appointHistory: [{
-        appointment_id: 201,
-        plantilla_id: 201,
-        employee_id: 201,
-        name: 'ALBINA, JEFFREY C.',
-        date_of_appointment: 'Date appointed: July 16, 2020',
-        date_vacated: 'Date vacated: July 16, 2020',
-        appointed: true
-      }, {
-        appointment_id: 321,
-        plantilla_id: 321,
-        employee_id: 321,
-        name: 'AMOR, MARY JEAN  C.',
-        date_of_appointment: 'Date appointed: January 11, 2018',
-        date_vacated: 'Date vacated: January 11, 2018',
+      appointedItemIndex: -1,
+      appointedItem: {
+        appointment_id: 0,
+        plantilla_id: 0,
+        employee_id: 0,
+        name: '',
+        date_appointed: '',
+        date_vacated: '',
         appointed: false
-      }, {
-        appointment_id: 111,
-        plantilla_id: 111,
-        employee_id: 111,
-        name: 'CABEL, RENATO B. JR.',
-        date_of_appointment: 'Date appointed: September 10, 2016',
-        date_vacated: 'Date vacated: September 10, 2016',
+      },
+      appointedItemDefault: {
+        appointment_id: 0,
+        plantilla_id: 0,
+        employee_id: 0,
+        name: '',
+        date_appointed: '',
+        date_vacated: '',
         appointed: false
-      }, {
-        appointment_id: 987,
-        plantilla_id: 987,
-        employee_id: 987,
-        name: 'OSTIGUE, AMORSOLO B.',
-        date_of_appointment: 'Date appointed: April 2, 2010',
-        date_vacated: 'Date vacated: April 2, 2010',
-        appointed: false
-      }, {
-        appointment_id: '18hr',
-        plantilla_id: '18hr',
-        employee_id: '18hr',
-        name: 'SORIA , NIKKA SOLIEL T.',
-        date_of_appointment: 'Date appointed: October 20, 2005',
-        date_vacated: 'Date vacated: October 20, 2005',
-        appointed: false
-      }],
+      },
+      appointHistory: [],
       vacant: false,
       snackbar: {
         color: 'success',
@@ -2572,14 +2478,7 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
       csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
       dialog: false,
       search: '',
-      headers: [// {
-      //   text: 'No.',
-      //   align: 'start',
-      //   sortable: false,
-      //   value: 'number',
-      //   width: 1
-      // },
-      {
+      headers: [{
         text: 'ITEM NO',
         value: 'item_no',
         width: 100,
@@ -2591,9 +2490,7 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
         width: 200,
         align: "center",
         sortable: false
-      }, // { text: 'FUNCTION',value: 'functional_title', ,align: "center",sortable: false},
-      // { text: 'OFFICE',value: 'department' ,align: "center",sortable: false},
-      {
+      }, {
         text: 'SG',
         value: 'salary_grade',
         width: 10,
@@ -2681,9 +2578,7 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
         value: '',
         align: "center",
         sortable: false
-      }, // { text: 'CATEGORY',value: 'category' ,align: "center"},
-      // { text: 'CLASS',value: 'classification',width:1 ,align: "center"},
-      {
+      }, {
         text: 'ACTIONS',
         value: 'actions',
         width: 100,
@@ -2761,11 +2656,7 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
     });
   },
   methods: {
-    appointSave: function appointSave(appoint_date) {
-      console.log('appoint_date:', appoint_date);
-      this.appoint_date_dialog = !this.appoint_date_dialog;
-      this.appoint = false;
-    },
+    appointSave: function appointSave() {},
     selectEmployee: function selectEmployee() {
       this.appoint_date_dialog = !this.appoint_date_dialog;
     },
@@ -2791,6 +2682,7 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
       this.dialog = true;
     },
     initAppoint: function initAppoint(item) {
+      console.log('plantilla_id:', item.plantilla_id);
       this.appoint_dialog = true;
       this.itemForAppointment = item;
     },
@@ -2830,6 +2722,7 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
 
       if (this.editedIndex > -1) {
         // Edit Existing
+        console.log('this.editedItem:', this.editedItem);
         axios.post('plantilla_permanents', {
           data: this.editedItem
         }).then(function (data) {
@@ -40763,11 +40656,7 @@ var render = function() {
                                   "v-btn",
                                   {
                                     attrs: { text: "", color: "primary" },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.appointSave(_vm.appoint_date)
-                                      }
-                                    }
+                                    on: { click: _vm.appointSave }
                                   },
                                   [_vm._v("OK")]
                                 )
@@ -40826,12 +40715,11 @@ var render = function() {
                           [
                             _c(
                               "v-list",
-                              { attrs: { "two-line": "" } },
+                              { attrs: { "two-line": "", disabled: "" } },
                               [
                                 _c(
                                   "v-list-item-group",
                                   {
-                                    attrs: { "active-class": "primary--text" },
                                     model: {
                                       value: _vm.selected,
                                       callback: function($$v) {
@@ -40848,8 +40736,9 @@ var render = function() {
                                       return [
                                         _c("v-list-item", {
                                           key: item.name,
-                                          staticClass:
-                                            "v-list-item--active text--primary",
+                                          class: item.appointed
+                                            ? "v-list-item--active text-primary"
+                                            : "",
                                           scopedSlots: _vm._u(
                                             [
                                               {
@@ -40877,7 +40766,7 @@ var render = function() {
                                                           {
                                                             domProps: {
                                                               textContent: _vm._s(
-                                                                item.date_of_appointment
+                                                                item.date_appointed
                                                               )
                                                             }
                                                           }
@@ -40900,7 +40789,7 @@ var render = function() {
                                                           }
                                                         ),
                                                         _vm._v(" "),
-                                                        !active
+                                                        !item.appointed
                                                           ? _c(
                                                               "v-icon",
                                                               {
@@ -40945,7 +40834,70 @@ var render = function() {
                                           ? _c("v-divider", { key: index })
                                           : _vm._e()
                                       ]
-                                    })
+                                    }),
+                                    _vm._v(" "),
+                                    _vm.appointHistory.length == 0
+                                      ? [
+                                          _c("v-list-item", {
+                                            scopedSlots: _vm._u(
+                                              [
+                                                {
+                                                  key: "default",
+                                                  fn: function(ref) {
+                                                    var active = ref.active
+                                                    var toggle = ref.toggle
+                                                    return [
+                                                      _c(
+                                                        "v-list-item-content",
+                                                        [
+                                                          _c(
+                                                            "v-list-item-title",
+                                                            [_vm._v("Vacant")]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "v-list-item-subtitle",
+                                                            [
+                                                              _vm._v(
+                                                                "No appointed employee."
+                                                              )
+                                                            ]
+                                                          )
+                                                        ],
+                                                        1
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "v-list-item-action",
+                                                        [
+                                                          _c(
+                                                            "v-icon",
+                                                            {
+                                                              attrs: {
+                                                                color:
+                                                                  "grey lighten-1"
+                                                              }
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                "\n    mdi-image-filter-none\n    "
+                                                              )
+                                                            ]
+                                                          )
+                                                        ],
+                                                        1
+                                                      )
+                                                    ]
+                                                  }
+                                                }
+                                              ],
+                                              null,
+                                              false,
+                                              3730264693
+                                            )
+                                          })
+                                        ]
+                                      : _vm._e()
                                   ],
                                   2
                                 )
@@ -40974,12 +40926,8 @@ var render = function() {
                               }
                             }
                           },
-                          [_vm._v("Cancel")]
-                        ),
-                        _vm._v(" "),
-                        _c("v-btn", { attrs: { color: "blue", text: "" } }, [
-                          _vm._v("Save")
-                        ])
+                          [_vm._v("Close")]
+                        )
                       ],
                       1
                     )
@@ -40998,140 +40946,78 @@ var render = function() {
         fn: function(ref) {
           var item = ref.item
           return [
-            !_vm.itemVacant(item)
-              ? _c(
-                  "tr",
+            _c(
+              "tr",
+              { class: { vacantTr: _vm.itemVacant(item) } },
+              [
+                _vm._l(_vm.headers, function(dat, ind) {
+                  return ind <= 8
+                    ? _c("td", [_vm._v(_vm._s(item[dat.value]))])
+                    : _vm._e()
+                }),
+                _vm._v(" "),
+                _vm._l(_vm.headers, function(dat, ind) {
+                  return ind > 8 && ind < 19 && !_vm.itemVacant(item)
+                    ? _c("td", [_vm._v(_vm._s(item[dat.value]))])
+                    : ind == 19 && _vm.itemVacant(item)
+                    ? _c("td", { attrs: { colspan: "10", align: "center" } }, [
+                        _c("strong", [_vm._v("(VACANT)")])
+                      ])
+                    : _vm._e()
+                }),
+                _vm._v(" "),
+                _c(
+                  "td",
+                  { attrs: { align: "center" } },
                   [
-                    _vm._l(_vm.headers, function(dat, ind) {
-                      return ind <= 8
-                        ? _c("td", [_vm._v(_vm._s(item[dat.value]))])
-                        : _vm._e()
-                    }),
-                    _vm._v(" "),
-                    _vm._l(_vm.headers, function(dat, ind) {
-                      return ind > 8 && ind < 19
-                        ? _c("td", [_vm._v(_vm._s(item[dat.value]))])
-                        : _vm._e()
-                    }),
+                    _c(
+                      "v-icon",
+                      {
+                        attrs: { small: "", "mr-5": "" },
+                        on: {
+                          click: function($event) {
+                            return _vm.initAppoint(item)
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n            mdi-clipboard-account\n          "
+                        )
+                      ]
+                    ),
                     _vm._v(" "),
                     _c(
-                      "td",
-                      { attrs: { align: "center" } },
-                      [
-                        _c(
-                          "v-icon",
-                          {
-                            attrs: { small: "", "mr-5": "" },
-                            on: {
-                              click: function($event) {
-                                return _vm.initAppoint(item)
-                              }
-                            }
-                          },
-                          [
-                            _vm._v(
-                              "\n            mdi-clipboard-account\n          "
-                            )
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "v-icon",
-                          {
-                            attrs: { small: "", "mr-5": "" },
-                            on: {
-                              click: function($event) {
-                                return _vm.editItem(item)
-                              }
-                            }
-                          },
-                          [_vm._v("\n            mdi-pencil\n          ")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "v-icon",
-                          {
-                            attrs: { small: "" },
-                            on: {
-                              click: function($event) {
-                                return _vm.initDelete(item)
-                              }
-                            }
-                          },
-                          [_vm._v("\n            mdi-delete\n          ")]
-                        )
-                      ],
-                      1
-                    )
-                  ],
-                  2
-                )
-              : _c(
-                  "tr",
-                  { staticClass: "vacantTr" },
-                  [
-                    _vm._l(_vm.headers, function(dat, ind) {
-                      return ind <= 8
-                        ? _c("td", [_vm._v(_vm._s(item[dat.value]))])
-                        : _vm._e()
-                    }),
-                    _vm._v(" "),
-                    _c("td", { attrs: { colspan: "10", align: "center" } }, [
-                      _c("strong", [_vm._v("(VACANT)")])
-                    ]),
+                      "v-icon",
+                      {
+                        attrs: { small: "", "mr-5": "" },
+                        on: {
+                          click: function($event) {
+                            return _vm.editItem(item)
+                          }
+                        }
+                      },
+                      [_vm._v("\n            mdi-pencil\n          ")]
+                    ),
                     _vm._v(" "),
                     _c(
-                      "td",
-                      { attrs: { align: "center" } },
-                      [
-                        _c(
-                          "v-icon",
-                          {
-                            attrs: { small: "", "mr-5": "" },
-                            on: {
-                              click: function($event) {
-                                return _vm.initAppoint(item)
-                              }
-                            }
-                          },
-                          [
-                            _vm._v(
-                              "\n            mdi-clipboard-account\n          "
-                            )
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "v-icon",
-                          {
-                            attrs: { small: "", "mr-5": "" },
-                            on: {
-                              click: function($event) {
-                                return _vm.editItem(item)
-                              }
-                            }
-                          },
-                          [_vm._v("\n            mdi-pencil\n          ")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "v-icon",
-                          {
-                            attrs: { small: "" },
-                            on: {
-                              click: function($event) {
-                                return _vm.initDelete(item)
-                              }
-                            }
-                          },
-                          [_vm._v("\n            mdi-delete\n          ")]
-                        )
-                      ],
-                      1
+                      "v-icon",
+                      {
+                        attrs: { small: "" },
+                        on: {
+                          click: function($event) {
+                            return _vm.initDelete(item)
+                          }
+                        }
+                      },
+                      [_vm._v("\n            mdi-delete\n          ")]
                     )
                   ],
-                  2
+                  1
                 )
+              ],
+              2
+            )
           ]
         }
       },
@@ -94650,7 +94536,8 @@ Vue.component('app-layout', __webpack_require__(/*! ./components/AppLayout.vue *
 Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
 Vue.component('data-tablefy', __webpack_require__(/*! ./components/DataTablefy.vue */ "./resources/js/components/DataTablefy.vue")["default"]);
 Vue.component('login-component', __webpack_require__(/*! ./components/LoginComponent.vue */ "./resources/js/components/LoginComponent.vue")["default"]);
-Vue.component('plantilla-permanent', __webpack_require__(/*! ./components/PlantillaPermanent.vue */ "./resources/js/components/PlantillaPermanent.vue")["default"]);
+Vue.component('plantilla-permanent', __webpack_require__(/*! ./components/PlantillaPermanent.vue */ "./resources/js/components/PlantillaPermanent.vue")["default"]); // FOR TEST COMPONENTS
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

@@ -85,6 +85,8 @@ class PlantillaPermanentController extends Controller
         $category = $request->data['category'];
         $classification = $request->data['classification'];
 
+        dd($request->data);
+
         $validator = Validator::make($request->data, [
             // 'item_no' => 'required'.($id==0?'|unique:plantilla_permanents':''),
             'item_no' => 'required|unique:plantilla_permanents,item_no,' . $id,
