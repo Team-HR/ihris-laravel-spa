@@ -18,11 +18,12 @@ class CreateAppointmentPermanentsTable extends Migration
             $table->unsignedBigInteger('plantilla_permanent_id');
             $table->foreign('plantilla_permanent_id')->references('id')->on('plantilla_permanents');
             $table->unsignedBigInteger('employee_id');
+            $table->boolean('appointed');
             $table->foreign('employee_id')->references('id')->on('employees');
             // $table->string('sg')->nullable();
             // $table->string('step')->nullable();
-            $table->date('date_of_original_appointment')->nullable();
-            $table->date('date_of_last_promotion')->nullable();
+            $table->date('date_appointed')->nullable();
+            $table->date('date_vacated')->nullable();
             $table->timestamps();
         });
     }

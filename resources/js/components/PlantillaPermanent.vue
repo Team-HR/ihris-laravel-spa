@@ -121,7 +121,7 @@
 
             <!-- <v-container> -->
               <!-- usob -->
-              <v-autocomplete v-model="appointed_employee" :readonly="(appoint?false:true)" :items="employees" item-text="full_name" item-value="id" dense :label="(appoint?'Select employee':'Appointed Employee')" outlined placeholder="Appoint employee"></v-autocomplete>
+              <v-autocomplete :prepend-inner-icon="appoint?'mdi-lock-open':'mdi-lock-check'" v-model="appointed_employee" :readonly="(appoint?false:true)" :items="employees" item-text="full_name" item-value="employee_id" dense :label="(appoint?'Select Employee':'Appointed Employee')" outlined placeholder="Appoint employee"></v-autocomplete>
               <v-spacer></v-spacer>
 
             <v-dialog
@@ -129,7 +129,7 @@
               persistent
               width="290px"
             >
-              <v-date-picker v-model="appoint_date" scrollable>
+              <v-date-picker v-model="appoint_date_picker" scrollable>
                 <v-spacer></v-spacer>
                 <v-btn text color="primary" @click="appoint_date_dialog = false">Cancel</v-btn>
                 <v-btn text color="primary" @click="appointSave">OK</v-btn>
@@ -140,7 +140,7 @@
             <v-slide-x-reverse-transition
               mode="out-in"
             >
-              <v-btn inset :disabled="appointed_employee?false:true" :key="`btn-${appoint}`" v-model="appoint" right :color="(appoint?'green':'red')" text @click="selectEmployee()">{{(appoint?'Appoint':'Vacate')}}</v-btn>
+              <v-btn inset :disabled="appointed_employee?false:true" :key="`btn-${appoint}`" v-model="appoint" right :color="(appoint?'green':'red')" text @click="appoint_date_dialog=true">{{(appoint?'Appoint':'Vacate')}}</v-btn>
             </v-slide-x-reverse-transition>
             
               <v-subheader>Appointment Hisory</v-subheader>
@@ -154,7 +154,7 @@
                     <v-list-item :key="item.name" :class="item.appointed?'v-list-item--active text-primary':''">
                       <template v-slot:default="{ active, toggle }">
                         <v-list-item-content>
-                          <v-list-item-title v-text="item.name"></v-list-item-title>
+                          <v-list-item-title v-text="item.full_name"></v-list-item-title>
                           <v-list-item-subtitle v-text="item.date_appointed"></v-list-item-subtitle>
                         </v-list-item-content>
 
@@ -258,7 +258,7 @@
     data() {
       return {
         appoint_date_dialog: false,
-        appoint_date: '',
+        appoint_date_picker: '',
         appointed_employee: null,
         date: new Date().toISOString().substr(0, 10),
         menu: false,
@@ -272,7 +272,14 @@
             appointment_id: 0,
             plantilla_id: 0,
             employee_id: 0,
-            name: '',
+            last_name: '',
+            middle_name: '',
+            first_name: '',
+            ext_name: '',
+            sex: '',
+            date_of_birth: '',
+            tin: '',
+            full_name: '',
             date_appointed: '',
             date_vacated: '',
             appointed: false
@@ -282,7 +289,14 @@
             appointment_id: 0,
             plantilla_id: 0,
             employee_id: 0,
-            name: '',
+            last_name: '',
+            middle_name: '',
+            first_name: '',
+            ext_name: '',
+            sex: '',
+            date_of_birth: '',
+            tin: '',
+            full_name: '',
             date_appointed: '',
             date_vacated: '',
             appointed: false
@@ -299,7 +313,7 @@
           y: 'bottom',
         },
         appoint_dialog: false,
-        itemForAppointment: [],
+        plantillaForAppointment: [],
         delete_dialog: false,
         csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
         dialog: false,
@@ -367,11 +381,10 @@
     },
 
     computed: {
-
-
       formTitle() {
         return this.editedIndex === -1 ? 'New Plantilla' : 'Edit Plantilla'
       },
+
     },
 
     watch: {
@@ -385,8 +398,14 @@
       },
       appoint_dialog(val) {
         if (!val) {
-          this.itemForAppointment = []
+          this.plantillaForAppointment = []
+          this.appointHistory = []
+          setTimeout(() => {
+            this.editedItem = Object.assign({}, this.defaultItem)
+            this.editedIndex = -1
+            console.log('Appoint Dialog Close!');
             
+          }, 300)   
         }
       }
     },
@@ -406,11 +425,55 @@
     },
 
     methods: {
-      appointSave(){
-
+      initAppoint(item) {
+        
+        this.plantillaForAppointment = item        
+        this.editedIndex = this.tableData.indexOf(item)
+        axios.get('getAppointmentWithPlantillaId', {
+            params: {
+              plantilla_id: item.plantilla_id
+            }
+          })
+          .then(data => {
+            this.appointHistory = data.data.data
+          })
+          this.appoint_dialog = true
+        // console.log('this.plantillaForAppointment:',this.plantillaForAppointment);
+        // console.log('this.appointedItem(before):',this.appointedItem);
       },
-      selectEmployee(){ 
-        this.appoint_date_dialog = !this.appoint_date_dialog
+      appointSave(){
+        console.log('this.tableData[this.editedIndex](before):',this.tableData[this.editedIndex]);
+
+        this.appointedItem.appointment_id = 0
+        this.appointedItem.plantilla_id = this.plantillaForAppointment.plantilla_id
+        this.appointedItem.employee_id = this.appointed_employee  
+        var that = this
+        $.each(this.employees, function (indexInArray, valueOfElement) { 
+          if (valueOfElement.employee_id == that.appointed_employee) {
+            console.log('$.each (Employee details):',valueOfElement);
+            Object.assign(that.appointedItem,valueOfElement)
+            // that.appointedItem.last_name = valueOfElement.last_name
+            // that.appointedItem.middle_name = valueOfElement.middle_name
+            // that.appointedItem.first_name = valueOfElement.first_name
+            // that.appointedItem.ext_name = valueOfElement.ext_name
+            // that.appointedItem.sex = valueOfElement.sex
+            // that.appointedItem.date_of_birth = valueOfElement.date_of_birth
+            // that.appointedItem.tin = valueOfElement.tin  
+            // that.appointedItem.full_name = valueOfElement.full_name
+            return false
+          }
+        });
+        this.appointedItem.date_appointed = this.appoint_date_picker
+        this.appointedItem.date_vacated = this.appoint_date_picker
+        this.appointedItem.appointed = true
+        
+        console.log('this.appointedItem(after):',this.appointedItem);
+        Object.assign(this.tableData[this.editedIndex], this.appointedItem)
+        // Object.assign(this.appointHistory, this.appointedItem)
+        this.appointHistory.push(this.appointedItem)
+        console.log('this.tableData[this.editedIndex](after):',this.tableData[this.editedIndex]);
+        this.appoint_date_dialog = false
+        this.appoint = !this.appoint
       },
 
       itemVacant(item) {
@@ -424,7 +487,8 @@
       fetchData() {
         axios.get('plantilla_permanents/data-table')
           .then(data => {
-            this.tableData = data.data.data
+            this.tableData = data.data
+            console.log(data.data)
           })
       },
 
@@ -433,18 +497,9 @@
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
-      
-
-      initAppoint(item) {
-        console.log('plantilla_id:',item.plantilla_id)
-        this.appoint_dialog = true
-        this.itemForAppointment = item
-        
-      },
+    
 
       initDelete(item) {
-        
-
         this.delete_dialog = true
         this.itemToDelete = item
         // console.log('initDelete: ',this.itemToDelete);

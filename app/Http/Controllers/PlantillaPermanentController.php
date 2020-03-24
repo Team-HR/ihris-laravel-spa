@@ -25,21 +25,21 @@ class PlantillaPermanentController extends Controller
 
     public function getPlantillaPermanentsForDataTable()
     {
-        // $matchThese = ['department_id' => 1 ];
-        // $plantillaPermanents = $this->plantillaPermanent->where($matchThese)
-        // $plantillaPermanents = $this->plantillaPermanent
-        //     ->select('*')
-        //     ->get();
 
-        $plantilla = PlantillaPermanent::leftJoin('appointment_permanents','appointment_permanents.plantilla_permanent_id','=','plantilla_permanents.id')
-            ->leftJoin('employees', 'appointment_permanents.employee_id', '=', 'employees.id')
-            ->select('plantilla_permanents.id as plantilla_id','plantilla_permanents.*','appointment_permanents.*','employees.*')
-            ->get();
+        $plantilla = PlantillaPermanent::select('plantilla_permanents.id as plantilla_id','plantilla_permanents.*')
+        ->get();
+        $appointment = AppointmentPermanent::select('plantilla_permanent_id as plantilla_id','appointment_permanents.*')
+        ->where(['appointed'=>1])
+        ->get();
 
-        // dd($plantilla->toArray());
-        // $data = array('data'=>$appointmentPermanents->toArray());
-        // return $data;
-        return PlantillaPermanentsResource::collection($plantilla);
+        // dd($plantilla);
+
+        $plantilla = $plantilla->toArray();
+        $appointment = $appointment->toArray();
+        
+        dd($appointment);
+
+        // return PlantillaPermanentsResource::collection($plantilla);
     }
 
     /**

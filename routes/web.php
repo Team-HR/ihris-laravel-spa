@@ -27,7 +27,6 @@ Route::get('users/data-table', 'UsersController@getUsersForDataTable')->name('us
 
 
 // plantilla permanent start
-Route::get('plantilla_permanents/data-table', 'PlantillaPermanentController@getPlantillaPermanentsForDataTable')->name('plantilla_permanents.table');
 Route::post('plantilla_permanents', 'PlantillaPermanentController@store');
 Route::delete('plantilla_permanents', 'PlantillaPermanentController@destroy');
 // Route::delete('api/users/{id}', 'UserController@destroy');
@@ -73,6 +72,12 @@ Route::get('users', 'UsersController@index');
 Route::get('users-list', 'UsersController@usersList');
 
 
+
 // listers
+Route::get('plantilla_permanents/data-table', 'PlantillaPermanentController@getPlantillaPermanentsForDataTable')->name('plantilla_permanents.table');
 Route::get('departments-list', 'DepartmentController@listDepartment');
 Route::get('employees-list', 'EmployeeController@listEmployee');
+
+
+//geters
+Route::get('getAppointmentWithPlantillaId', 'AppointmentPermanentController@getAppointmentPermanents');

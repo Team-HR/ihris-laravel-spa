@@ -2434,7 +2434,7 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
   data: function data() {
     return {
       appoint_date_dialog: false,
-      appoint_date: '',
+      appoint_date_picker: '',
       appointed_employee: null,
       date: new Date().toISOString().substr(0, 10),
       menu: false,
@@ -2447,7 +2447,14 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
         appointment_id: 0,
         plantilla_id: 0,
         employee_id: 0,
-        name: '',
+        last_name: '',
+        middle_name: '',
+        first_name: '',
+        ext_name: '',
+        sex: '',
+        date_of_birth: '',
+        tin: '',
+        full_name: '',
         date_appointed: '',
         date_vacated: '',
         appointed: false
@@ -2456,7 +2463,14 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
         appointment_id: 0,
         plantilla_id: 0,
         employee_id: 0,
-        name: '',
+        last_name: '',
+        middle_name: '',
+        first_name: '',
+        ext_name: '',
+        sex: '',
+        date_of_birth: '',
+        tin: '',
+        full_name: '',
         date_appointed: '',
         date_vacated: '',
         appointed: false
@@ -2473,7 +2487,7 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
         y: 'bottom'
       },
       appoint_dialog: false,
-      itemForAppointment: [],
+      plantillaForAppointment: [],
       delete_dialog: false,
       csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
       dialog: false,
@@ -2639,26 +2653,77 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
       }
     },
     appoint_dialog: function appoint_dialog(val) {
+      var _this = this;
+
       if (!val) {
-        this.itemForAppointment = [];
+        this.plantillaForAppointment = [];
+        this.appointHistory = [];
+        setTimeout(function () {
+          _this.editedItem = Object.assign({}, _this.defaultItem);
+          _this.editedIndex = -1;
+          console.log('Appoint Dialog Close!');
+        }, 300);
       }
     }
   },
   created: function created() {
-    var _this = this;
+    var _this2 = this;
 
     this.fetchData();
     axios.get('departments-list').then(function (data) {
-      _this.departments = data.data.data;
+      _this2.departments = data.data.data;
     });
     axios.get('employees-list').then(function (data) {
-      _this.employees = data.data.data;
+      _this2.employees = data.data.data;
     });
   },
   methods: {
-    appointSave: function appointSave() {},
-    selectEmployee: function selectEmployee() {
-      this.appoint_date_dialog = !this.appoint_date_dialog;
+    initAppoint: function initAppoint(item) {
+      var _this3 = this;
+
+      this.plantillaForAppointment = item;
+      this.editedIndex = this.tableData.indexOf(item);
+      axios.get('getAppointmentWithPlantillaId', {
+        params: {
+          plantilla_id: item.plantilla_id
+        }
+      }).then(function (data) {
+        _this3.appointHistory = data.data.data;
+      });
+      this.appoint_dialog = true; // console.log('this.plantillaForAppointment:',this.plantillaForAppointment);
+      // console.log('this.appointedItem(before):',this.appointedItem);
+    },
+    appointSave: function appointSave() {
+      console.log('this.tableData[this.editedIndex](before):', this.tableData[this.editedIndex]);
+      this.appointedItem.appointment_id = 0;
+      this.appointedItem.plantilla_id = this.plantillaForAppointment.plantilla_id;
+      this.appointedItem.employee_id = this.appointed_employee;
+      var that = this;
+      $.each(this.employees, function (indexInArray, valueOfElement) {
+        if (valueOfElement.employee_id == that.appointed_employee) {
+          console.log('$.each (Employee details):', valueOfElement);
+          Object.assign(that.appointedItem, valueOfElement); // that.appointedItem.last_name = valueOfElement.last_name
+          // that.appointedItem.middle_name = valueOfElement.middle_name
+          // that.appointedItem.first_name = valueOfElement.first_name
+          // that.appointedItem.ext_name = valueOfElement.ext_name
+          // that.appointedItem.sex = valueOfElement.sex
+          // that.appointedItem.date_of_birth = valueOfElement.date_of_birth
+          // that.appointedItem.tin = valueOfElement.tin  
+          // that.appointedItem.full_name = valueOfElement.full_name
+
+          return false;
+        }
+      });
+      this.appointedItem.date_appointed = this.appoint_date_picker;
+      this.appointedItem.date_vacated = this.appoint_date_picker;
+      this.appointedItem.appointed = true;
+      console.log('this.appointedItem(after):', this.appointedItem);
+      Object.assign(this.tableData[this.editedIndex], this.appointedItem); // Object.assign(this.appointHistory, this.appointedItem)
+
+      this.appointHistory.push(this.appointedItem);
+      console.log('this.tableData[this.editedIndex](after):', this.tableData[this.editedIndex]);
+      this.appoint_date_dialog = false;
+      this.appoint = !this.appoint;
     },
     itemVacant: function itemVacant(item) {
       var vacant = true;
@@ -2670,10 +2735,11 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
       return vacant;
     },
     fetchData: function fetchData() {
-      var _this2 = this;
+      var _this4 = this;
 
       axios.get('plantilla_permanents/data-table').then(function (data) {
-        _this2.tableData = data.data.data;
+        _this4.tableData = data.data;
+        console.log(data.data);
       });
     },
     editItem: function editItem(item) {
@@ -2681,27 +2747,22 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
-    initAppoint: function initAppoint(item) {
-      console.log('plantilla_id:', item.plantilla_id);
-      this.appoint_dialog = true;
-      this.itemForAppointment = item;
-    },
     initDelete: function initDelete(item) {
       this.delete_dialog = true;
       this.itemToDelete = item; // console.log('initDelete: ',this.itemToDelete);
     },
     execDelete: function execDelete() {
-      var _this3 = this;
+      var _this5 = this;
 
       var index = this.tableData.indexOf(this.itemToDelete);
       axios["delete"]('plantilla_permanents', {
         data: this.itemToDelete
       }).then(function (data) {
-        _this3.tableData.splice(index, 1);
+        _this5.tableData.splice(index, 1);
 
-        _this3.delete_dialog = false;
+        _this5.delete_dialog = false;
 
-        _this3.toast('Deleted successfully!');
+        _this5.toast('Deleted successfully!');
       });
     },
     toast: function toast(msg) {
@@ -2709,16 +2770,16 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
       this.snackbar.text = msg;
     },
     close: function close() {
-      var _this4 = this;
+      var _this6 = this;
 
       this.dialog = false;
       setTimeout(function () {
-        _this4.editedItem = Object.assign({}, _this4.defaultItem);
-        _this4.editedIndex = -1;
+        _this6.editedItem = Object.assign({}, _this6.defaultItem);
+        _this6.editedIndex = -1;
       }, 300);
     },
     save: function save() {
-      var _this5 = this;
+      var _this7 = this;
 
       if (this.editedIndex > -1) {
         // Edit Existing
@@ -2728,11 +2789,11 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
         }).then(function (data) {
           if (typeof data.data.error == 'undefined') {
             console.log('new no error');
-            Object.assign(_this5.tableData[_this5.editedIndex], _this5.editedItem);
+            Object.assign(_this7.tableData[_this7.editedIndex], _this7.editedItem);
 
-            _this5.close();
+            _this7.close();
 
-            _this5.toast('Updated successfully!');
+            _this7.toast('Updated successfully!');
           } else {
             console.log('new with error');
             console.log(data.data.error);
@@ -2744,15 +2805,15 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
           data: this.editedItem
         }).then(function (data) {
           if (typeof data.data.error == 'undefined') {
-            _this5.editedItem.plantilla_id = data.data.id;
+            _this7.editedItem.plantilla_id = data.data.id;
 
-            _this5.tableData.push(_this5.editedItem);
+            _this7.tableData.push(_this7.editedItem);
 
-            console.log('new no error', _this5.editedItem);
+            console.log('new no error', _this7.editedItem);
 
-            _this5.close();
+            _this7.close();
 
-            _this5.toast('Added successfully!');
+            _this7.toast('Added successfully!');
           } else {
             console.log('new with error');
             console.log(data.data.error);
@@ -40589,13 +40650,16 @@ var render = function() {
                       [
                         _c("v-autocomplete", {
                           attrs: {
+                            "prepend-inner-icon": _vm.appoint
+                              ? "mdi-lock-open"
+                              : "mdi-lock-check",
                             readonly: _vm.appoint ? false : true,
                             items: _vm.employees,
                             "item-text": "full_name",
-                            "item-value": "id",
+                            "item-value": "employee_id",
                             dense: "",
                             label: _vm.appoint
-                              ? "Select employee"
+                              ? "Select Employee"
                               : "Appointed Employee",
                             outlined: "",
                             placeholder: "Appoint employee"
@@ -40629,11 +40693,11 @@ var render = function() {
                               {
                                 attrs: { scrollable: "" },
                                 model: {
-                                  value: _vm.appoint_date,
+                                  value: _vm.appoint_date_picker,
                                   callback: function($$v) {
-                                    _vm.appoint_date = $$v
+                                    _vm.appoint_date_picker = $$v
                                   },
-                                  expression: "appoint_date"
+                                  expression: "appoint_date_picker"
                                 }
                               },
                               [
@@ -40686,7 +40750,7 @@ var render = function() {
                                 },
                                 on: {
                                   click: function($event) {
-                                    return _vm.selectEmployee()
+                                    _vm.appoint_date_dialog = true
                                   }
                                 },
                                 model: {
@@ -40755,7 +40819,7 @@ var render = function() {
                                                           {
                                                             domProps: {
                                                               textContent: _vm._s(
-                                                                item.name
+                                                                item.full_name
                                                               )
                                                             }
                                                           }

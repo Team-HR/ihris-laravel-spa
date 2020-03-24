@@ -16,7 +16,7 @@ class EmployeesResource extends JsonResource
     {
         // return parent::toArray($request);
         return [
-            'id'=>$this->id,
+            'employee_id'=>$this->id,
             'last_name'=>$this->last_name,
             'middle_name'=>$this->middle_name,
             'first_name'=>$this->first_name,
