@@ -18,7 +18,8 @@ class EmployeesResource extends JsonResource
         return [
             'employee_id'=>$this->id,
             'last_name'=>$this->last_name,
-            'middle_name'=>$this->middle_name,
+            // 'middle_name'=>$this->middle_name,
+            'middle_name' => ($this->middle_name?$this->middle_name[0]:''),
             'first_name'=>$this->first_name,
             'ext_name'=>$this->ext_name,
             'sex'=>$this->sex,

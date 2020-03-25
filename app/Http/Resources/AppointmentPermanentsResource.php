@@ -22,7 +22,7 @@ class AppointmentPermanentsResource extends JsonResource
             'last_name' => $this->last_name,
             'first_name' => $this->first_name,
             'ext_name' => $this->ext_name,
-            'middle_name' => $this->middle_name,
+            'middle_name' => ($this->middle_name?$this->middle_name[0]:''),
             'sex' => $this->sex,
             'date_of_birth' => $this->date_of_birth,
             'tin' => $this->tin,

@@ -151,7 +151,7 @@
                   v-model="selected"
                 >
                   <template v-for="(item, index) in appointHistory">
-                    <v-list-item :key="item.name" :class="item.appointed?'v-list-item--active text-primary':''">
+                    <v-list-item :key="item.name" :class="!item.date_vacated?'v-list-item--active text-primary':''">
                       <template v-slot:default="{ active, toggle }">
                         <v-list-item-content>
                           <v-list-item-title v-text="item.full_name"></v-list-item-title>
@@ -357,6 +357,7 @@
           area_type: '',
           category: '',
           classification: '',
+          appointed_to: '',
         },
         defaultItem: {
           plantilla_id: null,
@@ -373,6 +374,7 @@
           area_type: '',
           category: '',
           classification: '',
+          appointed_to: '',
         },
         departments: [],
         itemToDelete: [],
@@ -436,6 +438,8 @@
           })
           .then(data => {
             this.appointHistory = data.data.data
+            // console.log(data.data.data);
+            
           })
           this.appoint_dialog = true
         // console.log('this.plantillaForAppointment:',this.plantillaForAppointment);
@@ -487,8 +491,8 @@
       fetchData() {
         axios.get('plantilla_permanents/data-table')
           .then(data => {
-            this.tableData = data.data
-            console.log(data.data)
+            this.tableData = data.data.data
+            console.log(data.data.data)
           })
       },
 

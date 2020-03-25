@@ -2615,7 +2615,8 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
         region_code: '',
         area_type: '',
         category: '',
-        classification: ''
+        classification: '',
+        appointed_to: ''
       },
       defaultItem: {
         plantilla_id: null,
@@ -2631,7 +2632,8 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
         region_code: '',
         area_type: '',
         category: '',
-        classification: ''
+        classification: '',
+        appointed_to: ''
       },
       departments: [],
       itemToDelete: [],
@@ -2688,7 +2690,7 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
           plantilla_id: item.plantilla_id
         }
       }).then(function (data) {
-        _this3.appointHistory = data.data.data;
+        _this3.appointHistory = data.data.data; // console.log(data.data.data);
       });
       this.appoint_dialog = true; // console.log('this.plantillaForAppointment:',this.plantillaForAppointment);
       // console.log('this.appointedItem(before):',this.appointedItem);
@@ -2738,8 +2740,8 @@ var qs = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
       var _this4 = this;
 
       axios.get('plantilla_permanents/data-table').then(function (data) {
-        _this4.tableData = data.data;
-        console.log(data.data);
+        _this4.tableData = data.data.data;
+        console.log(data.data.data);
       });
     },
     editItem: function editItem(item) {
@@ -40800,7 +40802,7 @@ var render = function() {
                                       return [
                                         _c("v-list-item", {
                                           key: item.name,
-                                          class: item.appointed
+                                          class: !item.date_vacated
                                             ? "v-list-item--active text-primary"
                                             : "",
                                           scopedSlots: _vm._u(

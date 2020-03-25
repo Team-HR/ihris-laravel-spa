@@ -17,6 +17,7 @@ class CreatePlantillaPermanentsTable extends Migration
             $table->bigIncrements('id');
             $table->string('item_no');
             $table->bigInteger('department_id')->unsigned();
+            $table->foreign('department_id')->references('id')->on('departments');
             $table->string('position_title');
             $table->string('functional_title')->nullable();
             $table->string('level')->nullable();
@@ -28,6 +29,8 @@ class CreatePlantillaPermanentsTable extends Migration
             $table->string('area_type');
             $table->string('category')->nullable();
             $table->string('classification')->nullable();
+            $table->bigInteger('appointed_to')->unsigned()->nullable();
+            $table->foreign('appointed_to')->references('id')->on('appointment_permanents');
             $table->timestamps();
         });
     }

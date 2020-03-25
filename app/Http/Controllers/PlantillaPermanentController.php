@@ -26,20 +26,16 @@ class PlantillaPermanentController extends Controller
     public function getPlantillaPermanentsForDataTable()
     {
 
-        $plantilla = PlantillaPermanent::select('plantilla_permanents.id as plantilla_id','plantilla_permanents.*')
+        $plantilla = DB::table('plantilla_permanents')
+        ->leftJoin('appointment_permanents',function ($join){
+            $join->on('plantilla_permanents.appointed_to','=','appointment_permanents.id');
+        })
+        ->leftJoin('employees',function ($join){
+            $join->on('appointment_permanents.employee_id','=','employees.id');
+        })
         ->get();
-        $appointment = AppointmentPermanent::select('plantilla_permanent_id as plantilla_id','appointment_permanents.*')
-        ->where(['appointed'=>1])
-        ->get();
-
-        // dd($plantilla);
-
-        $plantilla = $plantilla->toArray();
-        $appointment = $appointment->toArray();
-        
-        dd($appointment);
-
-        // return PlantillaPermanentsResource::collection($plantilla);
+        // dd ($plantilla);
+        return PlantillaPermanentsResource::collection($plantilla);
     }
 
     /**

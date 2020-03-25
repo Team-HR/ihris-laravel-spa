@@ -32,6 +32,7 @@ class PlantillaPermanentsResource extends JsonResource
             'area_type' => $this->area_type,
             'category' => $this->category,
             'classification' => $this->classification,
+            'appointed_to' => $this->appointed_to,
             'employee_id' => $this->employee_id,
             'last_name' => $this->last_name,
             'first_name' => $this->first_name,
@@ -39,10 +40,8 @@ class PlantillaPermanentsResource extends JsonResource
             'sex' => $this->sex,
             'date_of_birth' => $this->date_of_birth,
             'tin' => $this->tin,
-            'date_of_original_appointment' => $this->date_of_original_appointment,
-            'date_of_last_promotion' => $this->date_of_last_promotion,
-            'employment_status' => $this->employment_status,
-            'civil_service_eligibility' => $this->civil_service_eligibility,
+            'date_appointed' => $this->date_appointed,
+            'date_vacated' => $this->date_vacated,
         ];
     }
 

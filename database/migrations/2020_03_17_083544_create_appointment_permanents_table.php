@@ -15,10 +15,10 @@ class CreateAppointmentPermanentsTable extends Migration
     {
         Schema::create('appointment_permanents', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('plantilla_permanent_id');
-            $table->foreign('plantilla_permanent_id')->references('id')->on('plantilla_permanents');
+            $table->unsignedBigInteger('plantilla_id');
+            $table->foreign('plantilla_id')->references('id')->on('plantilla_permanents');
             $table->unsignedBigInteger('employee_id');
-            $table->boolean('appointed');
+            // $table->boolean('appointed');
             $table->foreign('employee_id')->references('id')->on('employees');
             // $table->string('sg')->nullable();
             // $table->string('step')->nullable();
