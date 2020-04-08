@@ -16,26 +16,6 @@
 // });
 Auth::routes();
 
-// Auth::routes([
-//   'register' => true,
-//   'verify' => false,
-//   'reset' => false
-// ]);
-
-
-Route::get('users/data-table', 'UsersController@getUsersForDataTable')->name('users.table');
-
-
-// plantilla permanent start
-Route::post('plantilla_permanents', 'PlantillaPermanentController@store');
-Route::delete('plantilla_permanents', 'PlantillaPermanentController@destroy');
-// Route::delete('api/users/{id}', 'UserController@destroy');
-
-
-Route::get('dev_plantilla_permanent', function(){
-	return view('plantilla_permanent_dev');
-});
-// plantilla permanent end
 
 
 // home
