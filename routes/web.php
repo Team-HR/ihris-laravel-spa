@@ -15,12 +15,7 @@
 //     return view('auth.login');
 // });
 
-// Auth::routes();
-Auth::routes([
-  'register' => true,
-  'verify' => false,
-  'reset' => false
-]);
+Auth::routes();
 
 
 // home
