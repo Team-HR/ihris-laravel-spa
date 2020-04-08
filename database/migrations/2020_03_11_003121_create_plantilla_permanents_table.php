@@ -30,7 +30,7 @@ class CreatePlantillaPermanentsTable extends Migration
             $table->string('category')->nullable();
             $table->string('classification')->nullable();
             $table->bigInteger('appointed_to')->unsigned()->nullable();
-            $table->foreign('appointed_to')->references('id')->on('appointment_permanents');
+            // $table->foreign('appointed_to')->references('id')->on('appointment_permanents')->onDelete('cascade');
             $table->timestamps();
         });
     }

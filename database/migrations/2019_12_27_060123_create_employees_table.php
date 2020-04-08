@@ -19,6 +19,9 @@ class CreateEmployeesTable extends Migration
             $table->string('first_name');
             $table->string('ext_name')->nullable();
             $table->string('middle_name')->nullable();
+            $table->string('sex')->nullable();
+            $table->date('date_of_birth')->nullable();
+            $table->string('tin')->nullable();
             // $table->string('gender');
             // $table->string('status')->nullable();
             // $table->string('employment_status')->nullable();

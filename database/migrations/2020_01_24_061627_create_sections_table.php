@@ -17,15 +17,10 @@ class CreateSectionsTable extends Migration
         Schema::create('sections', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('department_id')->unsigned();
-            // $table->foreign('department_id')->references('id')->on('departments');
             $table->string('name');
             $table->string('short_name');
             $table->timestamps();
         });
-
-        // Schema::table('sections', function (Blueprint $table) {
-        //     $table->foreign('department_id')->references('id')->on('departments');
-        // });
     }
 
     /**
