@@ -18,7 +18,7 @@
 
       <v-btn
         text
-        href="cores"
+        to="cores"
       >Go to the Cores</v-btn>
       
       <v-spacer></v-spacer>

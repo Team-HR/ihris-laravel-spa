@@ -88,7 +88,7 @@
                     headline: 'RSP',
                     description: '',
                     href:'',
-                    img: 'icons/cores/rsp.png',
+                    img: 'images/cores/rsp.png',
                     color: '#ff7b00',
                     dark: true,
                     links: [
@@ -107,7 +107,7 @@
                     headline: 'L&D',
                     description: '',
                     href:'',
-                    img: 'icons/cores/lnd.png',
+                    img: 'images/cores/lnd.png',
                     color: '#00b3ff',
                     dark: true,
                     links: [
@@ -126,7 +126,7 @@
                     headline: 'SPMS',
                     description: '',
                     href:'',
-                    img: 'icons/cores/spms.png',
+                    img: 'images/cores/spms.png',
                     color: '#00d427',
                     dark: true,
                     links: [
@@ -139,7 +139,7 @@
                     headline: 'R&R',
                     description: '',
                     href:'',
-                    img: 'icons/cores/rnr.png',
+                    img: 'images/cores/rnr.png',
                     color: '#ffd500',
                     dark: true,
                     links: [
@@ -149,7 +149,7 @@
             ]
         }),
         mounted() {
-            console.log('Home Component mounted.')
+            // console.log('Home Component mounted.')
         }
     }
 </script>

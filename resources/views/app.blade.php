@@ -8,26 +8,10 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-    <script src="{{ asset('js/jquery-3.4.1.slim.min.js') }}"></script>
-    {{-- <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script> --}}
-
 </head>
 <body>
-<div id="app">
-    <app-layout>
-        <template v-slot:user>
-            {{Auth::user()->name}}
-        </template>
-        <template v-slot:csrf>
-            @csrf
-        </template>
-        @yield('content')
-    </app-layout>
-</div>
-
-{{-- @yield('script') --}}
-
+<div id="app"></div>
+<!-- Scripts -->
+<script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>
