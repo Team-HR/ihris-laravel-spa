@@ -25,8 +25,9 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('data-tablefy', require('./components/DataTablefy.vue').default);
 Vue.component('login-component', require('./components/LoginComponent.vue').default);
 Vue.component('plantilla-permanent', require('./components/PlantillaPermanent.vue').default);
+Vue.component('home-component', require('./components/HomeComponent.vue').default);
+Vue.component('cores-component', require('./components/CoresComponent.vue').default);
 
-// FOR TEST COMPONENTS
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

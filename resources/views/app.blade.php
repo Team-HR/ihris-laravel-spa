@@ -16,19 +16,18 @@
 </head>
 <body>
 <div id="app">
-<v-app>
-<app-layout appbar-bg-url="{{asset('images/circuitboardbg.gif')}}">
-  <template v-slot:logo>
-    <img src="{{asset('favicon.ico')}}" width="30" class="mr-2">
-  </template>
-  <plantilla-permanent></plantilla-permanent>
-</app-layout>
-</v-app>
+    <app-layout>
+        <template v-slot:user>
+            {{Auth::user()->name}}
+        </template>
+        <template v-slot:csrf>
+            @csrf
+        </template>
+        @yield('content')
+    </app-layout>
 </div>
 
-
-
-
+{{-- @yield('script') --}}
 
 </body>
 </html>

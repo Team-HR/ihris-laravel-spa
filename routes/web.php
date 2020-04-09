@@ -14,6 +14,11 @@
 // Route::get('/', function () {
 //     return view('auth.login');
 // });
+
+Route::get('/app', function () {
+    return view('app');
+});
+
 Auth::routes();
 
 
