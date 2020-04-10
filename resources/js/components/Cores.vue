@@ -62,8 +62,6 @@
     </v-card>
     
 </v-hover>
-  
-
         </v-col>
         <v-responsive
           v-if="n === 2"
