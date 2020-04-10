@@ -27,7 +27,7 @@ Development initiated on July 16, 2018.
 
 Start the creating wonders!
 
-##Documentations
+## Documentations
 <a href="https://laravel.com/docs/6.x/installation">Laravel 6.x</a>
 <a href="https://vuejs.org/v2/guide/">Vue Js</a>
 <a href="https://vuetifyjs.com/en/components/api-explorer/">Vuetify</a>
