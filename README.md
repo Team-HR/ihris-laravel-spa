@@ -1,4 +1,4 @@
-<p align="center"><img src="https://raw.githubusercontent.com/Team-HR/ihris-laravel/master/public/favicon.ico" width="400"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/Team-HR/ihris-laravel/master/public/favicon.ico" width="100"></p>
 
 <p align="center">
 <a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
@@ -28,10 +28,10 @@ Development initiated on July 16, 2018.
 Start the creating wonders!
 
 ## Documentations
-<a href="https://laravel.com/docs/6.x/installation">Laravel 6.x</a>
-<a href="https://vuejs.org/v2/guide/">Vue Js</a>
-<a href="https://vuetifyjs.com/en/components/api-explorer/">Vuetify</a>
-<a href="https://websanova.com/docs/vue-auth/home">Vue Auth</a>
+1. Laravel 6.x <a href="https://laravel.com/docs/6.x/installation">https://laravel.com/docs/6.x/installation</a>
+2. Vue Js <a href="https://vuejs.org/v2/guide/">https://vuejs.org/v2/guide/</a>
+3. Vuetify <a href="https://vuetifyjs.com/en/components/api-explorer/">https://vuetifyjs.com/en/components/api-explorer/</a>
+4. Vue Auth <a href="https://websanova.com/docs/vue-auth/home">https://websanova.com/docs/vue-auth/home</a>
 
 
 ## License
