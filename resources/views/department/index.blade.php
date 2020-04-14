@@ -275,8 +275,7 @@
                     if (!data.error) {
                         $('#ajax-crud-modal').modal('hide');
 
-
-var table_row = '<tr id="row_id_'+data.id+'"><td><div class="btn-group  btn-group-sm" role="group" aria-label="Basic example"><button type="button" class="btn text-primary" title="Open" id="btn-show"><i class="fas fa-folder-open"></i></button><button type="button" id="btn-update" class="btn text-primary" title="Edit" data-id="'+data.id+'"><i class="fas fa-edit"></i></a></div></td><td><div>'+data.id+'</div></td><td class="table-text"><div>'+(data.short_name=='null'?'':data.short_name)+'</div></td></td><td class="table-text"><div>'+data.name+'</div></td><td class="text-right"> <div class="btn-group  btn-group-sm" role="group" aria-label="Basic example"><button type="button" class="btn" title="Delete" id="btn-delete" data-id="'+data.id+'"><i class="fas fa-times"></i></button></div></td></tr>';
+    var table_row = '<tr id="row_id_'+data.id+'"><td><div class="btn-group  btn-group-sm" role="group" aria-label="Basic example"><button type="button" class="btn text-primary" title="Open" id="btn-show"><i class="fas fa-folder-open"></i></button><button type="button" id="btn-update" class="btn text-primary" title="Edit" data-id="'+data.id+'"><i class="fas fa-edit"></i></a></div></td><td><div>'+data.id+'</div></td><td class="table-text"><div>'+(data.short_name=='null'?'':data.short_name)+'</div></td></td><td class="table-text"><div>'+data.name+'</div></td><td class="text-right"> <div class="btn-group  btn-group-sm" role="group" aria-label="Basic example"><button type="button" class="btn" title="Delete" id="btn-delete" data-id="'+data.id+'"><i class="fas fa-times"></i></button></div></td></tr>';
 
                         if (actionType == "create") {
                             $('#table-body').prepend(table_row);

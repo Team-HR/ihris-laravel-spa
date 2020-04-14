@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Department;
-
 use Illuminate\Support\Facades\Auth;
 use Redirect,Response;
 use Illuminate\Validation\Rule;
 use Validator;
+
+use App\Http\Resources\DepartmentsResource;
 
 class DepartmentController extends Controller
 {
@@ -31,6 +32,12 @@ class DepartmentController extends Controller
         ]);
     }
 
+    public function listDepartment(Department $department)
+    {
+        // return Response::json($department->all());
+        return DepartmentsResource::collection($department->all());
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -48,7 +55,8 @@ class DepartmentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
+        dd ($request);
         $object_id = $request->object_id;
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:departments,name,' . $object_id,
@@ -126,7 +134,6 @@ class DepartmentController extends Controller
     public function destroy($id)
     {
         $department = Department::where('id',$id)->delete();
-   
         $count = Department::get()->count();
         return response()->json($count);
     }

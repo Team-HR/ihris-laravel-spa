@@ -8,7 +8,7 @@
 </p>
 
 ## About Integrated HRIS
-Integrated HRIS developed as a single page application with Laravel 6.x framework.The Agency’s RSP policies and processes clearly define link with other core HRM areas (i.e., L&D, PM and R&R)
+Integrated HRIS developed as a single page application with Laravel 6.x framework. The Agency’s RSP policies and processes clearly define link with other core HRM areas (i.e., L&D, PM and R&R)
 Development initiated on July 16, 2018.
 
 ## Dependencies for Installation
@@ -26,6 +26,9 @@ Development initiated on July 16, 2018.
 7. Run <code>npm run dev</code> or <code>npm run watch</code>
 
 Start the creating wonders!
+
+## Usefull
+1. Run command <code>start dump.bat</code> on terminal to clear cache and config everytime you change environment settings like <code>.env</code>
 
 ## Documentations
 1. Laravel 6.x <a href="https://laravel.com/docs/6.x/installation">https://laravel.com/docs/6.x/installation</a>

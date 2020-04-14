@@ -51,36 +51,8 @@ class LoginController extends Controller
         return 'username';
     }
 
-    // public function login(Request $request)
-    // {   
-    //     $input = $request->all();
-        
-        
-    //         $this->validate($request, [
-    //             'username' => 'required|exists:users,username',
-    //             'password' => 'required|string',
-    //         ]);   
-
-   
-    //     if(auth()->attempt(array('username' => $input['username'], 'password' => $input['password'])))
-    //     {
-    //         if (auth()->user()->is_admin == '1') {
-    //             return redirect()->route('admin.home');
-    //         }else{
-    //             return redirect()->route('user.home');
-    //         }   
-    //     }
-    //     else{
-    //
-    //      return redirect()->route('login')->with('error','Invalid username/password!');
-    //         return $this->sendFailedLoginResponse($request);
-    //     }
-          
-    // }
-
     protected function authenticated(Request $request, $user)
     {
-        //
             if (auth()->user()->is_admin == '1') {
                 return redirect()->route('admin.home');
             }else{
@@ -99,10 +71,10 @@ class LoginController extends Controller
     }
 
 
-    protected function sendFailedLoginResponse(Request $request)
-    {
-        throw ValidationException::withMessages([
-            $this->username() => [trans('auth.failed')],
-        ]);
-    }
+    // protected function sendFailedLoginResponse(Request $request)
+    // {
+    //     throw ValidationException::withMessages([
+    //         $this->username() => [trans('auth.failed')],
+    //     ]);
+    // }
 }

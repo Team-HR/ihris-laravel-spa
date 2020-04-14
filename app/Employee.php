@@ -15,32 +15,15 @@ class Employee extends Model
      * @var array
      */
     use Notifiable;
-    // use SearchableTrait;
-
-    // protected $searchable = [
-    //     'columns' => [
-    //         'employees.last_name'  => 10,
-    //         'employees.first_name'   => 10,
-    //         'employees.middle_name'   => 10,
-    //     ]
-    // ];
-
-
+    
     protected $fillable = [
         'last_name',
         'middle_name',
         'first_name',
         'ext_name',
-  //       'gender',
-  //       'status',
-		// 'employment_status',
-		// 'department_id',
-  //       'section_id',
-		// 'position_id',
-		// 'rank_of_ass',
-		// 'date_activated',
-		// 'date_inactivated',
-		// 'date_ipcr',
+        'sex',
+        'date_of_birth',
+        'tin'
     ];
 
     protected $appends = [

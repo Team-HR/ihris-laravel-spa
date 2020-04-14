@@ -1,13 +1,14 @@
-@extends('layouts.app')
+@extends('app')
 
 @section('content')
-<div class="container-fluid">
+<cores-component></cores-component>
+{{-- <div class="container-fluid">
     <div class="row justify-content-center mb-4">
         <div class="col">
             <div class="card border-rsp">
                 <div class="card-header bg-rsp"></div>
                 <div class="card-body">
-                    <h5 class="card-title text-primary"><img width="30" src="{{ asset('icons/rsp.png') }}"> Recruitment, Selection, and Placement (RSP)</h5>
+                    <h5 class="card-title text-primary"><img width="500" src="{{ asset('icons/rsp.png') }}"> Recruitment, Selection, and Placement (RSP)</h5>
                     <div class="row">
                         <div class="col">
                             <div class="list-group">
@@ -107,5 +108,5 @@
         </div>
     </div>
 
-</div>
+</div> --}}
 @endsection
