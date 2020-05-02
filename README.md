@@ -21,6 +21,7 @@ Development initiated on July 16, 2018.
 3. Run <code>composer install</code>
 4. Create copy of <code>.env.example</code> and rename to <code>.env</code>
 5. Configure <code>.env</code> database parameters.
+6. Run <code>php artisan key:generate</code>
 6. Run <code>php artisan jwt:secret</code>
 7. Run <code>npm install</code>
 7. Run <code>npm run dev</code> or <code>npm run watch</code>
