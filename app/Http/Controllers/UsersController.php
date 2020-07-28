@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\UsersResource;
 use Redirect,Response,DB,Config;
 use Datatables;
-use App\User;
+use App\Models\User;
 
 class UsersController extends Controller
 {

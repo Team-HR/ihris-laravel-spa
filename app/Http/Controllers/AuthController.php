@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Auth;
-use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 
 class AuthController extends Controller
@@ -19,13 +19,14 @@ class AuthController extends Controller
             'username' => 'required|unique:users',
             'password'  => 'required|min:3|confirmed',
         ]);
-        if ($v->fails())
-        {
+
+        if ($v->fails()) {
             return response()->json([
                 'status' => 'error',
                 'errors' => $v->errors()
             ], 422);
         }
+
         $user = new User();
         $user->name = $request->name;
         $user->username = $request->username;
@@ -33,6 +34,7 @@ class AuthController extends Controller
         $user->save();
         return response()->json(['status' => 'success'], 200);
     }
+
 
     /**
      * Login user and return a token

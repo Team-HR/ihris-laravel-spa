@@ -50,16 +50,6 @@
             username: app.username,
             password: app.password
           },
-          // success: function() {
-          //   // handle redirection
-          //   app.success = true
-          //   const redirectTo = 'dashboard'
-          //   this.$router.push({name: redirectTo})
-          // },
-          // error: function() {
-          //   app.has_error = true
-          //   app.error = res.response.data.error
-          // },
           rememberMe: true,
           fetchUser: true
         }).then((res)=>{

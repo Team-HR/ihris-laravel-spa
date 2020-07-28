@@ -15,10 +15,10 @@
                     <input type="text" id="name" class="form-control" placeholder="Full Name" v-model="name">
                     <span class="help-block" v-if="has_error && errors.name">{{ errors.name }}</span>
                 </div>
-                <div class="form-group" v-bind:class="{ 'has-error': has_error && errors.email }">
-                    <label for="email">E-mail</label>
-                    <input type="email" id="email" class="form-control" placeholder="user@example.com" v-model="email">
-                    <span class="help-block" v-if="has_error && errors.email">{{ errors.email }}</span>
+                <div class="form-group" v-bind:class="{ 'has-error': has_error && errors.username }">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" class="form-control" v-model="username">
+                    <span class="help-block" v-if="has_error && errors.username">{{ errors.username }}</span>
                 </div>
                 <div class="form-group" v-bind:class="{ 'has-error': has_error && errors.password }">
                     <label for="password">Password</label>
@@ -42,7 +42,7 @@
     data() {
       return {
         name: '',
-        email: '',
+        username: '',
         password: '',
         password_confirmation: '',
         has_error: false,
@@ -57,7 +57,7 @@
         this.$auth.register({
           data: {
             name: app.name,
-            email: app.email,
+            username: app.username,
             password: app.password,
             password_confirmation: app.password_confirmation
           },
