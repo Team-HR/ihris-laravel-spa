@@ -1,4 +1,4 @@
-// require('./bootstrap');
+require('./bootstrap');
 import 'es6-promise/auto'
 import axios from 'axios'
 import Vue from 'vue'
@@ -10,9 +10,8 @@ import auth from './auth'
 import router from './router'
 // Set Vue globally
 
+// import "vuetify/dist/vuetify.min.css";
 import Vuetify from 'vuetify';
-Vue.use(Vuetify);
-
 
 window.Vue = Vue
 // Set Vue router
@@ -22,7 +21,7 @@ Vue.use(VueRouter)
 Vue.use(VueAxios, axios)
 axios.defaults.baseURL = '/api/v1'
 Vue.use(VueAuth, auth)
-
+Vue.use(Vuetify);
 // auth.priv = function (role) {
 //   return auth.check(role, 'privileges');
 // }
