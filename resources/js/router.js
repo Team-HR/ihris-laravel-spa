@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 // Pages
 import Home from './pages/Home'
 import Register from './pages/Register'
-import Login from './pages/Login'
+import Login from './auth/Login'
 import Dashboard from './pages/user/Dashboard'
 
 // Routes
@@ -13,7 +13,7 @@ const routes = [
     name: 'home',
     component: Home,
     meta: {
-      auth: undefined
+      auth: true
     }
   },
   {

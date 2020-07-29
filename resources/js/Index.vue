@@ -5,7 +5,7 @@
         <!-- -->
       </v-navigation-drawer>
       
-      <app-bar  @toggled_drawer="drawer = !drawer"></app-bar>
+      <app-bar  @toggled_drawer="drawer = !drawer" v-if="$auth.check()"></app-bar>
 
       <v-sheet id="scrolling-techniques" class="overflow-y-auto" :max-height="window_height">
         <!-- Sizes your content based upon application components -->

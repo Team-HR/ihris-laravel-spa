@@ -23,9 +23,9 @@
       <v-icon>mdi-monitor-dashboard</v-icon>
     </v-btn>
 
-    <v-btn icon to="login" v-if="!$auth.check()">
+    <!-- <v-btn icon to="login" v-if="!$auth.check()">
       <v-icon>mdi-login</v-icon>
-    </v-btn>
+    </v-btn> -->
 
     <v-btn link icon href @click.prevent="$auth.logout()" v-if="$auth.check()">
       <v-icon>mdi-logout</v-icon>

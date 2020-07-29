@@ -27,7 +27,7 @@ const config = {
   logoutData: {
     url: 'auth/logout', 
     method: 'POST', 
-    redirect: '/', 
+    redirect: '/login', 
     makeRequest: true
   },
   fetchData: {
