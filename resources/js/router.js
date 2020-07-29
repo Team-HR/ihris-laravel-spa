@@ -16,14 +16,6 @@ const routes = [
       auth: undefined
     }
   },
-  // {
-  //   path: '/about',
-  //   name: 'about',
-  //   component: About,
-  //   meta: {
-  //     auth: undefined
-  //   }
-  // },
   {
     path: '/register',
     name: 'register',

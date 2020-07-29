@@ -42,4 +42,5 @@ const config = {
     interval: 30
   }
 }
+
 export default config

@@ -1,4 +1,4 @@
-require('./bootstrap');
+// require('./bootstrap');
 import 'es6-promise/auto'
 import axios from 'axios'
 import Vue from 'vue'
@@ -22,6 +22,10 @@ Vue.use(VueRouter)
 Vue.use(VueAxios, axios)
 axios.defaults.baseURL = '/api/v1'
 Vue.use(VueAuth, auth)
+
+// auth.priv = function (role) {
+//   return auth.check(role, 'privileges');
+// }
 
 // Load Index
 Vue.component('index', Index)

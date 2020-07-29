@@ -1,61 +1,52 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <router-link :to="{name: 'home'}" class="navbar-brand">Laravel + JWT + Vue JS</router-link>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto" v-if="$auth.check(1)">
-          <li class="nav-item" v-for="(route, key) in routes.user" v-bind:key="route.path">
-            <router-link :to="{ name : route.path }" :key="key" class="nav-link">{{route.name}}</router-link>
-          </li>
-      </ul>
-      <ul class="navbar-nav mr-auto" v-if="$auth.check(2)">
-          <li class="nav-item" v-for="(route, key) in routes.user" v-bind:key="route.path">
-            <router-link :to="{ name : route.path }" :key="key" class="nav-link">{{route.name}}</router-link>
-          </li>
-      </ul>
-      <ul class="navbar-nav ml-auto" v-if="!$auth.check()">
-          <li class="nav-item" v-for="(route, key) in routes.unlogged" v-bind:key="route.path">
-            <router-link :to="{ name : route.path }" :key="key" class="nav-link">{{route.name}}</router-link>
-          </li>
-      </ul>
-      <ul class="navbar-nav ml-auto" v-if="$auth.check()">
-        <li class="nav-item">
-          <a class="nav-link" href="#" @click.prevent="$auth.logout()">Logout</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
+  <v-app-bar
+    absolute
+    color="indigo darken-2"
+    dark
+    shrink-on-scroll
+    prominent
+    scroll-target="#scrolling-techniques"
+    app
+  >
+    <v-app-bar-nav-icon></v-app-bar-nav-icon>
+
+    <v-toolbar-title>Integrated HRIS</v-toolbar-title>
+
+    <v-spacer></v-spacer>
+
+    <!-- <v-btn icon>
+      <v-icon>mdi-magnify</v-icon>
+    </v-btn>
+
+    <v-btn icon>
+      <v-icon>mdi-heart</v-icon>
+    </v-btn> -->
+
+    <v-btn link icon href="" @click.prevent="$auth.logout()" v-if="$auth.check()">
+      <v-icon>mdi-logout-variant</v-icon>
+    </v-btn>
+  </v-app-bar>
 </template>
+
 <script>
-  export default {
-    data() {
-      return {
-        routes: {
-          // UNLOGGED
-          unlogged: [
-            { name: 'Register', path: 'register' },
-            { name: 'Login', path: 'login'}
-          ],
-          // LOGGED USER
-          user: [
-            { name: 'Dashboard', path: 'dashboard' }
-          ],
-          // LOGGED ADMIN
-          admin: [
-            { name: 'Dashboard', path: 'admin.dashboard' }
-          ]
-        }
-      }
-    },
-    mounted() {
-      //
-    }
-  }
+export default {
+  data() {
+    return {
+      // routes: {
+      //   // UNLOGGED
+      //   unlogged: [
+      //     { name: "Register", path: "register" },
+      //     { name: "Login", path: "login" },
+      //   ],
+      //   // LOGGED USER
+      //   user: [{ name: "Dashboard", path: "dashboard" }],
+      //   // LOGGED ADMIN
+      //   admin: [{ name: "Dashboard", path: "admin.dashboard" }],
+      // },
+    };
+  },
+  mounted() {
+    console.log(this.$auth);
+  },
+};
 </script>
-<style>
-.navbar {
-  margin-bottom: 30px;
-}
-</style>

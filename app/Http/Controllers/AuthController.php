@@ -66,6 +66,11 @@ class AuthController extends Controller
     public function user(Request $request)
     {
         $user = User::find(Auth::user()->id);
+        // USER ROLE TESTING START
+        $user['roles'] = array(
+            'admin' => array('r','d')
+        );
+        // USER ROLE TESTING END
         return response()->json([
             'status' => 'success',
             'data' => $user
