@@ -1,4 +1,4 @@
-require('./bootstrap');
+// require('./bootstrap');
 import 'es6-promise/auto'
 import axios from 'axios'
 import Vue from 'vue'
@@ -10,7 +10,7 @@ import auth from './auth'
 import router from './router'
 // Set Vue globally
 
-// import "vuetify/dist/vuetify.min.css";
+
 import Vuetify from 'vuetify';
 
 window.Vue = Vue
@@ -25,6 +25,7 @@ Vue.use(Vuetify);
 // auth.priv = function (role) {
 //   return auth.check(role, 'privileges');
 // }
+import "vuetify/dist/vuetify.min.css";
 
 // Load Index
 Vue.component('index', Index)

@@ -1,11 +1,11 @@
 <template>
   <v-app>
     <v-card class="overflow-y-hidden">
-      <v-navigation-drawer app v-model="drawer" clipped>
+      <v-navigation-drawer v-if="$auth.check()" app v-model="drawer" clipped>
         <!-- -->
       </v-navigation-drawer>
       
-      <app-bar @toggled_drawer="drawer = !drawer"></app-bar>
+      <app-bar  @toggled_drawer="drawer = !drawer"></app-bar>
 
       <v-sheet id="scrolling-techniques" class="overflow-y-auto" :max-height="window_height">
         <!-- Sizes your content based upon application components -->
@@ -40,3 +40,12 @@ export default {
   }
 };
 </script>
+
+<style>
+html,
+body {
+    /* margin: 0; */
+    overflow: hidden !important;
+}
+
+</style>
