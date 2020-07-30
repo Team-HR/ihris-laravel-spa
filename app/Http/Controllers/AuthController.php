@@ -80,6 +80,7 @@ class AuthController extends Controller
     /**
      * Refresh JWT token
      */
+
     public function refresh()
     {
         if ($token = $this->guard()->refresh()) {
@@ -89,6 +90,7 @@ class AuthController extends Controller
         }
         return response()->json(['error' => 'refresh_token_error'], 401);
     }
+
 
     /**
      * Return auth guard
