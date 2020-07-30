@@ -2,9 +2,13 @@ import VueRouter from 'vue-router'
 
 // Pages
 import Home from './pages/Home'
-import Register from './pages/Register'
+import Register from './auth/Register'
 import Login from './auth/Login'
-import Dashboard from './pages/user/Dashboard'
+import Dashboard from './pages/Dashboard'
+// Cores Components 
+import Cores from './pages/Cores'
+// System Admin Components
+import AccountsManagement from './pages/AccountsManagement'
 
 // Routes
 const routes = [
@@ -39,6 +43,42 @@ const routes = [
     component: Dashboard,
     meta: {
       auth: true
+    }
+  },
+  // CORES ROUTES
+  {
+    path: '/cores',
+    name: 'cores',
+    component: Cores,
+    meta: {
+      auth: {
+        // check roles if
+        roles: ['sysadmin','admin'],
+        // if not then 
+        redirect: '/sysadmin/login',
+        // if logged in but not found
+        notFoundRedirect: {name: 'error-404'},
+        // if logged in but forbidden access
+        forbiddenRedirect: '/403'
+      }
+    }
+  },
+  // SYS ADMIN ROUTES
+  {
+    path: '/sysadmin/accounts/management',
+    name: 'AccountsManagement',
+    component: AccountsManagement,
+    meta: {
+      auth: {
+        // check roles if
+        roles: ['sysadmin','admin'],
+        // if not then 
+        redirect: '/sysadmin/login',
+        // if logged in but not found
+        notFoundRedirect: {name: 'error-404'},
+        // if logged in but forbidden access
+        forbiddenRedirect: '/403'
+      }
     }
   },
 ]

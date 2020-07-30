@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use App\Models\User;
+use App\User;
 
 class AuthController extends Controller
 {
@@ -68,7 +68,7 @@ class AuthController extends Controller
         $user = User::find(Auth::user()->id);
         // USER ROLE TESTING START
         $user['roles'] = array(
-            'admin' => array('r','d')
+            'sysadmin'
         );
         // USER ROLE TESTING END
         return response()->json([
