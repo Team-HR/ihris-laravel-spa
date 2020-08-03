@@ -5,7 +5,7 @@ import Vue from 'vue'
 import VueAuth from '@websanova/vue-auth'
 import VueAxios from 'vue-axios'
 import VueRouter from 'vue-router'
-import Index from './Index'
+import App from './App'
 import auth from './auth'
 import router from './router'
 // Set Vue globally
@@ -28,7 +28,7 @@ Vue.use(Vuetify);
 import "vuetify/dist/vuetify.min.css";
 
 // Load Index
-Vue.component('index', Index)
+Vue.component('app', App)
 const app = new Vue({
   el: '#app',
   vuetify: new Vuetify(),
